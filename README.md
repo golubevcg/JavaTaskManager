@@ -1,4 +1,4 @@
-### Simple Kanban Like Task Manager
+### Simple Task Manager
 Desktop app created using JavaFX
 It have login and user registration
 uses Database to store all information
