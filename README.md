@@ -1,5 +1,5 @@
 ### Simple Kanban Like Task Manager
-Desktop app created using JavaFX and Db
+Desktop app created using JavaFX
 It have login and user registration
 uses Database to store all information
 (by default it's local PostgreSQL, but can be changed to and other)
