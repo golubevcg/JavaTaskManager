@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<GridPane fx:id="mainGridPane" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="850.0" minHeight="-Infinity" minWidth="850.0" prefHeight="500.0" prefWidth="850.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainWindowController">
+    <columnConstraints>
+        <ColumnConstraints maxWidth="0.0" minWidth="0.0" prefWidth="0.0" />
+        <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="303.2" minWidth="10.0" prefWidth="274.399951171875" />
+        <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="574.800048828125" />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    </rowConstraints>
+    <children>
+      <MenuButton fx:id="settiingsMenuButton" mnemonicParsing="false" opacity="0.5" scaleX="0.6" scaleY="0.6" scaleZ="0.6" style="-fx-background-color: #ffffff;" text="S" translateX="-7.0" translateY="-8.0" GridPane.columnIndex="1" GridPane.valignment="TOP">
+        <items>
+          <MenuItem fx:id="logOut" mnemonicParsing="false" style="-fx-background-color: #ffffff;" text="logOut" />
+        </items>
+         <font>
+            <Font size="18.0" />
+         </font>
+      </MenuButton>
+        <Label opacity="0.75" text="//входящее" translateX="45.0" translateY="5.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.valignment="TOP">
+            <font>
+                <Font name="Liberation Sans" size="14.0" />
+            </font>
+        </Label>
+        <Button fx:id="newWorkerButton" mnemonicParsing="false" opacity="0.5" prefHeight="14.0" prefWidth="14.0" scaleX="0.8" scaleY="0.8" scaleZ="0.8" style="-fx-background-color: #ffffff;" text="+" translateX="817.0" translateY="-8.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.valignment="TOP">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font></Button>
+        <Label opacity="0.75" text="//в очереди" translateX="10.0" translateY="5.0" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.valignment="TOP">
+            <font>
+                <Font name="Liberation Sans" size="14.0" />
+            </font>
+        </Label>
+        <Label layoutX="280.0" layoutY="207.0" opacity="0.75" text="//в работе" translateX="570.0" translateY="5.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.valignment="TOP">
+            <font>
+                <Font name="Liberation Sans" size="14.0" />
+            </font>
+        </Label>
+        <Separator fx:id="sep1" layoutX="10.0" layoutY="11.0" orientation="VERTICAL" prefHeight="200.0" translateX="560.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.valignment="TOP" />
+        <Separator fx:id="sep2" orientation="VERTICAL" prefHeight="200.0" translateX="272.0" />
+        <Separator fx:id="sep3" prefWidth="200.0" translateY="28.0" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.valignment="TOP" />
+    </children>
+</GridPane>
