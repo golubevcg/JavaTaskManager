@@ -20,6 +20,8 @@ also near every task there is three buttons:
 
 In text field you can select text and using right click create a new task from selected text, for convinience
 
+Designed for Windows, for assembly you need to run insall in Mavenm, which will generate .exe in target folder.
+
 ### Менеджер задач 
 Десктопное приложение, создано используя JavaFX библиотеку. 
 При запуске есть окно логгирования и регистрации.
@@ -41,3 +43,5 @@ In text field you can select text and using right click create a new task from s
 - X чтобы удалить задачу
 
 Так же в текстовом поле можно выделить текст и сразу же создать задачу из выделенного, нажав правой кнопкой мыши и выбрав из нужного меню.
+
+Рассчитана на Windows, для сборки запустить у Мавена инсталл, который сгенерит exe'шник в папку Таргет.
