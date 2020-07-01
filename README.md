@@ -4,8 +4,14 @@ It have login and user registration
 uses Database to store all information
 (by default it's local PostgreSQL, but can be changed to and other)
 
+(https://raw.githubusercontent.com/golubevcg/JavaTaskManager/master/login.png)
+
+(https://raw.githubusercontent.com/golubevcg/JavaTaskManager/master/newUser.png)
+
 after loggin in there is three columns
 first - it's a textfield for unnalocated tasks, notes, additional text and e.t.c.
+
+(https://raw.githubusercontent.com/golubevcg/JavaTaskManager/master/newUser.png)
 
 second column it's queue column -> for work to be done by worker
 
