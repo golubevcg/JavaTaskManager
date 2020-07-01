@@ -4,7 +4,10 @@ It have login and user registration
 uses Database to store all information
 (by default it's local PostgreSQL, but can be changed to and other)
 
-(https://raw.githubusercontent.com/golubevcg/JavaTaskManager/master/login.png)
+![Login](https://raw.githubusercontent.com/golubevcg/JavaTaskManager/master/login.png)
+
+
+![Login](login.png)
 
 (https://raw.githubusercontent.com/golubevcg/JavaTaskManager/master/newUser.png)
 
