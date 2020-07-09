@@ -69,8 +69,8 @@ public class EditTaskWindowController {
             if (registerNewUser() == true) {
                 mainWindowController.updateSceneWorkers(mainWindowController.allLabelsList,
                         mainWindowController.allButtonsList, mainWindowController.uiMap);
-                createButton.getScene().getWindow().hide();
                 mainWindowController.initialize();
+                createButton.getScene().getWindow().hide();
             }
         });
     }

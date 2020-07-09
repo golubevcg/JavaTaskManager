@@ -1,17 +1,13 @@
 package controllers;
 
-import animations.Shake;
 import database.HibernateSessionFactoryUtil;
 import database.Task;
 import database.User;
 import database.Worker;
 import database.services.TaskService;
-import javafx.collections.transformation.SortedList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.HPos;
-import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -21,13 +17,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import net.bytebuddy.dynamic.scaffold.TypeInitializer;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-import org.w3c.dom.ls.LSOutput;
 
 
 import java.io.IOException;
@@ -387,7 +380,7 @@ public class MainWindowController {
             setButtonOnCoursorAction(deleteWorkerButton);
             deleteWorkerButton.setOnAction(x -> {
                 FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("/fxml/deleteWorkerConfirmation.fxml"));
+                loader.setLocation(getClass().getResource("/fxml/deleteWorkerConfirmationWindow.fxml"));
                 loader.setController(new DeleteWorkerWindowController(this, newworker2, inputTextArea));
                 try {loader.load();
                 } catch (IOException d) {
@@ -690,18 +683,17 @@ public class MainWindowController {
                     Task newtask = inWorkTasksList.get(f);
                     setButtonOnCoursorAction(buttonTaskDone);
                     buttonTaskDone.setOnAction(d->{
-                        Session session3 = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-                        Transaction transaction = session3.beginTransaction();
-                        //сейчас он готовые задачи будет удалять, т.к. накапливать их пока что не нужно
-//                        Query newQuery = session3.createQuery("UPDATE Task SET " +
-//                                "tasktype = 'done' WHERE id = " + newtask.getId());
-                        Query newQuery = session3.createQuery("DELETE Task WHERE id = " + newtask.getId());
-                        newQuery.executeUpdate();
-                        transaction.commit();
-                        session3.close();
-                        updateSceneWorkers(allLabelsList, allButtonsList, uiMap);
-                        initialize();
-
+                        FXMLLoader loader = new FXMLLoader();
+                        loader.setLocation(getClass().getResource("/fxml/finTaskRatingWindow.fxml"));
+                        loader.setController(new FinTaskRatingWindowController(newtask, this, inputTextArea));
+                        try {loader.load();
+                        } catch (IOException h) {
+                            h.printStackTrace();
+                        }
+                        Parent root = loader.getRoot();
+                        Stage stage = new Stage();
+                        stage.setScene(new Scene(root));
+                        stage.show();
                     });
                     allButtonsList.add(buttonTaskDone);
 
