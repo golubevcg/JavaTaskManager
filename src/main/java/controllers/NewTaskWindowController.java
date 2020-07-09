@@ -49,6 +49,7 @@ public class NewTaskWindowController {
     public NewTaskWindowController(MainWindowController mainWindowController, Worker worker) {
         this.mainWindowController = mainWindowController;
         this.worker = worker;
+
     }
 
 

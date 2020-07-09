@@ -3,37 +3,42 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.net.Authenticator;
+import javafx.stage.StageStyle;
 
 public class Main extends Application {
 
+    private static Stage primaryStageObj;
+    private static Parent root;
+
+
     @Override
     public void start(Stage stage) throws Exception{
-//        System.setProperty("http.proxySet", "true");
-//        System.setProperty("http.proxyHost", "192.168.0.242");
+
+        primaryStageObj = stage;
 
 
-//        System.setProperty("http.proxyHost", "belyaev_a:1234@192.168.0.242");
-//        System.setProperty("http.proxyPort", "8080");
-//        System.setProperty("proxySet", "true");   //Obsolete ?
-//        System.setProperty("http.keepAlive", "false");
-//        System.setProperty("java.net.useSystemProxies", "false");
-//        System.setProperty("https.proxyHost", "192.168.0.242");
-//        System.setProperty("https.proxyPort", "8080");
-//        System.setProperty("https.proxyUser", "belyaev_a");
-//        System.setProperty("https.proxyPassword", "1234");
 
-//        Authenticator.setDefault(new NtlmAuthenticator(httpsProxyUser, httpsProxyPassword));
+//        Parent root = FXMLLoader.load(getClass().getResource("/fxml/loginWindow.fxml"));
+        root = FXMLLoader.load(getClass().getResource("/fxml/newMainTest.fxml"));
 
 
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/loginWindow.fxml"));
         stage.setScene(new Scene(root));
+        stage.initStyle(StageStyle.UNDECORATED);
         stage.show();
 
-//        System.out.println(getClass().getResource("fxml/loginWindow.fxml"));
+        System.out.println("+++++++++++++++++");
+        System.out.println(this.getClass().getPackage());
+        System.out.println("+++++++++++++++++");
+
     }
 
+    public static Stage getStageObj(){
+        return primaryStageObj;
+    }
+
+    public static Parent getRootObj(){
+        return root;
+    }
 
     public static void main(String[] args) {
         launch(args);
