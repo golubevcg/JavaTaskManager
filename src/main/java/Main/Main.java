@@ -1,3 +1,7 @@
+package Main;
+
+import controllers.FinTaskRatingWindowController;
+import controllers.newMainTestController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -18,9 +22,14 @@ public class Main extends Application {
 
 
 
-//        Parent root = FXMLLoader.load(getClass().getResource("/fxml/loginWindow.fxml"));
-        root = FXMLLoader.load(getClass().getResource("/fxml/newMainTest.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/loginWindow.fxml"));
 
+//        root = FXMLLoader.load(getClass().getResource("/fxml/newMainTest.fxml"));
+
+//
+//        FXMLLoader loader = new FXMLLoader();
+//        loader.setLocation(getClass().getResource("/fxml/newMainTest.fxml"));
+//        loader.setController(new newMainTestController(stage));
 
         stage.setScene(new Scene(root));
         stage.initStyle(StageStyle.UNDECORATED);

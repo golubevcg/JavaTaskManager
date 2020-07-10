@@ -1,20 +1,16 @@
 package controllers;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
+import Main.Main;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Cursor;
-import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 
 public class newMainTestController {
@@ -72,42 +68,23 @@ public class newMainTestController {
     private double xOffset;
     private double yOffset;
 
-
     @FXML
     void initialize() {
 
-//        Stage mainStage = ((Stage)(minimiseButton.getScene().getWindow()));
 
 
-//        mainAnchorPane.getScene().getRoot().setOnMousePressed(new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent mouseEvent) {
-//                xOffset = mouseEvent.getSceneX();
-//                yOffset = mouseEvent.getSceneY();
-//            }
-//        });
-//
-//        mainAnchorPane.getScene().getRoot().setOnMouseDragged(new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent mouseEvent) {
-//                mainAnchorPane.getScene().getWindow().setX(mouseEvent.getScreenX() - xOffset);
-//                mainAnchorPane.getScene().getWindow().setY(mouseEvent.getScreenY() - yOffset);
-//            }
-//        });
-
-//        Main.getRootObj()
+        //make window movable during pressing on top main Anchor Pane
+        mainAnchorPane.setOnMousePressed(e->{
+           xOffset = e.getSceneX();
+           yOffset = e.getSceneY();
+        });
+        mainAnchorPane.setOnMouseDragged(e->{
+            Main.getStageObj().setX(e.getScreenX() - xOffset);
+            Main.getStageObj().setY(e.getScreenY() - yOffset);
+        });
 
 
-//
-//        mainAnchorPane.setOnMousePressed(e->{
-//            xOffset = mainAnchorPane.getScene().getWindow().getX() - e.getSceneX();
-//            yOffset = mainAnchorPane.getScene().getWindow().getY() - e.getSceneY();
-//        });
-//
-//        mainAnchorPane.setOnMouseDragged(e->{
-//            mainAnchorPane.getScene().getWindow().setX(e.getSceneX() + xOffset);
-//            mainAnchorPane.getScene().getWindow().setY(e.getSceneY() + yOffset);
-//        });
+
 
 
 

@@ -54,7 +54,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.4</version>
                 <configuration>
-                    <mainClass>Main</mainClass>
+                    <mainClass>Main.Main</mainClass>
                     <executable>C:\Program Files\Java\jdk-13.0.2\bin\java</executable>
                 </configuration>
             </plugin>
@@ -90,7 +90,7 @@
                     <shadedClassifierName>shaded</shadedClassifierName>
                     <transformers>
                         <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                            <mainClass>Main</mainClass>
+                            <mainClass>Main.Main</mainClass>
                         </transformer>
                     </transformers>
                 </configuration>
@@ -113,7 +113,7 @@
                             <outfile>${project.build.directory}/agTaskManager.exe</outfile>
                             <downloadUrl>http://java.com/download</downloadUrl>
                             <classPath>
-                                <mainClass>Main</mainClass>
+                                <mainClass>Main.Main</mainClass>
                                 <preCp>anything</preCp>
                             </classPath>
                             <icon>src/main/resources/appIcon.ico.ico</icon>
@@ -200,12 +200,6 @@
             <artifactId>commons-codec</artifactId>
             <version>1.9</version>
         </dependency>
-
-<!--        <dependency>-->
-<!--            <groupId>com.googlecode.log4jdbc</groupId>-->
-<!--            <artifactId>log4jdbc</artifactId>-->
-<!--            <version>1.2</version>-->
-<!--        </dependency>-->
 
     </dependencies>
 

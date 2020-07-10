@@ -1,3 +1,5 @@
+package controllers;
+
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -5,7 +7,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class AlertBox {
+public class AlertBoxController {
 
     public static void display(String title, String message){
         Stage window = new Stage();
