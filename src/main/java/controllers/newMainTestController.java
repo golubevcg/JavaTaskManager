@@ -4,12 +4,14 @@ import Main.Main;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 
@@ -55,12 +57,12 @@ public class newMainTestController {
     @FXML
     private Button fullScreenButton;
 
-
-
+    //event to make window closable (connected to button in fxml)
     @FXML void close(ActionEvent event){
         System.exit(0);
     }
 
+    //event to make window collapsable (connected to button in fxml)
     @FXML void min(ActionEvent event){
         ((Stage)(minimiseButton.getScene().getWindow())).setIconified(true);
     }
@@ -71,8 +73,6 @@ public class newMainTestController {
     @FXML
     void initialize() {
 
-
-
         //make window movable during pressing on top main Anchor Pane
         mainAnchorPane.setOnMousePressed(e->{
            xOffset = e.getSceneX();
@@ -82,9 +82,6 @@ public class newMainTestController {
             Main.getStageObj().setX(e.getScreenX() - xOffset);
             Main.getStageObj().setY(e.getScreenY() - yOffset);
         });
-
-
-
 
 
 

@@ -1,7 +1,5 @@
 package Main;
 
-import controllers.FinTaskRatingWindowController;
-import controllers.newMainTestController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,28 +15,11 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception{
-
         primaryStageObj = stage;
-
-
-
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/loginWindow.fxml"));
-
-//        root = FXMLLoader.load(getClass().getResource("/fxml/newMainTest.fxml"));
-
-//
-//        FXMLLoader loader = new FXMLLoader();
-//        loader.setLocation(getClass().getResource("/fxml/newMainTest.fxml"));
-//        loader.setController(new newMainTestController(stage));
-
+        root = FXMLLoader.load(getClass().getResource("/fxml/newMainTest.fxml"));
         stage.setScene(new Scene(root));
         stage.initStyle(StageStyle.UNDECORATED);
         stage.show();
-
-        System.out.println("+++++++++++++++++");
-        System.out.println(this.getClass().getPackage());
-        System.out.println("+++++++++++++++++");
-
     }
 
     public static Stage getStageObj(){

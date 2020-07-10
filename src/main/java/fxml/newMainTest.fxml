@@ -17,7 +17,7 @@
                </children>
             </AnchorPane>
           <AnchorPane fx:id="AcnhorPaneInQuene" minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="213.0" style="-fx-background-color: ffffff;" />
-            <AnchorPane fx:id="AcnhorPaneInWork" layoutX="10.0" layoutY="10.0" minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="249.0" style="-fx-background-color: #ffffff;" />
+            <AnchorPane fx:id="AcnhorPaneInWork" layoutX="10.0" layoutY="10.0" minHeight="0.0" minWidth="0.0" prefHeight="620.0" prefWidth="336.0" style="-fx-background-color: #ffffff;" />
         </items>
       </SplitPane>
       <MenuBar fx:id="mainMenuBar" mouseTransparent="true" prefHeight="25.0" prefWidth="25.0" style="-fx-background-color: cfdee9;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
