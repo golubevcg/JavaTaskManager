@@ -1,8 +1,12 @@
 package controllers;
 
+import Main.Main;
 import animations.Shake;
+import classes.FXResizeHelper;
 import database.User;
 import database.services.UserService;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,7 +14,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -34,30 +43,43 @@ public class RegWindowController {
     @FXML
     private Button registerButton;
 
-
     @FXML
     private Button backButton;
+
+    @FXML
+    private AnchorPane moovableAnchorPane;
+
+    @FXML
+    private Button minimiseButton;
+
+    @FXML
+    private Button closeButton;
+
+    private double xOffset;
+    private double yOffset;
+
+    @FXML void close(ActionEvent event){
+        System.exit(0);
+    }
+
+
+    @FXML void min(ActionEvent event){
+        ((Stage)(moovableAnchorPane.getScene().getWindow())).setIconified(true);
+    }
+
 
 
     @FXML
     void initialize(){
 
-        setButtonOnCoursorAction(registerButton);
-        setButtonOnCoursorAction(backButton);
+        Main.getStageObj().setResizable(false);
+        this.setImagesAndColorToButtons();
+
+        this.makePaneMoovable(moovableAnchorPane);
 
         backButton.setOnAction(e->{
-            registerButton.getScene().getWindow().hide();
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/fxml/loginWindow.fxml"));
-            try {
-                loader.load();
-            } catch (IOException exc) {
-                exc.printStackTrace();
-            }
-            Parent root = loader.getRoot();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.show();
+            LoginWindowController loginWindowController = new LoginWindowController();
+            openNewScene("/fxml/loginWindow.fxml", closeButton, loginWindowController);
         });
 
         registerButton.setOnAction(event->{
@@ -77,17 +99,38 @@ public class RegWindowController {
                 stage.setScene(new Scene(root));
                 stage.show();
             }
-            setButtonOnCoursorAction(registerButton);
-            setButtonOnCoursorAction(backButton);
 
         });
-
-
     }
 
-    public void setButtonOnCoursorAction(Button button){
-        button.setOnMouseEntered(e->button.setStyle("-fx-background-color: #f5f9ff;" + "-fx-text-fill: #0f79fa;" ));
-        button.setOnMouseExited(e->button.setStyle("-fx-background-color:  #ffffff"));
+    public void openNewScene(String windowName, Button button, Object controller){
+
+        button.getScene().getWindow().hide();
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource(windowName));
+        loader.setController(controller);
+        try {
+            loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Parent root = loader.getRoot();
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.show();
+    }
+
+
+    private void makePaneMoovable(AnchorPane anchorPane){
+        anchorPane.setOnMousePressed(e->{
+            xOffset = e.getSceneX();
+            yOffset = e.getSceneY();
+        });
+        anchorPane.setOnMouseDragged(e->{
+            ((Stage)(anchorPane.getScene().getWindow())).setX(e.getScreenX() - xOffset);
+            ((Stage)(anchorPane.getScene().getWindow())).setY(e.getScreenY() - yOffset);
+        });
     }
 
     private boolean registerNewUser() {
@@ -148,5 +191,80 @@ public class RegWindowController {
         }
 //        return false;
     }
+
+    private void setImagesAndColorToButtons() {
+        this.setImageToButton(closeButton, "cross.png", 11,20);
+        this.setImageToButton(minimiseButton, "minimize.png", 13,40);
+        this.setColorsToButtons();
+    }
+
+    private void setImageToButton(Button button, String imageName, int width, int height){
+        Image image = new Image(imageName);
+        ImageView imageView = new ImageView(image);
+        imageView.setPickOnBounds(true);
+        imageView.setPreserveRatio(true);
+        imageView.setFitWidth(width);
+        imageView.setFitHeight(height);
+        button.setGraphic(imageView);
+    }
+
+    private void setColorsToButtons(){
+        String standartColorCursorOnButton = "cfdee9";
+
+        closeButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                closeButton.setStyle("-fx-background-color:#F87272");
+            }
+        });
+        closeButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                closeButton.setStyle("-fx-background-color: transparent");
+            }
+        });
+
+        minimiseButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                minimiseButton.setStyle("-fx-background-color:#" + standartColorCursorOnButton);
+            }
+        });
+        minimiseButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                minimiseButton.setStyle("-fx-background-color: transparent");
+            }
+        });
+
+        backButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                backButton.setStyle("-fx-background-color:#FFFFFF");
+            }
+        });
+        backButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                backButton.setStyle("-fx-background-color:transparent");
+            }
+        });
+
+        registerButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                registerButton.setStyle("-fx-background-color:#FFFFFF");
+            }
+        });
+        registerButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                registerButton.setStyle("-fx-background-color:transparent");
+            }
+        });
+
+
+    }
+
 
 }

@@ -15,13 +15,13 @@ import java.util.List;
 
 public class DeleteWorkerWindowController {
 
-    private MainWindowController mainWindowController;
+    private OldMainWindowController mainWindowController;
 
     private Worker worker;
 
     public TextArea textArea;
 
-    public DeleteWorkerWindowController(MainWindowController mainWindowController, Worker worker, TextArea textArea) {
+    public DeleteWorkerWindowController(OldMainWindowController mainWindowController, Worker worker, TextArea textArea) {
         this.mainWindowController = mainWindowController;
         this.worker = worker;
     }

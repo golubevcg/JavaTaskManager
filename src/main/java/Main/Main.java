@@ -1,5 +1,6 @@
 package Main;
 
+import controllers.LoginWindowController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,7 +17,11 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception{
         primaryStageObj = stage;
-        root = FXMLLoader.load(getClass().getResource("/fxml/newMainTest.fxml"));
+        FXMLLoader loader = new FXMLLoader();
+        loader.setController(new LoginWindowController());
+        loader.setLocation(getClass().getResource("/fxml/loginWindow.fxml"));
+        loader.load();
+        root = loader.getRoot();
         stage.setScene(new Scene(root));
         stage.initStyle(StageStyle.UNDECORATED);
         stage.show();

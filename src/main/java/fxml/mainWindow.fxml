@@ -1,54 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="mainGridPane" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="850.0" minHeight="-Infinity" minWidth="850.0" prefHeight="500.0" prefWidth="850.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainWindowController">
-    <columnConstraints>
-        <ColumnConstraints maxWidth="0.0" minWidth="0.0" prefWidth="0.0" />
-        <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="303.2" minWidth="10.0" prefWidth="274.399951171875" />
-        <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="574.800048828125" />
-    </columnConstraints>
-    <rowConstraints>
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-    </rowConstraints>
-    <children>
-      <MenuButton fx:id="settiingsMenuButton" mnemonicParsing="false" opacity="0.5" scaleX="0.6" scaleY="0.6" scaleZ="0.6" style="-fx-background-color: #ffffff;" text="S" translateX="-7.0" translateY="-8.0" GridPane.columnIndex="1" GridPane.valignment="TOP">
-        <items>
-          <MenuItem fx:id="logOut" mnemonicParsing="false" style="-fx-background-color: #ffffff;" text="logOut" />
-        </items>
+<AnchorPane fx:id="mainAnchorPane" prefHeight="730.0" prefWidth="927.0" style="-fx-background-color: cfdee9;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <AnchorPane fx:id="anchorPainTodragWindow1" layoutX="14.0" layoutY="14.0" prefHeight="27.0" prefWidth="919.0" style="-fx-background-color: FFFFFF;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <AnchorPane fx:id="anchorPainTodragWindow" prefHeight="20.0" prefWidth="919.0" style="-fx-background-color: FFFFFF;" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0" />
+      <MenuBar fx:id="mainMenuBar" mouseTransparent="true" prefHeight="23.0" prefWidth="91.0" style="-fx-background-color: FFFFFF;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <Button fx:id="closeButton" mnemonicParsing="false" onAction="#close" style="-fx-background-color: transparent;" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="1.0" />
+      <Button fx:id="addNewWorkerButton" layoutX="594.0" layoutY="10.0" mnemonicParsing="false" style="-fx-background-color: transparent;" textAlignment="CENTER" AnchorPane.leftAnchor="55.0" AnchorPane.topAnchor="0.0" />
+      <Button fx:id="minimiseButton" mnemonicParsing="false" onAction="#min" prefHeight="0.0" prefWidth="21.0" style="-fx-background-color: transparent;" AnchorPane.rightAnchor="44.0" AnchorPane.topAnchor="1.0" />
+      <TextArea fx:id="textArea" prefHeight="484.0" prefWidth="307.0" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-background-insets: transparent; -fx-faint-focus-color: transparent;" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="28.0">
          <font>
-            <Font size="18.0" />
+            <Font name="Arial" size="16.0" />
          </font>
-      </MenuButton>
-        <Label opacity="0.75" text="//входящее" translateX="45.0" translateY="5.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.valignment="TOP">
-            <font>
-                <Font name="Liberation Sans" size="14.0" />
-            </font>
-        </Label>
-        <Button fx:id="newWorkerButton" mnemonicParsing="false" opacity="0.5" prefHeight="14.0" prefWidth="14.0" scaleX="0.8" scaleY="0.8" scaleZ="0.8" style="-fx-background-color: #ffffff;" text="+" translateX="817.0" translateY="-8.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.valignment="TOP">
-            <font>
-                <Font name="System Bold" size="18.0" />
-            </font></Button>
-        <Label opacity="0.75" text="//в очереди" translateX="10.0" translateY="5.0" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.valignment="TOP">
-            <font>
-                <Font name="Liberation Sans" size="14.0" />
-            </font>
-        </Label>
-        <Label layoutX="280.0" layoutY="207.0" opacity="0.75" text="//в работе" translateX="570.0" translateY="5.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.valignment="TOP">
-            <font>
-                <Font name="Liberation Sans" size="14.0" />
-            </font>
-        </Label>
-        <Separator fx:id="sep1" layoutX="10.0" layoutY="11.0" orientation="VERTICAL" prefHeight="200.0" translateX="560.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.valignment="TOP" />
-        <Separator fx:id="sep2" orientation="VERTICAL" prefHeight="200.0" translateX="272.0" />
-        <Separator fx:id="sep3" prefWidth="200.0" translateY="28.0" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.valignment="TOP" />
-    </children>
-</GridPane>
+      </TextArea>
+      <AnchorPane fx:id="anchorPaneForCards" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="307.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="27.0" />
+   </children>
+</AnchorPane>

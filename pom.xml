@@ -66,8 +66,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>${jdkVersion}</source>
-                    <target>${jdkVersion}</target>
+                    <source>9</source>
+                    <target>9</target>
                 </configuration>
 
 
@@ -116,7 +116,7 @@
                                 <mainClass>Main.Main</mainClass>
                                 <preCp>anything</preCp>
                             </classPath>
-                            <icon>src/main/resources/appIcon.ico.ico</icon>
+                            <icon>src/main/resources/appIcon.ico</icon>
                             <jre>
                                 <minVersion>1.8.0</minVersion>
                                 <jdkPreference>preferJre</jdkPreference>

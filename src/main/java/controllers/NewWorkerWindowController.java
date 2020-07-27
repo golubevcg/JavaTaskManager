@@ -2,26 +2,17 @@ package controllers;
 
 import animations.Shake;
 import database.HibernateSessionFactoryUtil;
-import database.User;
 import database.Worker;
-import database.services.UserService;
 import database.services.WorkerService;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableColumn;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.query.Query;
-import org.jboss.jandex.Main;
 
 
 import java.io.IOException;
@@ -41,9 +32,9 @@ public class NewWorkerWindowController {
     @FXML
     private Button registerButton;
 
-    private MainWindowController mainWindowController;
+    private OldMainWindowController mainWindowController;
 
-    public NewWorkerWindowController(MainWindowController mainWindowController) {
+    public NewWorkerWindowController(OldMainWindowController mainWindowController) {
         this.mainWindowController = mainWindowController;
     }
 
@@ -66,7 +57,7 @@ public class NewWorkerWindowController {
         lwc.initialize();
     }
 
-    private boolean registerNewUser(MainWindowController mainWindowController) {
+    private boolean registerNewUser(OldMainWindowController mainWindowController) {
 
         String firstname = firstnameTextField.getText();
         String lastname = lastnameTextField.getText();
@@ -92,7 +83,7 @@ public class NewWorkerWindowController {
 
             //формируем запрос, чтобы проверить, есть ли такой пользователь в базе данных
             WorkerService workerService = new WorkerService();
-            Worker worker = new Worker(firstname, lastname, MainWindowController.rootUser, login);
+            Worker worker = new Worker(firstname, lastname, OldMainWindowController.rootUser, login);
             List<String> list = workerService.checkWorkerLogin(worker.getLogin());
 
             if (list.size() >= 1) {

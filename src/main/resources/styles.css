@@ -1,0 +1,11 @@
+.text-area {
+    -fx-text-box-border: transparent;
+    -fx-background-color: transparent;
+    -fx-background-insets: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-border-color: transparent;
+ }
+
+ .text-area:focused {
+     -fx-faint-focus-color: transparent;
+ }

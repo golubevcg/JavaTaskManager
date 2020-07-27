@@ -3,7 +3,6 @@ package controllers;
 import animations.Shake;
 import database.HibernateSessionFactoryUtil;
 import database.Task;
-import database.Worker;
 import database.services.TaskService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -41,11 +40,11 @@ public class EditTaskWindowController {
     @FXML
     private ToggleGroup tgroup;
 
-    private MainWindowController mainWindowController;
+    private OldMainWindowController mainWindowController;
 
     private Task task;
 
-    public EditTaskWindowController(MainWindowController mainWindowController, Task task) {
+    public EditTaskWindowController(OldMainWindowController mainWindowController, Task task) {
         this.mainWindowController = mainWindowController;
         this.task = task;
     }

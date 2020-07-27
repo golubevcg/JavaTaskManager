@@ -27,7 +27,7 @@ public class Worker implements Comparable<Worker>{
     @Column
     private String login;
 
-    @OneToMany(mappedBy = "worker", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "worker", cascade = CascadeType.ALL, orphanRemoval = true,  fetch = FetchType.EAGER)
     private List<Task> tasks;
 
     public Worker() {

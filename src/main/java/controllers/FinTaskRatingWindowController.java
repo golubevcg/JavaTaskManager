@@ -2,7 +2,6 @@ package controllers;
 
 import database.HibernateSessionFactoryUtil;
 import database.Task;
-import database.Worker;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -18,7 +17,6 @@ import org.hibernate.Transaction;
 
 import javax.persistence.Query;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class FinTaskRatingWindowController {
 
@@ -59,12 +57,12 @@ public class FinTaskRatingWindowController {
 
     private Task task;
 
-    private MainWindowController mainWindowController;
+    private OldMainWindowController mainWindowController;
 
     public TextArea textArea;
 
 
-    public FinTaskRatingWindowController(Task task, MainWindowController mainWindowController, TextArea textArea) {
+    public FinTaskRatingWindowController(Task task, OldMainWindowController mainWindowController, TextArea textArea) {
         this.task = task;
         this.mainWindowController = mainWindowController;
         this.textArea = textArea;

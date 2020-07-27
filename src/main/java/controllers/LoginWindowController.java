@@ -1,44 +1,46 @@
 package controllers;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
-
+import Main.Main;
 import animations.Shake;
+import classes.FXResizeHelper;
 import database.HibernateSessionFactoryUtil;
 import database.User;
 import database.services.UserService;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.hibernate.Session;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
+
 
 public class LoginWindowController {
-
-    public static User rootLWCUser;
 
     @FXML
     private AnchorPane anchorPane;
 
     @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
+    private AnchorPane moovableAnchorPane;
 
     @FXML
     private Button enterButton;
@@ -52,26 +54,39 @@ public class LoginWindowController {
     @FXML
     private Button newUserButton;
 
+    @FXML
+    private Button fullScreenButton;
 
-//    @FXML
-//    void Enter(KeyEvent event) {
-//        enterButton.getScene().addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
-//            if(keyEvent.getCode()== KeyCode.ENTER){
-//                enterButtonAction();
-//            }
-//        });
-//    }
+    @FXML
+    private Button minimiseButton;
+
+    @FXML
+    private Button closeButton;
+
+
+    @FXML void close(ActionEvent event){
+        System.exit(0);
+    }
+
+    @FXML void min(ActionEvent event){
+        ((Stage)(anchorPane.getScene().getWindow())).setIconified(true);
+    }
+
+    private double xOffset;
+    private double yOffset;
 
     @FXML
     void initialize() {
 
+        Main.getStageObj().setResizable(false);
+        this.setImagesAndColorToButtons();
         enterButtonAction();
 
-        setButtonCoursorEnterAction(newUserButton);
-        setButtonCoursorEnterAction(enterButton);
+        this.makePaneMoovable(moovableAnchorPane);
 
         newUserButton.setOnAction(event-> {
-            openNewScene("/fxml/regWindow.fxml", newUserButton);
+            RegWindowController regWindowController = new RegWindowController();
+            openNewScene("/fxml/regWindow.fxml", newUserButton, regWindowController);
         });
 
         KeyCombination kc = new KeyCodeCombination(KeyCode.ENTER);
@@ -92,10 +107,18 @@ public class LoginWindowController {
         });
     }
 
-    public void openNewScene(String windowName, Button button){
+    private void setImagesAndColorToButtons() {
+        this.setImageToButton(closeButton, "cross.png", 11,20);
+        this.setImageToButton(minimiseButton, "minimize.png", 13,40);
+        this.setColorsToButtons();
+    }
+
+    public void openNewScene(String windowName, Button button, Object controller){
+
         button.getScene().getWindow().hide();
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource(windowName));
+        loader.setController(controller);
         try {
             loader.load();
         } catch (IOException e) {
@@ -104,6 +127,13 @@ public class LoginWindowController {
         Parent root = loader.getRoot();
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
+        stage.initStyle(StageStyle.UNDECORATED);
+        if(controller.getClass()==(MainWindowController.class)){
+            ((MainWindowController)controller).setStage(stage);
+            FXResizeHelper fxResizeHelper = new FXResizeHelper();
+            fxResizeHelper.addResizeListener(stage);
+
+        }
         stage.show();
     }
 
@@ -124,7 +154,6 @@ public class LoginWindowController {
         });
     }
 
-
     private void loginUser(String loginText, String loginPassword) {
 
         UserService userService = new UserService();
@@ -133,13 +162,13 @@ public class LoginWindowController {
         session.getTransaction();
         session.close();
 
-
         if (list.size() == 1) {
             User user = list.get(0);
-            MainWindowController.rootUser = user;
             if(list.get(0).getPassword().equals(loginPassword)) {
                 enterButton.getScene().getWindow().hide();
-                openNewScene("/fxml/mainWindow.fxml", enterButton);
+                MainWindowController mainWindowController = new MainWindowController(user);
+                openNewScene("/fxml/mainWindow.fxml", enterButton, mainWindowController);
+
             }else{
                 Shake loginShake = new Shake(loginField);
                 Shake passwordShake = new Shake(pwdField);
@@ -159,8 +188,81 @@ public class LoginWindowController {
         lwc.initialize();
     }
 
-    public void setButtonCoursorEnterAction(Button button){
-        button.setOnMouseEntered(e->button.setStyle("-fx-background-color: #f5f9ff;" + "-fx-text-fill: #0f79fa;"));
-        button.setOnMouseExited(e->button.setStyle("-fx-background-color:  #ffffff"));
+    private void makePaneMoovable(AnchorPane anchorPane){
+        anchorPane.setOnMousePressed(e->{
+            xOffset = e.getSceneX();
+            yOffset = e.getSceneY();
+        });
+        anchorPane.setOnMouseDragged(e->{
+            ((Stage)(anchorPane.getScene().getWindow())).setX(e.getScreenX() - xOffset);
+            ((Stage)(anchorPane.getScene().getWindow())).setY(e.getScreenY() - yOffset);
+        });
     }
+
+    private void setImageToButton(Button button, String imageName, int width, int height){
+        Image image = new Image(imageName);
+        ImageView imageView = new ImageView(image);
+        imageView.setPickOnBounds(true);
+        imageView.setPreserveRatio(true);
+        imageView.setFitWidth(width);
+        imageView.setFitHeight(height);
+        button.setGraphic(imageView);
+    }
+
+    private void setColorsToButtons(){
+        String standartColorCursorOnButton = "cfdee9";
+
+        closeButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                closeButton.setStyle("-fx-background-color:#F87272");
+            }
+        });
+        closeButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                closeButton.setStyle("-fx-background-color: transparent");
+            }
+        });
+
+        minimiseButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                minimiseButton.setStyle("-fx-background-color:#" + standartColorCursorOnButton);
+            }
+        });
+        minimiseButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                minimiseButton.setStyle("-fx-background-color: transparent");
+            }
+        });
+
+        newUserButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                newUserButton.setStyle("-fx-background-color:#FFFFFF");
+            }
+        });
+        newUserButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                newUserButton.setStyle("-fx-background-color:transparent");
+            }
+        });
+
+        enterButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                enterButton.setStyle("-fx-background-color:#FFFFFF");
+            }
+        });
+        enterButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                enterButton.setStyle("-fx-background-color:transparent");
+            }
+        });
+    }
+
 }

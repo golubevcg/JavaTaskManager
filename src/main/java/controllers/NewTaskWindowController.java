@@ -5,7 +5,6 @@ import database.HibernateSessionFactoryUtil;
 import database.Task;
 import database.Worker;
 import database.services.TaskService;
-import database.services.WorkerService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,7 +13,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -42,11 +40,11 @@ public class NewTaskWindowController {
     @FXML
     private ToggleGroup tgroup;
 
-    private MainWindowController mainWindowController;
+    private OldMainWindowController mainWindowController;
 
     private Worker worker;
 
-    public NewTaskWindowController(MainWindowController mainWindowController, Worker worker) {
+    public NewTaskWindowController(OldMainWindowController mainWindowController, Worker worker) {
         this.mainWindowController = mainWindowController;
         this.worker = worker;
 
