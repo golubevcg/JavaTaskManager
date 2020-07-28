@@ -196,30 +196,17 @@ public class MainWindowController {
     private void drawWorkerLabels(){
         List<Worker> workerList = rootUser.getWorkers();
 
-        double additionalHeight=0;
+        double additionalHeight = 0;
 
         for (int i = 0; i < workerList.size(); i++) {
 
+            double additionalRectangleHeight = 0;
 
 
             double rectWidth = 302.5;
-            double rectHeight = 20*2.5;
             double rectLX = 5;
-            double rectLY = 5 + i * 50 + additionalHeight;
-            System.out.println("rectLY" + rectLY);
-//
-//            Rectangle rectangle = new Rectangle(rectWidth,rectHeight);
-//            rectangle.setFill(Color.WHITE);
-//            rectangle.setLayoutX(rectLX);
-//            AnchorPane.setLeftAnchor(rectangle, rectLX);
-//            AnchorPane.setTopAnchor(rectangle, rectLY);
-//            anchorPaneForCards.getChildren().addAll(rectangle);
-//
-//            Rectangle rectangle1 = new Rectangle(rectWidth,rectHeight);
-//            rectangle1.setFill(Color.WHITE);
-//            AnchorPane.setRightAnchor(rectangle1, rectLX);
-//            AnchorPane.setTopAnchor(rectangle1, rectLY);
-//            anchorPaneForCards.getChildren().addAll(rectangle1);
+            double rectLY = 5 + i * 55 + additionalHeight;
+
 
             Label label = new Label();
             label.setTranslateZ(2);
@@ -248,7 +235,6 @@ public class MainWindowController {
 
 
             List<Task> workerTasks = workerList.get(i).getTasks();
-
             for (int j = 0; j < workerTasks.size(); j++) {
 
                 double rectLY1 = 5 + i * 50 + additionalHeight + 2;
@@ -256,7 +242,6 @@ public class MainWindowController {
                 String taskText = workerTasks.get(j).getTasktype();
 
                 if(taskText.equals("inwork") || taskText.equals("quene")){
-                    System.out.println("iteration"+j + " needs to be drawn");
                     String myString = workerTasks.get(j).getText();
                     Label label1 = new Label();
                     Font font1 = new Font("Arial", 13);
@@ -265,22 +250,44 @@ public class MainWindowController {
                     label1.setPrefWidth(253);
                     label1.setMaxWidth(label1.getPrefWidth());
                     label1.setPrefHeight(20);
-                    label1.setWrapText(true);
+                    label1.setViewOrder(1);
 
                         if(taskText.equals("quene")) {
                             AnchorPane.setLeftAnchor(label1, 50.0);
-                            System.out.println("iteration"+j + " is quene");
                         }else{
                             AnchorPane.setRightAnchor(label1, rectLX+3);
-                            System.out.println("iteration"+j + " is in work");
                         }
 
                     AnchorPane.setTopAnchor(label1, rectLY1 + 40);
+                    label1.setWrapText(true);
                     anchorPaneForCards.getChildren().addAll(label1);
                     additionalHeight+=20;
+                    additionalRectangleHeight+=20;
                 }
             }
 
+            double rectHeight = 25*2 + additionalRectangleHeight;
+
+            Rectangle rectangle = new Rectangle(rectWidth,rectHeight);
+            rectangle.setFill(Color.WHITE);
+            rectangle.setLayoutX(rectLX);
+            AnchorPane.setLeftAnchor(rectangle, rectLX);
+            AnchorPane.setTopAnchor(rectangle, rectLY);
+            anchorPaneForCards.getChildren().addAll(rectangle);
+
+            Rectangle rectangle1 = new Rectangle(rectWidth,rectHeight);
+            rectangle1.setFill(Color.WHITE);
+            AnchorPane.setRightAnchor(rectangle1, rectLX);
+            AnchorPane.setTopAnchor(rectangle1, rectLY);
+            anchorPaneForCards.getChildren().addAll(rectangle1);
+
+            rectangle.setViewOrder(2);
+            rectangle1.setViewOrder(2);
+
+            if(i%2==0){
+                rectangle.setOpacity(0.82);
+                rectangle1.setOpacity(0.82);
+            }
 
 
         }
