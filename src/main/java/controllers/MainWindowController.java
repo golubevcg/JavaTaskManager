@@ -237,12 +237,12 @@ public class MainWindowController {
             List<Task> workerTasks = workerList.get(i).getTasks();
             for (int j = 0; j < workerTasks.size(); j++) {
 
-                double rectLY1 = 5 + i * 50 + additionalHeight + 2;
+                double rectLY1 = i * 55 + additionalHeight;
 
                 String taskText = workerTasks.get(j).getTasktype();
 
                 if(taskText.equals("inwork") || taskText.equals("quene")){
-                    String myString = workerTasks.get(j).getText();
+                    String myString = "- " + workerTasks.get(j).getText();
                     Label label1 = new Label();
                     Font font1 = new Font("Arial", 13);
                     label1.setFont(font1);
@@ -251,18 +251,18 @@ public class MainWindowController {
                     label1.setMaxWidth(label1.getPrefWidth());
                     label1.setPrefHeight(20);
                     label1.setViewOrder(1);
-
                         if(taskText.equals("quene")) {
                             AnchorPane.setLeftAnchor(label1, 50.0);
                         }else{
-                            AnchorPane.setRightAnchor(label1, rectLX+3);
+                            AnchorPane.setRightAnchor(label1, rectLX+3+20);
+                            //add done button here
                         }
 
                     AnchorPane.setTopAnchor(label1, rectLY1 + 40);
                     label1.setWrapText(true);
                     anchorPaneForCards.getChildren().addAll(label1);
-                    additionalHeight+=20;
-                    additionalRectangleHeight+=20;
+                    additionalHeight+=25;
+                    additionalRectangleHeight+=25;
                 }
             }
 
@@ -284,9 +284,9 @@ public class MainWindowController {
             rectangle.setViewOrder(2);
             rectangle1.setViewOrder(2);
 
-            if(i%2==0){
-                rectangle.setOpacity(0.82);
-                rectangle1.setOpacity(0.82);
+            if(i%2!=0){
+                rectangle.setOpacity(0.725);
+                rectangle1.setOpacity(0.725);
             }
 
 
