@@ -208,30 +208,29 @@ public class MainWindowController {
             double rectLY = 5 + i * 55 + additionalHeight;
 
 
-            Label label = new Label();
-            label.setTranslateZ(2);
-            Font font = new Font("Arial", 16);
-            label.setFont(font);
-            label.setText(workerList.get(i).getFirstname() + " " + workerList.get(i).getLastname());
-            AnchorPane.setLeftAnchor(label, rectLX + 3);
-            AnchorPane.setTopAnchor(label, rectLY + 3);
-            label.setMaxWidth(rectWidth);
-            label.setWrapText(true);
-            anchorPaneForCards.getChildren().addAll(label);
+            Label workerLabel = new Label();
+            Font workerFont = new Font("Arial", 16);
+            workerLabel.setFont(workerFont);
+            workerLabel.setText(workerList.get(i).getFirstname() + " " + workerList.get(i).getLastname());
+            AnchorPane.setLeftAnchor(workerLabel, rectLX + 3);
+            AnchorPane.setTopAnchor(workerLabel, rectLY + 3);
+            workerLabel.setMaxWidth(rectWidth);
+            workerLabel.setWrapText(true);
+            anchorPaneForCards.getChildren().addAll(workerLabel);
 
-            Separator separator = new Separator();
-            AnchorPane.setLeftAnchor(separator, rectLX+1);
-            separator.setLayoutY(rectLY+21+3);
-            separator.setPrefWidth(301);
-            separator.setMaxWidth(separator.getPrefWidth());
-            anchorPaneForCards.getChildren().addAll(separator);
+            Separator inQueueSeparator = new Separator();
+            AnchorPane.setLeftAnchor(inQueueSeparator, rectLX+1);
+            inQueueSeparator.setLayoutY(rectLY+21+3);
+            inQueueSeparator.setPrefWidth(301);
+            inQueueSeparator.setMaxWidth(inQueueSeparator.getPrefWidth());
+            anchorPaneForCards.getChildren().addAll(inQueueSeparator);
 
-            Separator separator1 = new Separator();
-            AnchorPane.setRightAnchor(separator1, rectLX);
-            separator1.setLayoutY(rectLY+21+3);
-            separator1.setPrefWidth(301);
-            separator1.setMaxWidth(separator1.getPrefWidth());
-            anchorPaneForCards.getChildren().addAll(separator1);
+            Separator inWorkSeparator = new Separator();
+            AnchorPane.setRightAnchor(inWorkSeparator, rectLX);
+            inWorkSeparator.setLayoutY(rectLY+21+3);
+            inWorkSeparator.setPrefWidth(301);
+            inWorkSeparator.setMaxWidth(inWorkSeparator.getPrefWidth());
+            anchorPaneForCards.getChildren().addAll(inWorkSeparator);
 
 
             List<Task> workerTasks = workerList.get(i).getTasks();
@@ -242,51 +241,95 @@ public class MainWindowController {
                 String taskText = workerTasks.get(j).getTasktype();
 
                 if(taskText.equals("inwork") || taskText.equals("quene")){
+
+                    Rectangle taskRectangle = new Rectangle(253,23);
+
+                    String standartColorCursorOnButton = "51abed";
+                    taskRectangle.setFill(Color.WHITE);
+                    taskRectangle.setViewOrder(2);
+                    taskRectangle.setArcHeight(5);
+                    taskRectangle.setArcWidth(5);
+                    AnchorPane.setTopAnchor(taskRectangle, rectLY1 + 40);
+                    anchorPaneForCards.getChildren().addAll(taskRectangle);
+                    taskRectangle.setOpacity(0.75);
+
+
+                    taskRectangle.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent mouseEvent) {
+                            taskRectangle.setFill(Color.web(standartColorCursorOnButton));
+                        }
+                    });
+
+                    if(i%2!=0){
+                        taskRectangle.setFill((Color.web("f2f6f9")));
+                        taskRectangle.setOnMouseExited(new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(MouseEvent mouseEvent) {
+                                    taskRectangle.setFill((Color.web("f2f6f9")));
+
+                            }
+                        });
+                    }else{
+                        taskRectangle.setOnMouseExited(new EventHandler<MouseEvent>() {
+                           @Override
+                           public void handle(MouseEvent mouseEvent) {
+                               taskRectangle.setFill(Color.WHITE);
+
+                           }
+                    });
+                    }
+
                     String myString = "- " + workerTasks.get(j).getText();
-                    Label label1 = new Label();
+                    Label taskLabel = new Label();
                     Font font1 = new Font("Arial", 13);
-                    label1.setFont(font1);
-                    label1.setText(myString);
-                    label1.setPrefWidth(253);
-                    label1.setMaxWidth(label1.getPrefWidth());
-                    label1.setPrefHeight(20);
-                    label1.setViewOrder(1);
+                    taskLabel.setFont(font1);
+                    taskLabel.setText(myString);
+                    taskLabel.setPrefWidth(253);
+                    taskLabel.setMaxWidth(taskLabel.getPrefWidth());
+                    taskLabel.setPrefHeight(20);
+                    taskLabel.setViewOrder(1);
                         if(taskText.equals("quene")) {
-                            AnchorPane.setLeftAnchor(label1, 50.0);
+                            AnchorPane.setLeftAnchor(taskLabel, 50.0);
+                            AnchorPane.setLeftAnchor(taskRectangle, 50.0);
                         }else{
-                            AnchorPane.setRightAnchor(label1, rectLX+3+20);
+                            AnchorPane.setRightAnchor(taskLabel, rectLX+3+20);
+                            AnchorPane.setRightAnchor(taskRectangle, rectLX+3+20);
                             //add done button here
                         }
 
-                    AnchorPane.setTopAnchor(label1, rectLY1 + 40);
-                    label1.setWrapText(true);
-                    anchorPaneForCards.getChildren().addAll(label1);
+                    AnchorPane.setTopAnchor(taskLabel, rectLY1 + 40);
+                    taskLabel.setWrapText(true);
+                    taskLabel.setMouseTransparent(true);
+                    anchorPaneForCards.getChildren().addAll(taskLabel);
                     additionalHeight+=25;
                     additionalRectangleHeight+=25;
+
+
+
                 }
             }
 
             double rectHeight = 25*2 + additionalRectangleHeight;
 
-            Rectangle rectangle = new Rectangle(rectWidth,rectHeight);
-            rectangle.setFill(Color.WHITE);
-            rectangle.setLayoutX(rectLX);
-            AnchorPane.setLeftAnchor(rectangle, rectLX);
-            AnchorPane.setTopAnchor(rectangle, rectLY);
-            anchorPaneForCards.getChildren().addAll(rectangle);
+            Rectangle queueRectangle = new Rectangle(rectWidth,rectHeight);
+            queueRectangle.setFill(Color.WHITE);
+            queueRectangle.setLayoutX(rectLX);
+            queueRectangle.setViewOrder(3);
+            AnchorPane.setLeftAnchor(queueRectangle, rectLX);
+            AnchorPane.setTopAnchor(queueRectangle, rectLY);
+            anchorPaneForCards.getChildren().addAll(queueRectangle);
 
-            Rectangle rectangle1 = new Rectangle(rectWidth,rectHeight);
-            rectangle1.setFill(Color.WHITE);
-            AnchorPane.setRightAnchor(rectangle1, rectLX);
-            AnchorPane.setTopAnchor(rectangle1, rectLY);
-            anchorPaneForCards.getChildren().addAll(rectangle1);
-
-            rectangle.setViewOrder(2);
-            rectangle1.setViewOrder(2);
+            Rectangle inWorkRectangle = new Rectangle(rectWidth,rectHeight);
+            inWorkRectangle.setFill(Color.WHITE);
+            inWorkRectangle.setViewOrder(3);
+            AnchorPane.setRightAnchor(inWorkRectangle, rectLX);
+            AnchorPane.setTopAnchor(inWorkRectangle, rectLY);
+            anchorPaneForCards.getChildren().addAll(inWorkRectangle);
 
             if(i%2!=0){
-                rectangle.setOpacity(0.725);
-                rectangle1.setOpacity(0.725);
+                queueRectangle.setFill(Color.web("f2f6f9"));
+                inWorkRectangle.setFill(Color.web("f2f6f9"));
             }
 
 
