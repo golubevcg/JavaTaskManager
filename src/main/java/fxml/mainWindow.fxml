@@ -4,21 +4,24 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="mainAnchorPane" prefHeight="730.0" prefWidth="927.0" style="-fx-background-color: cfdee9;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <AnchorPane fx:id="anchorPainTodragWindow1" layoutX="14.0" layoutY="14.0" prefHeight="27.0" prefWidth="919.0" style="-fx-background-color: FFFFFF;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <AnchorPane fx:id="anchorPainTodragWindow" prefHeight="20.0" prefWidth="919.0" style="-fx-background-color: FFFFFF;" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0" />
-      <MenuBar fx:id="mainMenuBar" mouseTransparent="true" prefHeight="23.0" prefWidth="91.0" style="-fx-background-color: FFFFFF;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <AnchorPane fx:id="anchorPainTodragWindow1" layoutX="14.0" layoutY="14.0" prefHeight="27.0" prefWidth="919.0" style="-fx-background-color: cfdee9;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <AnchorPane fx:id="anchorPainTodragWindow" prefHeight="20.0" prefWidth="919.0" style="-fx-background-color: cfdee9;" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0" />
+      <MenuBar fx:id="mainMenuBar" mouseTransparent="true" prefHeight="23.0" prefWidth="91.0" style="-fx-background-color: cfdee9;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
       <Button fx:id="closeButton" mnemonicParsing="false" onAction="#close" style="-fx-background-color: transparent;" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="1.0" />
       <Button fx:id="addNewWorkerButton" layoutX="594.0" layoutY="10.0" mnemonicParsing="false" style="-fx-background-color: transparent;" textAlignment="CENTER" AnchorPane.leftAnchor="55.0" AnchorPane.topAnchor="0.0" />
       <Button fx:id="minimiseButton" mnemonicParsing="false" onAction="#min" prefHeight="0.0" prefWidth="21.0" style="-fx-background-color: transparent;" AnchorPane.rightAnchor="44.0" AnchorPane.topAnchor="1.0" />
-      <TextArea fx:id="textArea" prefHeight="484.0" prefWidth="307.0" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-background-insets: transparent; -fx-faint-focus-color: transparent;" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="28.0">
+      <AnchorPane fx:id="anchorPaneForCards" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: FFFFFF;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="307.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0" />
+      <AnchorPane fx:id="anchorPaneTextFieldBG" layoutX="24.0" layoutY="24.0" prefHeight="27.0" prefWidth="310.0" style="-fx-background-color: FFFFFF;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="30.0" />
+      <Rectangle fx:id="textFieldRectangle" arcHeight="10.0" arcWidth="10.0" fill="#ffffff00" height="692.0" layoutX="14.0" layoutY="35.0" stroke="#91afc5" strokeType="INSIDE" strokeWidth="2.0" width="307.0" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="34.0" />
+      <TextArea fx:id="textArea" layoutY="76.0" prefHeight="652.0" prefWidth="305.0" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-background-insets: transparent; -fx-faint-focus-color: transparent; -fx-border-radius: 10; -fx-background-radius: 10;" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="617.0" AnchorPane.topAnchor="35.0">
          <font>
             <Font name="Arial" size="16.0" />
          </font>
       </TextArea>
-      <AnchorPane fx:id="anchorPaneForCards" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="307.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="27.0" />
    </children>
 </AnchorPane>

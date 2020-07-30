@@ -19,7 +19,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -73,6 +75,13 @@ public class MainWindowController {
     @FXML
     private AnchorPane anchorPaneForCards;
 
+    @FXML
+    private AnchorPane anchorPaneTextFieldBG;
+
+    @FXML
+    private Rectangle textFieldRectangle;
+
+
     @FXML void close(ActionEvent event){
         System.exit(0);
     }
@@ -104,14 +113,19 @@ public class MainWindowController {
         this.textArea.setText(this.getUserTextField());
         this.textArea.setMinWidth(textArea.getPrefWidth());
         this.textArea.setMaxHeight(textArea.getPrefHeight());
-        textArea.setWrapText(true);
+        this.textArea.setWrapText(true);
+//        this.textArea.setStyle(".text-area {\n" +
+//                "  -fx-border-radius: 5 5 0 0;\n" +
+//                "  -fx-background-radius: 5 5 0 0; }");
 
         this.setImagesAndColorToButtons();
 
         this.fixCaretView();
 
-
         this.drawWorkerLabels();
+
+
+
 
 
     }
@@ -202,7 +216,7 @@ public class MainWindowController {
 
             double additionalRectangleHeight = 0;
 
-
+            double rectanglesArcRadius = 5;
             double rectWidth = 302.5;
             double rectLX = 5;
             double rectLY = 5 + i * 55 + additionalHeight;
@@ -232,6 +246,8 @@ public class MainWindowController {
             inWorkSeparator.setMaxWidth(inWorkSeparator.getPrefWidth());
             anchorPaneForCards.getChildren().addAll(inWorkSeparator);
 
+            String standartColorCursorOnButton = "51abed";
+            String standartRectanglesColor = "FFFFFF";
 
             List<Task> workerTasks = workerList.get(i).getTasks();
             for (int j = 0; j < workerTasks.size(); j++) {
@@ -244,15 +260,13 @@ public class MainWindowController {
 
                     Rectangle taskRectangle = new Rectangle(253,23);
 
-                    String standartColorCursorOnButton = "51abed";
-                    taskRectangle.setFill(Color.WHITE);
+                    taskRectangle.setFill(Color.web(standartRectanglesColor));
                     taskRectangle.setViewOrder(2);
-                    taskRectangle.setArcHeight(5);
-                    taskRectangle.setArcWidth(5);
+                    taskRectangle.setArcHeight(rectanglesArcRadius);
+                    taskRectangle.setArcWidth(rectanglesArcRadius);
                     AnchorPane.setTopAnchor(taskRectangle, rectLY1 + 40);
                     anchorPaneForCards.getChildren().addAll(taskRectangle);
                     taskRectangle.setOpacity(0.75);
-
 
                     taskRectangle.setOnMouseEntered(new EventHandler<MouseEvent>() {
                         @Override
@@ -261,24 +275,13 @@ public class MainWindowController {
                         }
                     });
 
-                    if(i%2!=0){
-                        taskRectangle.setFill((Color.web("f2f6f9")));
-                        taskRectangle.setOnMouseExited(new EventHandler<MouseEvent>() {
-                            @Override
-                            public void handle(MouseEvent mouseEvent) {
-                                    taskRectangle.setFill((Color.web("f2f6f9")));
+                    taskRectangle.setOnMouseExited(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent mouseEvent) {
+                                taskRectangle.setFill((Color.web(standartRectanglesColor)));
 
-                            }
-                        });
-                    }else{
-                        taskRectangle.setOnMouseExited(new EventHandler<MouseEvent>() {
-                           @Override
-                           public void handle(MouseEvent mouseEvent) {
-                               taskRectangle.setFill(Color.WHITE);
-
-                           }
+                        }
                     });
-                    }
 
                     String myString = "- " + workerTasks.get(j).getText();
                     Label taskLabel = new Label();
@@ -305,33 +308,33 @@ public class MainWindowController {
                     additionalHeight+=25;
                     additionalRectangleHeight+=25;
 
-
-
                 }
             }
 
             double rectHeight = 25*2 + additionalRectangleHeight;
 
             Rectangle queueRectangle = new Rectangle(rectWidth,rectHeight);
-            queueRectangle.setFill(Color.WHITE);
+            queueRectangle.setFill(Color.web(standartRectanglesColor));
+            queueRectangle.setStrokeWidth(3);
+            queueRectangle.setStroke(Paint.valueOf("000000"));
             queueRectangle.setLayoutX(rectLX);
             queueRectangle.setViewOrder(3);
+            queueRectangle.setArcWidth(rectanglesArcRadius);
+            queueRectangle.setArcHeight(rectanglesArcRadius);
             AnchorPane.setLeftAnchor(queueRectangle, rectLX);
             AnchorPane.setTopAnchor(queueRectangle, rectLY);
             anchorPaneForCards.getChildren().addAll(queueRectangle);
 
             Rectangle inWorkRectangle = new Rectangle(rectWidth,rectHeight);
-            inWorkRectangle.setFill(Color.WHITE);
-            inWorkRectangle.setViewOrder(3);
+            inWorkRectangle.setFill(Color.web(standartRectanglesColor));
+            inWorkRectangle.setStrokeWidth(3);
+            inWorkRectangle.setStroke(Paint.valueOf("000000"));
+            inWorkRectangle.setViewOrder(4);
+            inWorkRectangle.setArcWidth(rectanglesArcRadius);
+            inWorkRectangle.setArcHeight(rectanglesArcRadius);
             AnchorPane.setRightAnchor(inWorkRectangle, rectLX);
             AnchorPane.setTopAnchor(inWorkRectangle, rectLY);
             anchorPaneForCards.getChildren().addAll(inWorkRectangle);
-
-            if(i%2!=0){
-                queueRectangle.setFill(Color.web("f2f6f9"));
-                inWorkRectangle.setFill(Color.web("f2f6f9"));
-            }
-
 
         }
 
