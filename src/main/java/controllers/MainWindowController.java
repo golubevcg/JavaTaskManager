@@ -20,6 +20,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
@@ -124,10 +125,6 @@ public class MainWindowController {
 
         this.drawWorkerLabels();
 
-
-
-
-
     }
 
     private void makePaneMoovable(AnchorPane anchorPane){
@@ -221,28 +218,33 @@ public class MainWindowController {
             double rectLX = 5;
             double rectLY = 5 + i * 55 + additionalHeight;
 
-
             Label workerLabel = new Label();
             Font workerFont = new Font("Arial", 16);
             workerLabel.setFont(workerFont);
             workerLabel.setText(workerList.get(i).getFirstname() + " " + workerList.get(i).getLastname());
-            AnchorPane.setLeftAnchor(workerLabel, rectLX + 3);
-            AnchorPane.setTopAnchor(workerLabel, rectLY + 3);
+            AnchorPane.setLeftAnchor(workerLabel, rectLX + 3 + 4 + 2+3);
+            if(i==0){
+                AnchorPane.setTopAnchor(workerLabel, rectLY + 3 + 3);
+            }else{
+                AnchorPane.setTopAnchor(workerLabel, rectLY + 3 + 3*i);
+            }
             workerLabel.setMaxWidth(rectWidth);
             workerLabel.setWrapText(true);
             anchorPaneForCards.getChildren().addAll(workerLabel);
 
             Separator inQueueSeparator = new Separator();
-            AnchorPane.setLeftAnchor(inQueueSeparator, rectLX+1);
-            inQueueSeparator.setLayoutY(rectLY+21+3);
-            inQueueSeparator.setPrefWidth(301);
+            AnchorPane.setLeftAnchor(inQueueSeparator, rectLX+1+4+2);
+            inQueueSeparator.setLayoutY(rectLY+21+3+4+2);
+            inQueueSeparator.setPrefWidth(301-6-4);
             inQueueSeparator.setMaxWidth(inQueueSeparator.getPrefWidth());
+            inQueueSeparator.setStyle("-fx-background-color: 91afc5");
             anchorPaneForCards.getChildren().addAll(inQueueSeparator);
 
             Separator inWorkSeparator = new Separator();
-            AnchorPane.setRightAnchor(inWorkSeparator, rectLX);
-            inWorkSeparator.setLayoutY(rectLY+21+3);
-            inWorkSeparator.setPrefWidth(301);
+            AnchorPane.setRightAnchor(inWorkSeparator, rectLX+4+2);
+            inWorkSeparator.setLayoutY(rectLY+21+3+4+2);
+            inWorkSeparator.setPrefWidth(301-6);
+            inWorkSeparator.setStyle("-fx-background-color: 91afc5");
             inWorkSeparator.setMaxWidth(inWorkSeparator.getPrefWidth());
             anchorPaneForCards.getChildren().addAll(inWorkSeparator);
 
@@ -252,14 +254,13 @@ public class MainWindowController {
             List<Task> workerTasks = workerList.get(i).getTasks();
             for (int j = 0; j < workerTasks.size(); j++) {
 
-                double rectLY1 = i * 55 + additionalHeight;
+                double rectLY1 = 5 + i * 55 + additionalHeight;
 
                 String taskText = workerTasks.get(j).getTasktype();
 
                 if(taskText.equals("inwork") || taskText.equals("quene")){
 
                     Rectangle taskRectangle = new Rectangle(253,23);
-
                     taskRectangle.setFill(Color.web(standartRectanglesColor));
                     taskRectangle.setViewOrder(2);
                     taskRectangle.setArcHeight(rectanglesArcRadius);
@@ -313,27 +314,27 @@ public class MainWindowController {
 
             double rectHeight = 25*2 + additionalRectangleHeight;
 
-            Rectangle queueRectangle = new Rectangle(rectWidth,rectHeight);
+
+            Rectangle queueRectangle = new Rectangle(rectWidth-5.5,rectHeight);
             queueRectangle.setFill(Color.web(standartRectanglesColor));
-            queueRectangle.setStrokeWidth(3);
-            queueRectangle.setStroke(Paint.valueOf("000000"));
-            queueRectangle.setLayoutX(rectLX);
+            queueRectangle.setStrokeWidth(2);
+            queueRectangle.setStroke(Paint.valueOf("91afc5"));
             queueRectangle.setViewOrder(3);
             queueRectangle.setArcWidth(rectanglesArcRadius);
             queueRectangle.setArcHeight(rectanglesArcRadius);
-            AnchorPane.setLeftAnchor(queueRectangle, rectLX);
-            AnchorPane.setTopAnchor(queueRectangle, rectLY);
+            AnchorPane.setLeftAnchor(queueRectangle, rectLX+3.5);
+            AnchorPane.setTopAnchor(queueRectangle, rectLY+i*2);
             anchorPaneForCards.getChildren().addAll(queueRectangle);
 
-            Rectangle inWorkRectangle = new Rectangle(rectWidth,rectHeight);
+            Rectangle inWorkRectangle = new Rectangle(rectWidth-5.5+3.5,rectHeight);
             inWorkRectangle.setFill(Color.web(standartRectanglesColor));
-            inWorkRectangle.setStrokeWidth(3);
-            inWorkRectangle.setStroke(Paint.valueOf("000000"));
+            inWorkRectangle.setStrokeWidth(2);
+            inWorkRectangle.setStroke(Paint.valueOf("91afc5"));
             inWorkRectangle.setViewOrder(4);
             inWorkRectangle.setArcWidth(rectanglesArcRadius);
             inWorkRectangle.setArcHeight(rectanglesArcRadius);
             AnchorPane.setRightAnchor(inWorkRectangle, rectLX);
-            AnchorPane.setTopAnchor(inWorkRectangle, rectLY);
+            AnchorPane.setTopAnchor(inWorkRectangle, rectLY+i*2);
             anchorPaneForCards.getChildren().addAll(inWorkRectangle);
 
         }
