@@ -5,6 +5,7 @@ import database.User;
 import database.Worker;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.css.Stylesheet;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -119,17 +120,20 @@ public class MainWindowController {
         this.textArea.setMinWidth(textArea.getPrefWidth());
         this.textArea.setMaxHeight(textArea.getPrefHeight());
         this.textArea.setWrapText(true);
-        this.textArea.setStyle( "-fx-background-color: transparent;"+
-                                "-fx-border-color:#91afc5;"+
-                                "-fx-background-insets: transparent;"+
-                                "-fx-faint-focus-color: transparent;"+
-                                "-fx-border-radius: 5;"+
-                                "-fx-background-radius: 5;"+
-                                "-fx-border-width: 1.5;");
+//        this.textArea.setStyle( "-fx-background-color: transparent;"+
+//                                "-fx-border-color:#91afc5;"+
+//                                "-fx-background-insets: transparent;"+
+//                                "-fx-faint-focus-color: transparent;"+
+//                                "-fx-border-radius: 5;"+
+//                                "-fx-background-radius: 5;"+
+//                                "-fx-border-width: 1.5;");
         this.setImagesAndColorToButtons();
 
-//        this.fixCaretView();
 
+        String stylesheet = getClass().getResource("/styles.css").toExternalForm();
+        System.out.println(stylesheet);
+//        this.fixCaretView();
+        textArea.getStylesheets().add(stylesheet);
         this.drawWorkerLabels();
 
     }
@@ -216,8 +220,6 @@ public class MainWindowController {
 
         double additionalHeight = 0;
 
-
-
         for (int i = 0; i < workerList.size(); i++) {
 
             double additionalRectangleHeight = 0;
@@ -228,7 +230,6 @@ public class MainWindowController {
             double rectLY = 5 + i * 55 + additionalHeight;
             double strokeWidth = 1.5;
 
-            String standartColorCursorOnButton = "51abed";
             String standartRectanglesColor = "FFFFFF";
 
             Label workerLabel = new Label();
