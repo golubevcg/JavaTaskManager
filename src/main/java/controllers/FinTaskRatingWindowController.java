@@ -57,12 +57,12 @@ public class FinTaskRatingWindowController {
 
     private Task task;
 
-    private OldMainWindowController mainWindowController;
+    private MainWindowController mainWindowController;
 
     public TextArea textArea;
 
 
-    public FinTaskRatingWindowController(Task task, OldMainWindowController mainWindowController, TextArea textArea) {
+    public FinTaskRatingWindowController(Task task, MainWindowController mainWindowController, TextArea textArea) {
         this.task = task;
         this.mainWindowController = mainWindowController;
         this.textArea = textArea;

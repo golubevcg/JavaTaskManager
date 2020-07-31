@@ -8,9 +8,12 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.skin.TextInputControlSkin;
 import javafx.scene.effect.DropShadow;
@@ -26,6 +29,7 @@ import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -115,13 +119,16 @@ public class MainWindowController {
         this.textArea.setMinWidth(textArea.getPrefWidth());
         this.textArea.setMaxHeight(textArea.getPrefHeight());
         this.textArea.setWrapText(true);
-//        this.textArea.setStyle(".text-area {\n" +
-//                "  -fx-border-radius: 5 5 0 0;\n" +
-//                "  -fx-background-radius: 5 5 0 0; }");
-
+        this.textArea.setStyle( "-fx-background-color: transparent;"+
+                                "-fx-border-color:#91afc5;"+
+                                "-fx-background-insets: transparent;"+
+                                "-fx-faint-focus-color: transparent;"+
+                                "-fx-border-radius: 5;"+
+                                "-fx-background-radius: 5;"+
+                                "-fx-border-width: 1.5;");
         this.setImagesAndColorToButtons();
 
-        this.fixCaretView();
+//        this.fixCaretView();
 
         this.drawWorkerLabels();
 
@@ -209,6 +216,8 @@ public class MainWindowController {
 
         double additionalHeight = 0;
 
+
+
         for (int i = 0; i < workerList.size(); i++) {
 
             double additionalRectangleHeight = 0;
@@ -217,70 +226,80 @@ public class MainWindowController {
             double rectWidth = 302.5;
             double rectLX = 5;
             double rectLY = 5 + i * 55 + additionalHeight;
+            double strokeWidth = 1.5;
+
+            String standartColorCursorOnButton = "51abed";
+            String standartRectanglesColor = "FFFFFF";
 
             Label workerLabel = new Label();
             Font workerFont = new Font("Arial", 16);
             workerLabel.setFont(workerFont);
             workerLabel.setText(workerList.get(i).getFirstname() + " " + workerList.get(i).getLastname());
-            AnchorPane.setLeftAnchor(workerLabel, rectLX + 3 + 4 + 2+3);
-            if(i==0){
-                AnchorPane.setTopAnchor(workerLabel, rectLY + 3 + 3);
-            }else{
-                AnchorPane.setTopAnchor(workerLabel, rectLY + 3 + 3*i);
-            }
+            AnchorPane.setLeftAnchor(workerLabel, rectLX + 12);
+            AnchorPane.setTopAnchor(workerLabel, rectLY+i*2+6);
+
             workerLabel.setMaxWidth(rectWidth);
             workerLabel.setWrapText(true);
             anchorPaneForCards.getChildren().addAll(workerLabel);
 
-            Separator inQueueSeparator = new Separator();
-            AnchorPane.setLeftAnchor(inQueueSeparator, rectLX+1+4+2);
-            inQueueSeparator.setLayoutY(rectLY+21+3+4+2);
-            inQueueSeparator.setPrefWidth(301-6-4);
-            inQueueSeparator.setMaxWidth(inQueueSeparator.getPrefWidth());
-            inQueueSeparator.setStyle("-fx-background-color: 91afc5");
-            anchorPaneForCards.getChildren().addAll(inQueueSeparator);
+            Line inQueueLine = new Line();
+            inQueueLine.setStartX(rectLX+12);
+            inQueueLine.setEndX(299);
+            inQueueLine.setStartY(rectLY+i*2+6+25);
+            inQueueLine.setEndY(rectLY+i*2+6+25);
+            inQueueLine.setStrokeWidth(strokeWidth);
+            inQueueLine.setOpacity(0.7);
+            inQueueLine.setStroke(Paint.valueOf("91afc5"));
+            anchorPaneForCards.getChildren().addAll(inQueueLine);
 
-            Separator inWorkSeparator = new Separator();
-            AnchorPane.setRightAnchor(inWorkSeparator, rectLX+4+2);
-            inWorkSeparator.setLayoutY(rectLY+21+3+4+2);
-            inWorkSeparator.setPrefWidth(301-6);
-            inWorkSeparator.setStyle("-fx-background-color: 91afc5");
-            inWorkSeparator.setMaxWidth(inWorkSeparator.getPrefWidth());
-            anchorPaneForCards.getChildren().addAll(inWorkSeparator);
-
-            String standartColorCursorOnButton = "51abed";
-            String standartRectanglesColor = "FFFFFF";
+            Line inWorkLine = new Line();
+            inWorkLine.setStartX(rectLX+1+4+2+5+303);
+            inWorkLine.setEndX(301-6-4+8+305);
+            inWorkLine.setStartY(rectLY+i*2+6+25);
+            inWorkLine.setEndY(rectLY+i*2+6+25);
+            inWorkLine.setStrokeWidth(strokeWidth);
+            inWorkLine.setOpacity(0.7);
+            inWorkLine.setStroke(Paint.valueOf("91afc5"));
+            anchorPaneForCards.getChildren().addAll(inWorkLine);
 
             List<Task> workerTasks = workerList.get(i).getTasks();
+
             for (int j = 0; j < workerTasks.size(); j++) {
 
-                double rectLY1 = 5 + i * 55 + additionalHeight;
+                Task task = workerTasks.get(j);
+
+                double rectLY1 = i * 55 + additionalHeight;
 
                 String taskText = workerTasks.get(j).getTasktype();
 
                 if(taskText.equals("inwork") || taskText.equals("quene")){
 
-                    Rectangle taskRectangle = new Rectangle(253,23);
+                    Rectangle taskRectangle;
+                    if(taskText.equals("quene")) {
+                        taskRectangle = new Rectangle(253+4,23+2);
+                    }else{
+                        taskRectangle = new Rectangle(253+4+4+8+15,23+2);
+                    }
                     taskRectangle.setFill(Color.web(standartRectanglesColor));
                     taskRectangle.setViewOrder(2);
-                    taskRectangle.setArcHeight(rectanglesArcRadius);
-                    taskRectangle.setArcWidth(rectanglesArcRadius);
-                    AnchorPane.setTopAnchor(taskRectangle, rectLY1 + 40);
+                    taskRectangle.setArcHeight(rectanglesArcRadius*1.5);
+                    taskRectangle.setArcWidth(rectanglesArcRadius*1.5);
+
+                    AnchorPane.setTopAnchor(taskRectangle, rectLY1 + 48);
                     anchorPaneForCards.getChildren().addAll(taskRectangle);
-                    taskRectangle.setOpacity(0.75);
 
                     taskRectangle.setOnMouseEntered(new EventHandler<MouseEvent>() {
                         @Override
                         public void handle(MouseEvent mouseEvent) {
-                            taskRectangle.setFill(Color.web(standartColorCursorOnButton));
+                            taskRectangle.setStrokeWidth(strokeWidth);
+                            taskRectangle.setStroke(Paint.valueOf("91afc5"));
                         }
                     });
 
                     taskRectangle.setOnMouseExited(new EventHandler<MouseEvent>() {
                         @Override
                         public void handle(MouseEvent mouseEvent) {
-                                taskRectangle.setFill((Color.web(standartRectanglesColor)));
-
+                            taskRectangle.setStrokeWidth(0);
                         }
                     });
 
@@ -293,31 +312,82 @@ public class MainWindowController {
                     taskLabel.setMaxWidth(taskLabel.getPrefWidth());
                     taskLabel.setPrefHeight(20);
                     taskLabel.setViewOrder(1);
-                        if(taskText.equals("quene")) {
-                            AnchorPane.setLeftAnchor(taskLabel, 50.0);
-                            AnchorPane.setLeftAnchor(taskRectangle, 50.0);
-                        }else{
-                            AnchorPane.setRightAnchor(taskLabel, rectLX+3+20);
-                            AnchorPane.setRightAnchor(taskRectangle, rectLX+3+20);
-                            //add done button here
-                        }
+                    taskLabel.setTextOverrun(OverrunStyle.ELLIPSIS);
 
-                    AnchorPane.setTopAnchor(taskLabel, rectLY1 + 40);
+                    if(taskText.equals("quene")) {
+                        AnchorPane.setLeftAnchor(taskLabel, 50.0);
+                        AnchorPane.setLeftAnchor(taskRectangle, 43.0);
+                    }else{
+                        AnchorPane.setRightAnchor(taskLabel, rectLX+3+20+10);
+                        AnchorPane.setRightAnchor(taskRectangle, rectLX+3+20+10-4-8-15);
+                        Button doneButton = new Button();
+                        AnchorPane.setRightAnchor(doneButton, 8.0);
+                        AnchorPane.setTopAnchor(doneButton, rectLY1 + 48);
+                        doneButton.setStyle("-fx-background-color: transparent;");
+                        int imgWidth = 18;
+                        int imgHeight = 18;
+                        this.setImageToButton(doneButton, "checkboxundone1.png", imgWidth, imgHeight);
+
+                        doneButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(MouseEvent mouseEvent) {
+                                Image image = new Image("checkboxdone1.png");
+                                ImageView imageView = new ImageView(image);
+                                imageView.setPickOnBounds(true);
+                                imageView.setPreserveRatio(true);
+                                imageView.setFitWidth(imgWidth);
+                                imageView.setFitHeight(imgHeight);
+                                doneButton.setGraphic(imageView);
+                            }
+                        });
+
+                        doneButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(MouseEvent mouseEvent) {
+                                Image image = new Image("checkboxundone1.png");
+                                ImageView imageView = new ImageView(image);
+                                imageView.setPickOnBounds(true);
+                                imageView.setPreserveRatio(true);
+                                imageView.setFitWidth(imgWidth);
+                                imageView.setFitHeight(imgHeight);
+                                doneButton.setGraphic(imageView);
+                            }
+                        });
+
+
+                        doneButton.setOnAction(d->{
+                            FXMLLoader loader = new FXMLLoader();
+                            loader.setLocation(getClass().getResource("/fxml/finTaskRatingWindow.fxml"));
+                            loader.setController(new FinTaskRatingWindowController(task, this, textArea));
+                            try {loader.load();
+                            } catch (IOException h) {
+                                h.printStackTrace();
+                            }
+                            Parent root = loader.getRoot();
+                            Stage stage = new Stage();
+                            stage.setScene(new Scene(root));
+                            stage.show();
+                        });
+
+
+                        anchorPaneForCards.getChildren().addAll(doneButton);
+                    }
+
+                    AnchorPane.setTopAnchor(taskLabel, rectLY1 + 50);
                     taskLabel.setWrapText(true);
                     taskLabel.setMouseTransparent(true);
                     anchorPaneForCards.getChildren().addAll(taskLabel);
-                    additionalHeight+=25;
-                    additionalRectangleHeight+=25;
+                    additionalHeight+=28;
+                    additionalRectangleHeight+=28;
 
                 }
             }
 
             double rectHeight = 25*2 + additionalRectangleHeight;
 
-
             Rectangle queueRectangle = new Rectangle(rectWidth-5.5,rectHeight);
             queueRectangle.setFill(Color.web(standartRectanglesColor));
-            queueRectangle.setStrokeWidth(2);
+            queueRectangle.setStrokeWidth(strokeWidth);
             queueRectangle.setStroke(Paint.valueOf("91afc5"));
             queueRectangle.setViewOrder(3);
             queueRectangle.setArcWidth(rectanglesArcRadius);
@@ -328,7 +398,7 @@ public class MainWindowController {
 
             Rectangle inWorkRectangle = new Rectangle(rectWidth-5.5+3.5,rectHeight);
             inWorkRectangle.setFill(Color.web(standartRectanglesColor));
-            inWorkRectangle.setStrokeWidth(2);
+            inWorkRectangle.setStrokeWidth(strokeWidth);
             inWorkRectangle.setStroke(Paint.valueOf("91afc5"));
             inWorkRectangle.setViewOrder(4);
             inWorkRectangle.setArcWidth(rectanglesArcRadius);
@@ -336,6 +406,7 @@ public class MainWindowController {
             AnchorPane.setRightAnchor(inWorkRectangle, rectLX);
             AnchorPane.setTopAnchor(inWorkRectangle, rectLY+i*2);
             anchorPaneForCards.getChildren().addAll(inWorkRectangle);
+
 
         }
 
@@ -350,7 +421,7 @@ public class MainWindowController {
             TextInputControlSkin<TextArea> skin = (TextInputControlSkin<TextArea>) textArea.getSkin();
             if (skin != null) {
                 Rectangle2D bounds = skin.getCharacterBounds(nv.intValue());
-                caretShape.set(new Rectangle(bounds.getMinX(), bounds.getMinY()-1,
+                caretShape.set(new Rectangle(bounds.getMinX()+12.5, bounds.getMinY()-1+12.5,
                         4, bounds.getHeight()+2));
             }
         });

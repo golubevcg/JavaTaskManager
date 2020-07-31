@@ -82,6 +82,24 @@ public class LoginWindowController {
         this.setImagesAndColorToButtons();
         enterButtonAction();
 
+        this.loginField.setStyle( "-fx-background-color: transparent;"+
+                "-fx-border-color:#91afc5;"+
+                "-fx-background-insets: transparent;"+
+                "-fx-faint-focus-color: transparent;"+
+                "-fx-border-radius: 5;"+
+                "-fx-background-radius: 5;"+
+                "-fx-border-width: 1.5;"+
+                "-fx-padding: 10 10 10 10;");
+
+        this.pwdField.setStyle( "-fx-background-color: transparent;"+
+                "-fx-border-color:#91afc5;"+
+                "-fx-background-insets: transparent;"+
+                "-fx-faint-focus-color: transparent;"+
+                "-fx-border-radius: 5;"+
+                "-fx-background-radius: 5;"+
+                "-fx-border-width: 1.5;"+
+                "-fx-padding: 10 10 10 10;");
+
         this.makePaneMoovable(moovableAnchorPane);
 
         newUserButton.setOnAction(event-> {
@@ -238,31 +256,74 @@ public class LoginWindowController {
             }
         });
 
+
+        newUserButton.setStyle("-fx-background-color: transparent;" +
+                "-fx-border-color:#FFFFFF;" +
+                "-fx-background-insets: transparent;" +
+                "-fx-faint-focus-color: transparent;" +
+                "-fx-border-radius: 5;" +
+                "-fx-background-radius: 5;" +
+                "-fx-border-width: 1.5;");
+
+        enterButton.setStyle("-fx-background-color: transparent;" +
+                "-fx-border-color:#FFFFFF;" +
+                "-fx-background-insets: transparent;" +
+                "-fx-faint-focus-color: transparent;" +
+                "-fx-border-radius: 5;" +
+                "-fx-background-radius: 5;" +
+                "-fx-border-width: 1.5;");
+
         newUserButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                newUserButton.setStyle("-fx-background-color:#FFFFFF");
+                newUserButton.setStyle( "-fx-background-color: transparent;"+
+                        "-fx-border-color:#91afc5;"+
+                        "-fx-background-insets: transparent;"+
+                        "-fx-faint-focus-color: transparent;"+
+                        "-fx-border-radius: 5;"+
+                        "-fx-background-radius: 5;"+
+                        "-fx-border-width: 1.5;");
             }
         });
         newUserButton.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                newUserButton.setStyle("-fx-background-color:transparent");
+                newUserButton.setStyle("-fx-background-color: transparent;" +
+                        "-fx-border-color:#FFFFFF;" +
+                        "-fx-background-insets: transparent;" +
+                        "-fx-faint-focus-color: transparent;" +
+                        "-fx-border-radius: 5;" +
+                        "-fx-background-radius: 5;" +
+                        "-fx-border-width: 1.5;");
             }
         });
 
         enterButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                enterButton.setStyle("-fx-background-color:#FFFFFF");
+                enterButton.setStyle( "-fx-background-color: transparent;"+
+                        "-fx-border-color:#91afc5;"+
+                        "-fx-background-insets: transparent;"+
+                        "-fx-faint-focus-color: transparent;"+
+                        "-fx-border-radius: 5;"+
+                        "-fx-background-radius: 5;"+
+                        "-fx-border-width: 1.5;");
             }
         });
         enterButton.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                enterButton.setStyle("-fx-background-color:transparent");
+                enterButton.setStyle("-fx-background-color: transparent;" +
+                        "-fx-border-color:#FFFFFF;" +
+                        "-fx-background-insets: transparent;" +
+                        "-fx-faint-focus-color: transparent;" +
+                        "-fx-border-radius: 5;" +
+                        "-fx-background-radius: 5;" +
+                        "-fx-border-width: 1.5;");
             }
         });
+
+
     }
 
 }

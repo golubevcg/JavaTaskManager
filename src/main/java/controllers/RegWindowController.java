@@ -77,6 +77,7 @@ public class RegWindowController {
 
         this.makePaneMoovable(moovableAnchorPane);
 
+
         backButton.setOnAction(e->{
             LoginWindowController loginWindowController = new LoginWindowController();
             openNewScene("/fxml/loginWindow.fxml", closeButton, loginWindowController);
@@ -101,6 +102,42 @@ public class RegWindowController {
             }
 
         });
+
+        this.firstnameTextField.setStyle( "-fx-background-color: transparent;"+
+                "-fx-border-color:#91afc5;"+
+                "-fx-background-insets: transparent;"+
+                "-fx-faint-focus-color: transparent;"+
+                "-fx-border-radius: 5;"+
+                "-fx-background-radius: 5;"+
+                "-fx-border-width: 1.5;"+
+                "-fx-padding: 10 10 10 10;");
+
+        this.lastnameTextField.setStyle( "-fx-background-color: transparent;"+
+                "-fx-border-color:#91afc5;"+
+                "-fx-background-insets: transparent;"+
+                "-fx-faint-focus-color: transparent;"+
+                "-fx-border-radius: 5;"+
+                "-fx-background-radius: 5;"+
+                "-fx-border-width: 1.5;"+
+                "-fx-padding: 10 10 10 10;");
+
+        this.loginField.setStyle( "-fx-background-color: transparent;"+
+                "-fx-border-color:#91afc5;"+
+                "-fx-background-insets: transparent;"+
+                "-fx-faint-focus-color: transparent;"+
+                "-fx-border-radius: 5;"+
+                "-fx-background-radius: 5;"+
+                "-fx-border-width: 1.5;"+
+                "-fx-padding: 10 10 10 10;");
+
+        this.passwordField.setStyle( "-fx-background-color: transparent;"+
+                "-fx-border-color:#91afc5;"+
+                "-fx-background-insets: transparent;"+
+                "-fx-faint-focus-color: transparent;"+
+                "-fx-border-radius: 5;"+
+                "-fx-background-radius: 5;"+
+                "-fx-border-width: 1.5;"+
+                "-fx-padding: 10 10 10 10;");
     }
 
     public void openNewScene(String windowName, Button button, Object controller){
@@ -195,6 +232,8 @@ public class RegWindowController {
     private void setImagesAndColorToButtons() {
         this.setImageToButton(closeButton, "cross.png", 11,20);
         this.setImageToButton(minimiseButton, "minimize.png", 13,40);
+        this.setImageToButton(backButton, "back.png", 18,16);
+
         this.setColorsToButtons();
     }
 
@@ -210,6 +249,22 @@ public class RegWindowController {
 
     private void setColorsToButtons(){
         String standartColorCursorOnButton = "cfdee9";
+
+        backButton.setStyle("-fx-background-color: transparent;" +
+                "-fx-border-color:#FFFFFF;" +
+                "-fx-background-insets: transparent;" +
+                "-fx-faint-focus-color: transparent;" +
+                "-fx-border-radius: 5;" +
+                "-fx-background-radius: 5;" +
+                "-fx-border-width: 1.5;");
+
+        registerButton.setStyle("-fx-background-color: transparent;" +
+                "-fx-border-color:#FFFFFF;" +
+                "-fx-background-insets: transparent;" +
+                "-fx-faint-focus-color: transparent;" +
+                "-fx-border-radius: 5;" +
+                "-fx-background-radius: 5;" +
+                "-fx-border-width: 1.5;");
 
         closeButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
@@ -237,31 +292,58 @@ public class RegWindowController {
             }
         });
 
+
+
         backButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                backButton.setStyle("-fx-background-color:#FFFFFF");
+                backButton.setStyle( "-fx-background-color: transparent;"+
+                        "-fx-border-color:#91afc5;"+
+                        "-fx-background-insets: transparent;"+
+                        "-fx-faint-focus-color: transparent;"+
+                        "-fx-border-radius: 5;"+
+                        "-fx-background-radius: 5;"+
+                        "-fx-border-width: 1.5;");
             }
         });
         backButton.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                backButton.setStyle("-fx-background-color:transparent");
+                backButton.setStyle("-fx-background-color: transparent;" +
+                        "-fx-border-color:#FFFFFF;" +
+                        "-fx-background-insets: transparent;" +
+                        "-fx-faint-focus-color: transparent;" +
+                        "-fx-border-radius: 5;" +
+                        "-fx-background-radius: 5;" +
+                        "-fx-border-width: 1.5;");
             }
         });
 
         registerButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                registerButton.setStyle("-fx-background-color:#FFFFFF");
+                registerButton.setStyle( "-fx-background-color: transparent;"+
+                        "-fx-border-color:#91afc5;"+
+                        "-fx-background-insets: transparent;"+
+                        "-fx-faint-focus-color: transparent;"+
+                        "-fx-border-radius: 5;"+
+                        "-fx-background-radius: 5;"+
+                        "-fx-border-width: 1.5;");
             }
         });
         registerButton.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                registerButton.setStyle("-fx-background-color:transparent");
+                registerButton.setStyle("-fx-background-color: transparent;" +
+                        "-fx-border-color:#FFFFFF;" +
+                        "-fx-background-insets: transparent;" +
+                        "-fx-faint-focus-color: transparent;" +
+                        "-fx-border-radius: 5;" +
+                        "-fx-background-radius: 5;" +
+                        "-fx-border-width: 1.5;");
             }
         });
+
 
 
     }

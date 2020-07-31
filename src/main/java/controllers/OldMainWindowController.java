@@ -685,7 +685,7 @@ public class OldMainWindowController {
                     buttonTaskDone.setOnAction(d->{
                         FXMLLoader loader = new FXMLLoader();
                         loader.setLocation(getClass().getResource("/fxml/finTaskRatingWindow.fxml"));
-                        loader.setController(new FinTaskRatingWindowController(newtask, this, inputTextArea));
+//                        loader.setController(new FinTaskRatingWindowController(newtask, this, inputTextArea));
                         try {loader.load();
                         } catch (IOException h) {
                             h.printStackTrace();
