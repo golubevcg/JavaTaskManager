@@ -3,21 +3,13 @@ package controllers;
 import database.Task;
 import database.User;
 import database.Worker;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.css.Stylesheet;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.skin.TextInputControlSkin;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -26,14 +18,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.StrokeType;
+import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -87,7 +79,6 @@ public class MainWindowController {
     @FXML
     private Rectangle textFieldRectangle;
 
-
     @FXML void close(ActionEvent event){
         System.exit(0);
     }
@@ -95,6 +86,11 @@ public class MainWindowController {
     @FXML void min(ActionEvent event){
         ((Stage)(mainAnchorPane.getScene().getWindow())).setIconified(true);
     }
+
+    private List<Label> labelsItemsList = new ArrayList<>();
+    private List<Shape> shapesItemsList = new ArrayList<>();
+    private List<Button> buttonsItemsList = new ArrayList<>();
+
 
     private double xOffset;
     private double yOffset;
@@ -120,22 +116,35 @@ public class MainWindowController {
         this.textArea.setMinWidth(textArea.getPrefWidth());
         this.textArea.setMaxHeight(textArea.getPrefHeight());
         this.textArea.setWrapText(true);
-//        this.textArea.setStyle( "-fx-background-color: transparent;"+
-//                                "-fx-border-color:#91afc5;"+
-//                                "-fx-background-insets: transparent;"+
-//                                "-fx-faint-focus-color: transparent;"+
-//                                "-fx-border-radius: 5;"+
-//                                "-fx-background-radius: 5;"+
-//                                "-fx-border-width: 1.5;");
+        String stylesheet = getClass().getResource("/styles.css").toExternalForm();
+        System.out.println(stylesheet);
+        textArea.getStylesheets().add(stylesheet);
+
         this.setImagesAndColorToButtons();
 
 
-        String stylesheet = getClass().getResource("/styles.css").toExternalForm();
-        System.out.println(stylesheet);
-//        this.fixCaretView();
-        textArea.getStylesheets().add(stylesheet);
+
         this.drawWorkerLabels();
 
+//        Menu menuItemNewTask = new Menu("Новая задача");
+//        Menu menuItemQuene = new Menu("в очередь");
+//        Menu menuItemWork = new Menu("в работе");
+//        menuItemNewTask.getItems().addAll(menuItemQuene, menuItemWork);
+//        this.textArea.getContextMenu().getItems().addAll(menuItemNewTask);
+    }
+
+    public void cleanAllNodes(){
+        for (int i = 0; i < labelsItemsList.size() ; i++) {
+            this.anchorPaneForCards.getChildren().remove(labelsItemsList.get(i));
+        }
+
+        for (int i = 0; i < shapesItemsList.size() ; i++) {
+            this.anchorPaneForCards.getChildren().remove(shapesItemsList.get(i));
+        }
+
+        for (int i = 0; i < buttonsItemsList.size() ; i++) {
+            this.anchorPaneForCards.getChildren().remove(buttonsItemsList.get(i));
+        }
     }
 
     private void makePaneMoovable(AnchorPane anchorPane){
@@ -216,6 +225,7 @@ public class MainWindowController {
     }
 
     private void drawWorkerLabels(){
+
         List<Worker> workerList = rootUser.getWorkers();
 
         double additionalHeight = 0;
@@ -263,18 +273,20 @@ public class MainWindowController {
             inWorkLine.setStroke(Paint.valueOf("91afc5"));
             anchorPaneForCards.getChildren().addAll(inWorkLine);
 
+            shapesItemsList.add(inQueueLine);
+            shapesItemsList.add(inWorkLine);
+
+            labelsItemsList.add(workerLabel);
+
             List<Task> workerTasks = workerList.get(i).getTasks();
 
             for (int j = 0; j < workerTasks.size(); j++) {
 
                 Task task = workerTasks.get(j);
-
                 double rectLY1 = i * 55 + additionalHeight;
-
                 String taskText = workerTasks.get(j).getTasktype();
 
                 if(taskText.equals("inwork") || taskText.equals("quene")){
-
                     Rectangle taskRectangle;
                     if(taskText.equals("quene")) {
                         taskRectangle = new Rectangle(253+4,23+2);
@@ -372,6 +384,7 @@ public class MainWindowController {
 
 
                         anchorPaneForCards.getChildren().addAll(doneButton);
+                        buttonsItemsList.add(doneButton);
                     }
 
                     AnchorPane.setTopAnchor(taskLabel, rectLY1 + 50);
@@ -380,6 +393,10 @@ public class MainWindowController {
                     anchorPaneForCards.getChildren().addAll(taskLabel);
                     additionalHeight+=28;
                     additionalRectangleHeight+=28;
+
+                    labelsItemsList.add(taskLabel);
+                    shapesItemsList.add(taskRectangle);
+
 
                 }
             }
@@ -408,6 +425,8 @@ public class MainWindowController {
             AnchorPane.setTopAnchor(inWorkRectangle, rectLY+i*2);
             anchorPaneForCards.getChildren().addAll(inWorkRectangle);
 
+            shapesItemsList.add(queueRectangle);
+            shapesItemsList.add(inWorkRectangle);
 
         }
 
@@ -415,31 +434,4 @@ public class MainWindowController {
 
     }
 
-    private void fixCaretView(){
-        textArea.getCaretPosition();
-        ObjectProperty<Rectangle> caretShape = new SimpleObjectProperty<>();
-        textArea.caretPositionProperty().addListener((src, ov, nv ) -> {
-            TextInputControlSkin<TextArea> skin = (TextInputControlSkin<TextArea>) textArea.getSkin();
-            if (skin != null) {
-                Rectangle2D bounds = skin.getCharacterBounds(nv.intValue());
-                caretShape.set(new Rectangle(bounds.getMinX()+12.5, bounds.getMinY()-1+12.5,
-                        4, bounds.getHeight()+2));
-            }
-        });
-        caretShape.addListener((src, ov, r) -> {
-            Skin<?> skin = textArea.getSkin();
-            if (skin instanceof SkinBase) {
-                if (ov != null) {
-                    ((SkinBase<?>) skin).getChildren().remove(ov);
-                }
-                if (r != null) {
-                    Color color = Color.DODGERBLUE;
-                    r.setStroke(color);
-                    r.setFill(color);
-                    r.setMouseTransparent(true);
-                    ((SkinBase<?>) skin).getChildren().add(r);
-                }
-            }
-        });
-    }
 }
