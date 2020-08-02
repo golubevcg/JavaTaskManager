@@ -1,5 +1,6 @@
 package controllers;
 
+import Main.Main;
 import animations.Shake;
 import database.HibernateSessionFactoryUtil;
 import database.Task;
@@ -40,11 +41,11 @@ public class NewTaskWindowController {
     @FXML
     private ToggleGroup tgroup;
 
-    private OldMainWindowController mainWindowController;
+    private MainWindowController mainWindowController;
 
     private Worker worker;
 
-    public NewTaskWindowController(OldMainWindowController mainWindowController, Worker worker) {
+    public NewTaskWindowController(MainWindowController mainWindowController, Worker worker) {
         this.mainWindowController = mainWindowController;
         this.worker = worker;
 
@@ -60,10 +61,8 @@ public class NewTaskWindowController {
 
         createButton.setOnAction(e->{
                 if(registerNewUser()==true) {
-                    mainWindowController.updateSceneWorkers(mainWindowController.allLabelsList,
-                            mainWindowController.allButtonsList, mainWindowController.uiMap);
-                    createButton.getScene().getWindow().hide();
                     mainWindowController.initialize();
+                    createButton.getScene().getWindow().hide();
                 }
         });
     }
@@ -108,6 +107,8 @@ public class NewTaskWindowController {
                 session2.save(task);
                 transaction1.commit();
                 session2.close();
+
+                worker.addTask(task);
                 return true;
             }
         }

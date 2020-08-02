@@ -26,6 +26,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import org.hibernate.jdbc.Work;
 
 import java.io.IOException;
 import java.net.URL;
@@ -128,8 +129,36 @@ public class MainWindowController {
         textArea.getStylesheets().add(stylesheet);
         ContextMenu contextMenu = new ContextMenu();
         contextMenu.getItems().addAll(createDefaultMenuItems(textArea));
-        contextMenu.getItems().add(new MenuItem("Создать задачу из выделенного"));
-        contextMenu.getItems().add(new MenuItem("Выделить текст цветом"));
+
+        Menu createTaskFromSelectedMenuItem = new Menu("Создать задачу из выделенного");
+
+        List<Menu> menuItemsList = new ArrayList<>();
+        for (int i = 0; i < rootUser.getWorkers().size(); i++) {
+            Worker worker = rootUser.getWorkers().get(i);
+            Menu workerMenu = new Menu(worker.getFirstname()
+                    + " " + worker.getLastname());
+            menuItemsList.add(workerMenu);
+            MenuItem inWorkMenuItem = new MenuItem("в работу");
+            MenuItem inQueueMenuItem = new MenuItem("в очередь");
+            workerMenu.getItems().addAll(inWorkMenuItem,inQueueMenuItem);
+
+//            inWorkMenuItem.setOnAction(d->{
+//                String selectedText = inputTextArea.getSelectedText();
+//                if(newTaskFromSelected(selectedText, worker, "quene")){
+//                    inputTextArea.setText(inputTextArea.getText()
+//                            .replace(selectedText, ""));
+//                    this.updateSceneWorkers(allLabelsList, allButtonsList, uiMap);
+//                    this.initialize();
+//                }
+//                    worker.addTask(new Task(textArea.getSelectedText(), worker, "inwork"));
+//
+//            });
+
+        }
+
+        createTaskFromSelectedMenuItem.getItems().addAll(menuItemsList);
+
+        contextMenu.getItems().addAll(createTaskFromSelectedMenuItem);
         this.textArea.setContextMenu(contextMenu);
 
         this.setImagesAndColorToButtons();
@@ -466,8 +495,6 @@ public class MainWindowController {
 
                     labelsItemsList.add(taskLabel);
                     shapesItemsList.add(taskRectangle);
-
-
                 }
             }
 

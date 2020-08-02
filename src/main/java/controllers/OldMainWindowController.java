@@ -174,9 +174,9 @@ public class OldMainWindowController {
             entry.getKey().setOnAction(d->{
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("/fxml/newTaskWindow.fxml"));
-                NewTaskWindowController newTaskWindowController =
-                        new NewTaskWindowController(this, entry.getValue());
-                loader.setController(newTaskWindowController);
+//                NewTaskWindowController newTaskWindowController =
+//                        new NewTaskWindowController(this, entry.getValue());
+//                loader.setController(newTaskWindowController);
                 try {loader.load();
                 } catch (IOException a) {
                     a.printStackTrace();
