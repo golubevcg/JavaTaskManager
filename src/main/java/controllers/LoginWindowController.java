@@ -11,11 +11,13 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -23,6 +25,7 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -35,6 +38,9 @@ import java.util.ResourceBundle;
 
 
 public class LoginWindowController {
+
+    @FXML
+    private AnchorPane mainAnchorPane;
 
     @FXML
     private AnchorPane anchorPane;
@@ -77,6 +83,11 @@ public class LoginWindowController {
 
     @FXML
     void initialize() {
+
+//        mainAnchorPane.setPadding(new Insets(20,20,20,20));
+//        mainAnchorPane.setEffect(new DropShadow());
+//        anchorPane.getScene().setFill(Color.TRANSPARENT);
+
 
         Main.getStageObj().setResizable(false);
         this.setImagesAndColorToButtons();

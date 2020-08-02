@@ -8,27 +8,36 @@
 
 <!--<?import javafx.scene.control.TextField?>-->
 
-<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="730.0" minHeight="-Infinity" minWidth="730.0" prefHeight="410.0" prefWidth="730.0" style="-fx-background-color: FFFFFF;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+
+<AnchorPane fx:id="mainAnchorPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <AnchorPane prefHeight="25.0" prefWidth="200.0" style="-fx-background-color: #91afc5;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <AnchorPane fx:id="moovableAnchorPane" layoutX="14.0" layoutY="14.0" prefHeight="21.0" prefWidth="200.0" style="-fx-background-color: #91afc5;" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0" />
-      <Button fx:id="enterButton" layoutX="385.0" layoutY="250.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="67.0" style="-fx-background-color: treansparent;" text="enter" textFill="#91afc5">
-         <font>
-            <Font name="Arial" size="15.0" />
-         </font></Button>
-      <TextField fx:id="loginField" layoutX="278.0" layoutY="144.0" prefHeight="36.0" prefWidth="174.0" promptText="login">
-         <font>
-            <Font size="14.0" />
-         </font></TextField>
-      <PasswordField fx:id="pwdField" layoutX="278.0" layoutY="198.0" prefHeight="36.0" prefWidth="174.0" promptText="password">
-         <font>
-            <Font size="14.0" />
-         </font></PasswordField>
-      <Button fx:id="newUserButton" cacheShape="false" layoutX="278.0" layoutY="250.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="86.0" style="-fx-background-color: transparent;" text="new user" textFill="#91afc5">
-         <font>
-            <Font name="Arial" size="14.0" />
-         </font></Button>
-      <Button fx:id="minimiseButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#min" prefHeight="0.0" prefWidth="21.0" style="-fx-background-color: transparent;" AnchorPane.rightAnchor="44.0" AnchorPane.topAnchor="1.0" />
-      <Button fx:id="closeButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#close" style="-fx-background-color: transparent;" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="1.0" />
+      <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="730.0" minHeight="-Infinity" minWidth="730.0" prefHeight="410.0" prefWidth="730.0" style="-fx-background-color: FFFFFF;">
+         <children>
+            <AnchorPane prefHeight="25.0" prefWidth="200.0" style="-fx-background-color: #91afc5;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <AnchorPane fx:id="moovableAnchorPane" layoutX="14.0" layoutY="14.0" prefHeight="21.0" prefWidth="200.0" style="-fx-background-color: #91afc5;" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0" />
+            <Button fx:id="enterButton" layoutX="385.0" layoutY="250.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="67.0" style="-fx-background-color: treansparent;" text="enter" textFill="#91afc5">
+               <font>
+                  <Font name="Arial" size="15.0" />
+               </font>
+            </Button>
+            <TextField fx:id="loginField" layoutX="278.0" layoutY="144.0" prefHeight="36.0" prefWidth="174.0" promptText="login">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </TextField>
+            <PasswordField fx:id="pwdField" layoutX="278.0" layoutY="198.0" prefHeight="36.0" prefWidth="174.0" promptText="password">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </PasswordField>
+            <Button fx:id="newUserButton" cacheShape="false" layoutX="278.0" layoutY="250.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="86.0" style="-fx-background-color: transparent;" text="new user" textFill="#91afc5">
+               <font>
+                  <Font name="Arial" size="14.0" />
+               </font>
+            </Button>
+            <Button fx:id="minimiseButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#min" prefHeight="0.0" prefWidth="21.0" style="-fx-background-color: transparent;" AnchorPane.rightAnchor="44.0" AnchorPane.topAnchor="1.0" />
+            <Button fx:id="closeButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#close" style="-fx-background-color: transparent;" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="1.0" />
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>

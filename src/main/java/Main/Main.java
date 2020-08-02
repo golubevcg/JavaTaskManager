@@ -3,8 +3,11 @@ package Main;
 import controllers.LoginWindowController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -22,9 +25,11 @@ public class Main extends Application {
         loader.setLocation(getClass().getResource("/fxml/loginWindow.fxml"));
         loader.load();
         root = loader.getRoot();
-        stage.setScene(new Scene(root));
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
         stage.initStyle(StageStyle.UNDECORATED);
         stage.show();
+
     }
 
     public static Stage getStageObj(){

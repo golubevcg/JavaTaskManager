@@ -3,15 +3,20 @@ package controllers;
 import database.Task;
 import database.User;
 import database.Worker;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -107,6 +112,8 @@ public class MainWindowController {
     @FXML
     void initialize() {
 
+        this.cleanAllNodes();
+
         this.mainAnchorPane.setMinWidth(mainAnchorPane.getPrefWidth());
         this.mainAnchorPane.setMaxWidth(mainAnchorPane.getPrefHeight());
 
@@ -119,29 +126,25 @@ public class MainWindowController {
         String stylesheet = getClass().getResource("/styles.css").toExternalForm();
         System.out.println(stylesheet);
         textArea.getStylesheets().add(stylesheet);
+        ContextMenu contextMenu = new ContextMenu();
+        contextMenu.getItems().addAll(createDefaultMenuItems(textArea));
+        contextMenu.getItems().add(new MenuItem("Создать задачу из выделенного"));
+        contextMenu.getItems().add(new MenuItem("Выделить текст цветом"));
+        this.textArea.setContextMenu(contextMenu);
 
         this.setImagesAndColorToButtons();
 
-
-
         this.drawWorkerLabels();
 
-//        Menu menuItemNewTask = new Menu("Новая задача");
-//        Menu menuItemQuene = new Menu("в очередь");
-//        Menu menuItemWork = new Menu("в работе");
-//        menuItemNewTask.getItems().addAll(menuItemQuene, menuItemWork);
-//        this.textArea.getContextMenu().getItems().addAll(menuItemNewTask);
     }
 
     public void cleanAllNodes(){
         for (int i = 0; i < labelsItemsList.size() ; i++) {
             this.anchorPaneForCards.getChildren().remove(labelsItemsList.get(i));
         }
-
         for (int i = 0; i < shapesItemsList.size() ; i++) {
             this.anchorPaneForCards.getChildren().remove(shapesItemsList.get(i));
         }
-
         for (int i = 0; i < buttonsItemsList.size() ; i++) {
             this.anchorPaneForCards.getChildren().remove(buttonsItemsList.get(i));
         }
@@ -157,6 +160,29 @@ public class MainWindowController {
             stage.setY(e.getScreenY() - yOffset);
             textArea.setPrefWidth(textArea.getPrefWidth()-xOffset);
         });
+    }
+
+    private List<MenuItem> createDefaultMenuItems(TextInputControl t) {
+        MenuItem cut = new MenuItem("Cut");
+        cut.setOnAction(e -> t.cut());
+        MenuItem copy = new MenuItem("Copy");
+        copy.setOnAction(e -> t.copy());
+        MenuItem paste = new MenuItem("Paste");
+        paste.setOnAction(e -> t.paste());
+        MenuItem delete = new MenuItem("Delete");
+        delete.setOnAction(e -> t.deleteText(t.getSelection()));
+        MenuItem selectAll = new MenuItem("Select All");
+        selectAll.setOnAction(e -> t.selectAll());
+
+        BooleanBinding emptySelection = Bindings.createBooleanBinding(() ->
+                        t.getSelection().getLength() == 0,
+                t.selectionProperty());
+
+        cut.disableProperty().bind(emptySelection);
+        copy.disableProperty().bind(emptySelection);
+        delete.disableProperty().bind(emptySelection);
+
+        return Arrays.asList(cut, copy, paste, delete, new SeparatorMenuItem(), selectAll);
     }
 
     private void setImagesAndColorToButtons(){
@@ -248,10 +274,22 @@ public class MainWindowController {
             workerLabel.setText(workerList.get(i).getFirstname() + " " + workerList.get(i).getLastname());
             AnchorPane.setLeftAnchor(workerLabel, rectLX + 12);
             AnchorPane.setTopAnchor(workerLabel, rectLY+i*2+6);
-
             workerLabel.setMaxWidth(rectWidth);
             workerLabel.setWrapText(true);
             anchorPaneForCards.getChildren().addAll(workerLabel);
+
+            ContextMenu workerLabelContextMenu = new ContextMenu();
+            MenuItem addTaskToWorker = new MenuItem("Добавить новую задачу");
+            MenuItem editWorker = new MenuItem("Отредактировать сотрудника");
+            MenuItem deleteWorker = new MenuItem("Удалить сотрудника");
+
+            workerLabelContextMenu.getItems().addAll(addTaskToWorker,editWorker,deleteWorker);
+            workerLabel.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
+                @Override
+                public void handle(ContextMenuEvent contextMenuEvent) {
+                    workerLabelContextMenu.show(workerLabel, contextMenuEvent.getScreenX(), contextMenuEvent.getScreenY());
+                }
+            });
 
             Line inQueueLine = new Line();
             inQueueLine.setStartX(rectLX+12);
@@ -284,11 +322,11 @@ public class MainWindowController {
 
                 Task task = workerTasks.get(j);
                 double rectLY1 = i * 55 + additionalHeight;
-                String taskText = workerTasks.get(j).getTasktype();
+                String taskType = workerTasks.get(j).getTasktype();
 
-                if(taskText.equals("inwork") || taskText.equals("quene")){
+                if(taskType.equals("inwork") || taskType.equals("quene")){
                     Rectangle taskRectangle;
-                    if(taskText.equals("quene")) {
+                    if(taskType.equals("quene")) {
                         taskRectangle = new Rectangle(253+4,23+2);
                     }else{
                         taskRectangle = new Rectangle(253+4+4+8+15,23+2);
@@ -297,7 +335,6 @@ public class MainWindowController {
                     taskRectangle.setViewOrder(2);
                     taskRectangle.setArcHeight(rectanglesArcRadius*1.5);
                     taskRectangle.setArcWidth(rectanglesArcRadius*1.5);
-
                     AnchorPane.setTopAnchor(taskRectangle, rectLY1 + 48);
                     anchorPaneForCards.getChildren().addAll(taskRectangle);
 
@@ -316,6 +353,39 @@ public class MainWindowController {
                         }
                     });
 
+                    if(taskType.equals("quene")){
+                        ContextMenu taskRectangleContextMenu = new ContextMenu();
+                        MenuItem moveTaskToInWork = new MenuItem("Сделать задачу в работе");
+                        MenuItem editTask = new MenuItem("Отредактировать задачу");
+                        MenuItem deleteTask = new MenuItem("Удалить задачу");
+                        MenuItem markByColor = new MenuItem("Пометить цветом");
+
+                        taskRectangleContextMenu.getItems().addAll(moveTaskToInWork,editTask,deleteTask,markByColor);
+                        taskRectangle.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
+                            @Override
+                            public void handle(ContextMenuEvent contextMenuEvent) {
+                                taskRectangleContextMenu.show(taskRectangle, contextMenuEvent.getScreenX(), contextMenuEvent.getScreenY());
+                            }
+                        });
+                    }
+
+                    if(taskType.equals("inwork")){
+                        ContextMenu taskRectangleContextMenu = new ContextMenu();
+                        MenuItem moveTaskToInQueue = new MenuItem("Вернуть задачу в очередь");
+                        MenuItem editTask = new MenuItem("Отредактировать задачу");
+                        MenuItem deleteTask = new MenuItem("Удалить задачу");
+                        MenuItem markByColor = new MenuItem("Пометить цветом");
+
+                        taskRectangleContextMenu.getItems().addAll(moveTaskToInQueue,editTask,deleteTask,markByColor);
+                        taskRectangle.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
+                            @Override
+                            public void handle(ContextMenuEvent contextMenuEvent) {
+                                taskRectangleContextMenu.show(taskRectangle, contextMenuEvent.getScreenX(), contextMenuEvent.getScreenY());
+                            }
+                        });
+                    }
+
+
                     String myString = "- " + workerTasks.get(j).getText();
                     Label taskLabel = new Label();
                     Font font1 = new Font("Arial", 13);
@@ -327,7 +397,7 @@ public class MainWindowController {
                     taskLabel.setViewOrder(1);
                     taskLabel.setTextOverrun(OverrunStyle.ELLIPSIS);
 
-                    if(taskText.equals("quene")) {
+                    if(taskType.equals("quene")) {
                         AnchorPane.setLeftAnchor(taskLabel, 50.0);
                         AnchorPane.setLeftAnchor(taskRectangle, 43.0);
                     }else{
@@ -427,10 +497,7 @@ public class MainWindowController {
 
             shapesItemsList.add(queueRectangle);
             shapesItemsList.add(inWorkRectangle);
-
         }
-
-
 
     }
 

@@ -4,15 +4,9 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
-import java.util.HashMap;
-import java.util.Map;
-
-
 public class HibernateSessionFactoryUtil {
     private static SessionFactory sessionFactory;
-
     private HibernateSessionFactoryUtil(){}
-
     public static SessionFactory getSessionFactory(){
         if(sessionFactory == null) {
             try {
@@ -33,7 +27,7 @@ public class HibernateSessionFactoryUtil {
             }
         }
 
-        sessionFactory.getStatistics();
+//        sessionFactory.getStatistics();
         return sessionFactory;
     }
 
