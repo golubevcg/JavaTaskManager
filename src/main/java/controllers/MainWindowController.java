@@ -1,19 +1,19 @@
 package controllers;
 
+import database.HibernateSessionFactoryUtil;
 import database.Task;
 import database.User;
 import database.Worker;
+import database.services.TaskService;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
@@ -26,7 +26,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import org.hibernate.jdbc.Work;
+import javafx.stage.StageStyle;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.io.IOException;
 import java.net.URL;
@@ -125,41 +127,8 @@ public class MainWindowController {
         this.textArea.setMaxHeight(textArea.getPrefHeight());
         this.textArea.setWrapText(true);
         String stylesheet = getClass().getResource("/styles.css").toExternalForm();
-        System.out.println(stylesheet);
         textArea.getStylesheets().add(stylesheet);
-        ContextMenu contextMenu = new ContextMenu();
-        contextMenu.getItems().addAll(createDefaultMenuItems(textArea));
-
-        Menu createTaskFromSelectedMenuItem = new Menu("Создать задачу из выделенного");
-
-        List<Menu> menuItemsList = new ArrayList<>();
-        for (int i = 0; i < rootUser.getWorkers().size(); i++) {
-            Worker worker = rootUser.getWorkers().get(i);
-            Menu workerMenu = new Menu(worker.getFirstname()
-                    + " " + worker.getLastname());
-            menuItemsList.add(workerMenu);
-            MenuItem inWorkMenuItem = new MenuItem("в работу");
-            MenuItem inQueueMenuItem = new MenuItem("в очередь");
-            workerMenu.getItems().addAll(inWorkMenuItem,inQueueMenuItem);
-
-//            inWorkMenuItem.setOnAction(d->{
-//                String selectedText = inputTextArea.getSelectedText();
-//                if(newTaskFromSelected(selectedText, worker, "quene")){
-//                    inputTextArea.setText(inputTextArea.getText()
-//                            .replace(selectedText, ""));
-//                    this.updateSceneWorkers(allLabelsList, allButtonsList, uiMap);
-//                    this.initialize();
-//                }
-//                    worker.addTask(new Task(textArea.getSelectedText(), worker, "inwork"));
-//
-//            });
-
-        }
-
-        createTaskFromSelectedMenuItem.getItems().addAll(menuItemsList);
-
-        contextMenu.getItems().addAll(createTaskFromSelectedMenuItem);
-        this.textArea.setContextMenu(contextMenu);
+        this.createTextAreaContextMenus();
 
         this.setImagesAndColorToButtons();
 
@@ -187,7 +156,6 @@ public class MainWindowController {
         anchorPane.setOnMouseDragged(e->{
             stage.setX(e.getScreenX() - xOffset);
             stage.setY(e.getScreenY() - yOffset);
-            textArea.setPrefWidth(textArea.getPrefWidth()-xOffset);
         });
     }
 
@@ -396,6 +364,41 @@ public class MainWindowController {
                                 taskRectangleContextMenu.show(taskRectangle, contextMenuEvent.getScreenX(), contextMenuEvent.getScreenY());
                             }
                         });
+
+                        EditTaskWindowController editTaskWindowController = new EditTaskWindowController(this,task);
+                        editTask.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent actionEvent) {
+                                FXMLLoader loader = new FXMLLoader();
+                                loader.setLocation(getClass().getResource("/fxml/newTaskWindow.fxml"));
+                                loader.setController(editTaskWindowController);
+                                try {loader.load();
+                                } catch (IOException a) {
+                                    a.printStackTrace();
+                                }
+                                Parent root = loader.getRoot();
+                                Stage stage = new Stage();
+                                stage.initStyle(StageStyle.UNDECORATED);
+                                stage.setScene(new Scene(root));
+                                editTaskWindowController.setStage(stage);
+                                stage.setResizable(false);
+                                stage.show();
+                            }
+                        });
+
+                        deleteTask.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent actionEvent) {
+                                //тут нужно сделать окошко подтверждения удаления задачи
+                            }
+                        });
+
+                        markByColor.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent actionEvent) {
+
+                            }
+                        });
                     }
 
                     if(taskType.equals("inwork")){
@@ -528,4 +531,75 @@ public class MainWindowController {
 
     }
 
+    public boolean addNewTaskFromText(String text, Worker worker, String tasktype){
+        if (text.isEmpty()) {
+            return false;
+        } else {
+            Task task = new Task(text, worker, tasktype);
+            TaskService taskService = new TaskService();
+            List<String> list = taskService.checkTask(text);
+            if (list.size() >= 1) {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("/fxml/alertTaskBoxWindow.fxml"));
+                try {
+                    loader.load();
+                } catch (IOException а) {
+                    а.printStackTrace();
+                }
+                Parent root = loader.getRoot();
+                Stage stage = new Stage();
+                stage.setScene(new Scene(root));
+                stage.show();
+                return false;
+            } else {
+                Session session2 = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+                Transaction transaction1 = session2.beginTransaction();
+                session2.save(task);
+                transaction1.commit();
+                session2.close();
+                return true;
+            }
+        }
+    }
+
+    public void createTextAreaContextMenus(){
+        ContextMenu contextMenu = new ContextMenu();
+        contextMenu.getItems().addAll(createDefaultMenuItems(textArea));
+        Menu createTaskFromSelectedMenuItem = new Menu("Создать задачу из выделенного");
+        List<Menu> menuItemsList = new ArrayList<>();
+        for (int i = 0; i < rootUser.getWorkers().size(); i++) {
+            Worker worker = rootUser.getWorkers().get(i);
+            Menu workerMenu = new Menu(worker.getFirstname()
+                    + " " + worker.getLastname());
+            menuItemsList.add(workerMenu);
+            MenuItem inWorkMenuItem = new MenuItem("в работу");
+            MenuItem inQueueMenuItem = new MenuItem("в очередь");
+            workerMenu.getItems().addAll(inWorkMenuItem,inQueueMenuItem);
+
+            inWorkMenuItem.setOnAction(d->{
+                String selectedText = textArea.getSelectedText();
+                if(addNewTaskFromText(selectedText, worker, "inwork")){
+                    rootUser.setTextfield(textArea.getText()
+                            .replace(selectedText, ""));
+                    worker.addTask(new Task(textArea.getSelectedText(), worker, "inwork"));
+                    this.initialize();
+                }
+            });
+
+            inQueueMenuItem.setOnAction(d->{
+                String selectedText = textArea.getSelectedText();
+                if(addNewTaskFromText(selectedText, worker, "quene")){
+                    rootUser.setTextfield(textArea.getText()
+                            .replace(selectedText, ""));
+                    worker.addTask(new Task(textArea.getSelectedText(), worker, "quene"));
+                    this.initialize();
+                }
+            });
+
+        }
+
+        createTaskFromSelectedMenuItem.getItems().addAll(menuItemsList);
+        contextMenu.getItems().addAll(createTaskFromSelectedMenuItem);
+        this.textArea.setContextMenu(contextMenu);
+    }
 }

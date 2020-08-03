@@ -188,23 +188,23 @@ public class OldMainWindowController {
             });
         }
 
-        for (Map.Entry<Button, Task> entry: editTuskButtonsMap.entrySet()) {
-            entry.getKey().setOnAction(d->{
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("/fxml/newTaskWindow.fxml"));
-                EditTaskWindowController editTaskWindowController =
-                        new EditTaskWindowController(this, entry.getValue());
-                loader.setController(editTaskWindowController);
-                try {loader.load();
-                } catch (IOException a) {
-                    a.printStackTrace();
-                }
-                Parent root = loader.getRoot();
-                Stage stage = new Stage();
-                stage.setScene(new Scene(root));
-                stage.show();
-            });
-        }
+//        for (Map.Entry<Button, Task> entry: editTuskButtonsMap.entrySet()) {
+//            entry.getKey().setOnAction(d->{
+//                FXMLLoader loader = new FXMLLoader();
+//                loader.setLocation(getClass().getResource("/fxml/newTaskWindow.fxml"));
+//                EditTaskWindowController editTaskWindowController =
+//                        new EditTaskWindowController(this, entry.getValue());
+//                loader.setController(editTaskWindowController);
+//                try {loader.load();
+//                } catch (IOException a) {
+//                    a.printStackTrace();
+//                }
+//                Parent root = loader.getRoot();
+//                Stage stage = new Stage();
+//                stage.setScene(new Scene(root));
+//                stage.show();
+//            });
+//        }
 
 
         logOut.setOnAction(e-> {

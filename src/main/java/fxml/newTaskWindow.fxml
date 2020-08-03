@@ -7,20 +7,24 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="201.0" prefWidth="292.0" style="-fx-background-color: #fafafa;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="225.0" prefWidth="291.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <TextField fx:id="taskTextfield" layoutX="8.0" layoutY="9.0" prefHeight="99.0" prefWidth="277.0" promptText="Текст задачи">
+      <AnchorPane prefHeight="25.0" prefWidth="200.0" style="-fx-background-color: #91afc5;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <AnchorPane fx:id="moovableAnchorPane" layoutX="10.0" layoutY="10.0" prefHeight="21.0" prefWidth="200.0" style="-fx-background-color: #91afc5;" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0" />
+      <TextField fx:id="taskTextfield" layoutX="7.0" layoutY="34.0" prefHeight="99.0" prefWidth="277.0" promptText="Текст задачи">
          <font>
             <Font size="14.0" />
          </font></TextField>
-      <Button fx:id="createButton" layoutX="64.0" layoutY="156.0" mnemonicParsing="false" style="-fx-background-color: #fafafa;" text="Создать новую задачу">
+      <Button fx:id="createButton" layoutX="57.0" layoutY="182.0" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Создать новую задачу" textFill="#91afc5">
          <font>
-            <Font size="14.0" />
+            <Font name="Arial" size="14.0" />
          </font></Button>
-      <RadioButton fx:id="inQueenRadioButton" layoutX="41.0" layoutY="121.0" mnemonicParsing="false" text="в очереди">
+      <RadioButton fx:id="inQueenRadioButton" layoutX="42.0" layoutY="148.0" mnemonicParsing="false" text="в очереди">
          <toggleGroup>
             <ToggleGroup fx:id="tgroup" />
          </toggleGroup></RadioButton>
-      <RadioButton fx:id="inWorkRadioButton" layoutX="164.0" layoutY="121.0" mnemonicParsing="false" text="в работе" toggleGroup="$tgroup" />
+      <RadioButton fx:id="inWorkRadioButton" layoutX="162.0" layoutY="148.0" mnemonicParsing="false" text="в работе" toggleGroup="$tgroup" />
+      <Button fx:id="minimiseButton" layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#min" prefHeight="0.0" prefWidth="21.0" style="-fx-background-color: transparent;" AnchorPane.rightAnchor="44.0" AnchorPane.topAnchor="1.0" />
+      <Button fx:id="closeButton" layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#close" style="-fx-background-color: transparent;" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="1.0" />
    </children>
 </AnchorPane>
