@@ -9,12 +9,14 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -37,6 +39,10 @@ public class EditTaskWindowController {
 
     @FXML
     private URL location;
+
+
+    @FXML
+    private AnchorPane forDropShadowTopAnchorPane;
 
     @FXML
     private AnchorPane AnchorPane;
@@ -93,23 +99,29 @@ public class EditTaskWindowController {
         this.task = task;
     }
 
-
     @FXML
     private void initialize() {
 
+        this.forDropShadowTopAnchorPane.setStyle("-fx-background-color: transparent;");
+        this.forDropShadowTopAnchorPane.setPadding(new Insets(10,10,10,10));
+        this.forDropShadowTopAnchorPane.setEffect(new DropShadow());
+
         this.makePaneMoovable(moovableAnchorPane);
 
-        String stylesheet = "-fx-background-color: transparent;\n" +
+        String stylesheetRadioButtons = getClass().getResource("/styles.css").toExternalForm();
+        inWorkRadioButton.getStylesheets().add(stylesheetRadioButtons);
+        inQueenRadioButton.getStylesheets().add(stylesheetRadioButtons);
+
+        String textFieldStylesheet = "-fx-background-color: transparent;\n" +
                 "     -fx-border-color:#91afc5;\n" +
                 "     -fx-background-insets: transparent;\n" +
                 "     -fx-faint-focus-color: transparent;\n" +
                 "     -fx-border-radius: 5;\n" +
                 "     -fx-background-radius: 5;\n" +
                 "     -fx-border-width: 1.5;";
-        taskTextfield.getStylesheets().add(stylesheet);
+        taskTextfield.getStylesheets().add(textFieldStylesheet);
 
         this.setImagesAndColorToButtons();
-        this.setButtonOnCoursorAction(createButton);
 
         if (task.getTasktype() != "quene") {
             inQueenRadioButton.fire();
@@ -131,7 +143,6 @@ public class EditTaskWindowController {
     public boolean checkTaskRegisterNewTask() {
         String taskText;
         taskText = taskTextfield.getText();
-        Worker worker = this.task.getWorker();
 
         if (taskText.isEmpty()) {
             Shake taskTextfield = new Shake(this.taskTextfield);
@@ -144,6 +155,7 @@ public class EditTaskWindowController {
             } else {
                 tasktype = "inwork";
             }
+
             TaskService taskService = new TaskService();
             List<String> list = taskService.checkTask(taskText);
 
@@ -161,24 +173,13 @@ public class EditTaskWindowController {
                 stage.show();
                 return false;
             } else {
-                Session session2 = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-                Transaction transaction1 = session2.beginTransaction();
-                Query newQuery = session2.createQuery("DELETE Task WHERE id = " + this.task.getId());
-                newQuery.executeUpdate();
-                transaction1.commit();
-                session2.close();
-
                 this.task.setText(taskTextfield.getText());
+                this.task.setTasktype(tasktype);
+                taskService.updateTask(task);
                 mainWindowController.initialize();
                 return true;
             }
         }
-    }
-
-    public void setButtonOnCoursorAction(Button button) {
-        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: #ffffff;" + "-fx-text-fill: #0f79fa;"));
-        button.setOnMouseExited(e -> button.setStyle("-fx-background-color:  #ffffff"));
-
     }
 
     private void makePaneMoovable(AnchorPane anchorPane){
@@ -221,6 +222,40 @@ public class EditTaskWindowController {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 minimiseButton.setStyle("-fx-background-color: transparent");
+            }
+        });
+
+        createButton.setStyle("-fx-background-color: transparent;" +
+                "-fx-border-color:#FFFFFF;" +
+                "-fx-background-insets: transparent;" +
+                "-fx-faint-focus-color: transparent;" +
+                "-fx-border-radius: 5;" +
+                "-fx-background-radius: 5;" +
+                "-fx-border-width: 1.5;");
+
+        createButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                createButton.setStyle( "-fx-background-color: transparent;"+
+                        "-fx-border-color:#91afc5;"+
+                        "-fx-background-insets: transparent;"+
+                        "-fx-faint-focus-color: transparent;"+
+                        "-fx-border-radius: 5;"+
+                        "-fx-background-radius: 5;"+
+                        "-fx-border-width: 1.5;");
+            }
+        });
+
+        createButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                createButton.setStyle("-fx-background-color: transparent;" +
+                        "-fx-border-color:#FFFFFF;" +
+                        "-fx-background-insets: transparent;" +
+                        "-fx-faint-focus-color: transparent;" +
+                        "-fx-border-radius: 5;" +
+                        "-fx-background-radius: 5;" +
+                        "-fx-border-width: 1.5;");
             }
         });
     }

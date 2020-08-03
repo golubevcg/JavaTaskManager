@@ -2,31 +2,34 @@ package controllers;
 
 import Main.Main;
 import animations.Shake;
-import classes.FXResizeHelper;
 import database.User;
 import database.services.UserService;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 public class RegWindowController {
+
+    @FXML
+    private AnchorPane forDropShadowTopAnchorPane;
 
     @FXML
     private TextField firstnameTextField;
@@ -73,32 +76,24 @@ public class RegWindowController {
     void initialize(){
 
         Main.getStageObj().setResizable(false);
+        this.forDropShadowTopAnchorPane.setStyle("-fx-background-color: transparent;");
+        this.forDropShadowTopAnchorPane.setPadding(new Insets(10,10,10,10));
+        this.forDropShadowTopAnchorPane.setEffect(new DropShadow());
+
         this.setImagesAndColorToButtons();
 
         this.makePaneMoovable(moovableAnchorPane);
 
-
+        LoginWindowController loginWindowController = new LoginWindowController();
         backButton.setOnAction(e->{
-            LoginWindowController loginWindowController = new LoginWindowController();
             openNewScene("/fxml/loginWindow.fxml", closeButton, loginWindowController);
         });
 
         registerButton.setOnAction(event->{
 
             if(registerNewUser()==true) {
-
                 registerButton.getScene().getWindow().hide();
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("/fxml/loginWindow.fxml"));
-                try {
-                    loader.load();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Parent root = loader.getRoot();
-                Stage stage = new Stage();
-                stage.setScene(new Scene(root));
-                stage.show();
+                openNewScene("/fxml/loginWindow.fxml", closeButton, loginWindowController);
             }
 
         });
@@ -153,8 +148,11 @@ public class RegWindowController {
         }
         Parent root = loader.getRoot();
         Stage stage = new Stage();
-        stage.setScene(new Scene(root));
+        Scene scene = new Scene(root);
+        scene.setFill(Color.TRANSPARENT);
+        stage.setScene(scene);
         stage.initStyle(StageStyle.UNDECORATED);
+        stage.initStyle(StageStyle.TRANSPARENT);
         stage.show();
     }
 

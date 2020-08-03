@@ -26,8 +26,10 @@ public class Main extends Application {
         loader.load();
         root = loader.getRoot();
         Scene scene = new Scene(root);
+        scene.setFill(Color.TRANSPARENT);
         stage.setScene(scene);
         stage.initStyle(StageStyle.UNDECORATED);
+        stage.initStyle(StageStyle.TRANSPARENT);
         stage.show();
 
     }

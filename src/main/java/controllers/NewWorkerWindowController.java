@@ -32,32 +32,24 @@ public class NewWorkerWindowController {
     @FXML
     private Button registerButton;
 
-    private OldMainWindowController mainWindowController;
+    private MainWindowController mainWindowController;
 
-    public NewWorkerWindowController(OldMainWindowController mainWindowController) {
+    public NewWorkerWindowController(MainWindowController mainWindowController) {
         this.mainWindowController = mainWindowController;
     }
 
     @FXML
     void initialize(){
 
-        setButtonCoursorEnterAction(registerButton);
         registerButton.setOnAction(e->{
             if(registerNewUser(mainWindowController)==true) {
-                mainWindowController.updateSceneWorkers(mainWindowController.allLabelsList,
-                        mainWindowController.allButtonsList, mainWindowController.uiMap);
                 mainWindowController.initialize();
                 registerButton.getScene().getWindow().hide();
             }
         });
     }
 
-    public static void main(String[] args) {
-        LoginWindowController lwc = new LoginWindowController();
-        lwc.initialize();
-    }
-
-    private boolean registerNewUser(OldMainWindowController mainWindowController) {
+    private boolean registerNewUser(MainWindowController mainWindowController) {
 
         String firstname = firstnameTextField.getText();
         String lastname = lastnameTextField.getText();
@@ -81,33 +73,16 @@ public class NewWorkerWindowController {
 
         }else {
 
-            //формируем запрос, чтобы проверить, есть ли такой пользователь в базе данных
             WorkerService workerService = new WorkerService();
-            Worker worker = new Worker(firstname, lastname, OldMainWindowController.rootUser, login);
+            Worker worker = new Worker(firstname, lastname, mainWindowController.getUser(), login);
             List<String> list = workerService.checkWorkerLogin(worker.getLogin());
 
             if (list.size() >= 1) {
-
-                //popup window - такой пользователь уже существует
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("/fxml/alertBoxWindow.fxml"));
-                try {
-                    loader.load();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Parent root = loader.getRoot();
-                Stage stage = new Stage();
-                stage.setScene(new Scene(root));
-                stage.show();
+                openNewScene("/fxml/alertBoxWindow.fxml", registerButton);
                 return false;
             } else {
-                //если всё хорошо - то добавляем нового пользователя в базу
-                Session session2 = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-                Transaction transaction1 =  session2.beginTransaction();
-                session2.save(worker);
-                transaction1.commit();
-                session2.close();
+                workerService.saveWorker(worker);
+                mainWindowController.getUser().addWorker(worker);
                 return true;
             }
         }
@@ -127,11 +102,5 @@ public class NewWorkerWindowController {
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
         stage.show();
-
-    }
-
-    public void setButtonCoursorEnterAction(Button button){
-        button.setOnMouseEntered(e->button.setStyle("-fx-background-color: #ffffff;" + "-fx-text-fill: #0f79fa;" ));
-        button.setOnMouseExited(e->button.setStyle("-fx-background-color:  #ffffff"));
     }
 }

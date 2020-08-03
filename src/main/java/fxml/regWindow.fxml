@@ -6,36 +6,46 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="410.0" prefWidth="730.0" style="-fx-background-color: FFFFFF;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+
+<AnchorPane fx:id="forDropShadowTopAnchorPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <TextField fx:id="firstnameTextField" layoutX="278.0" layoutY="95.0" prefHeight="36.0" prefWidth="174.0" promptText="firstname">
-         <font>
-            <Font name="Liberation Sans" size="14.0" />
-         </font></TextField>
-      <TextField fx:id="lastnameTextField" layoutX="278.0" layoutY="143.0" prefHeight="36.0" prefWidth="174.0" promptText="lastname">
-         <font>
-            <Font name="Liberation Sans" size="14.0" />
-         </font></TextField>
-      <TextField fx:id="loginField" layoutX="278.0" layoutY="191.0" prefHeight="36.0" prefWidth="174.0" promptText="login">
-         <font>
-            <Font name="Liberation Sans" size="14.0" />
-         </font></TextField>
-      <PasswordField fx:id="passwordField" layoutX="278.0" layoutY="239.0" prefHeight="36.0" prefWidth="174.0" promptText="password">
-         <font>
-            <Font name="Liberation Sans" size="14.0" />
-         </font></PasswordField>
-      <Button fx:id="registerButton" layoutX="330.0" layoutY="285.0" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Register" textFill="#91afc5">
-         <font>
-            <Font name="Arial" size="14.0" />
-         </font></Button>
-      <Button fx:id="backButton" layoutX="232.0" layoutY="98.0" mnemonicParsing="false" opacity="0.5" style="-fx-background-color: transparent;">
-         <font>
-            <Font name="Arial Bold" size="16.0" />
-         </font>
-      </Button>
-      <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="25.0" prefWidth="200.0" style="-fx-background-color: #91afc5;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <AnchorPane fx:id="moovableAnchorPane" layoutX="24.0" layoutY="24.0" prefHeight="21.0" prefWidth="200.0" style="-fx-background-color: #91afc5;" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0" />
-      <Button fx:id="minimiseButton" layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#min" prefHeight="0.0" prefWidth="21.0" style="-fx-background-color: transparent;" AnchorPane.rightAnchor="44.0" AnchorPane.topAnchor="1.0" />
-      <Button fx:id="closeButton" layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#close" style="-fx-background-color: transparent;" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="1.0" />
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="410.0" prefWidth="730.0" style="-fx-background-color: FFFFFF;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <TextField fx:id="firstnameTextField" layoutX="278.0" layoutY="95.0" prefHeight="36.0" prefWidth="174.0" promptText="firstname">
+               <font>
+                  <Font name="Liberation Sans" size="14.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="lastnameTextField" layoutX="278.0" layoutY="143.0" prefHeight="36.0" prefWidth="174.0" promptText="lastname">
+               <font>
+                  <Font name="Liberation Sans" size="14.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="loginField" layoutX="278.0" layoutY="191.0" prefHeight="36.0" prefWidth="174.0" promptText="login">
+               <font>
+                  <Font name="Liberation Sans" size="14.0" />
+               </font>
+            </TextField>
+            <PasswordField fx:id="passwordField" layoutX="278.0" layoutY="239.0" prefHeight="36.0" prefWidth="174.0" promptText="password">
+               <font>
+                  <Font name="Liberation Sans" size="14.0" />
+               </font>
+            </PasswordField>
+            <Button fx:id="registerButton" layoutX="330.0" layoutY="285.0" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Register" textFill="#91afc5">
+               <font>
+                  <Font name="Arial" size="14.0" />
+               </font>
+            </Button>
+            <Button fx:id="backButton" layoutX="232.0" layoutY="98.0" mnemonicParsing="false" opacity="0.5" style="-fx-background-color: transparent;">
+               <font>
+                  <Font name="Arial Bold" size="16.0" />
+               </font>
+            </Button>
+            <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="25.0" prefWidth="200.0" style="-fx-background-color: #91afc5;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <AnchorPane fx:id="moovableAnchorPane" layoutX="24.0" layoutY="24.0" prefHeight="21.0" prefWidth="200.0" style="-fx-background-color: #91afc5;" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0" />
+            <Button fx:id="minimiseButton" layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#min" prefHeight="0.0" prefWidth="21.0" style="-fx-background-color: transparent;" AnchorPane.rightAnchor="44.0" AnchorPane.topAnchor="1.0" />
+            <Button fx:id="closeButton" layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#close" style="-fx-background-color: transparent;" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="1.0" />
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>

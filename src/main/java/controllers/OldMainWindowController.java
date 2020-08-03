@@ -227,8 +227,8 @@ public class OldMainWindowController {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/fxml/newWorkerWindow.fxml"));
             try {
-                NewWorkerWindowController newWorkerWindowController = new NewWorkerWindowController(this);
-                loader.setController(newWorkerWindowController);
+//                NewWorkerWindowController newWorkerWindowController = new NewWorkerWindowController(this);
+//                loader.setController(newWorkerWindowController);
                 loader.load();
             } catch (IOException d) {
                 d.printStackTrace();

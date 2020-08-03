@@ -8,10 +8,9 @@
 
 <!--<?import javafx.scene.control.TextField?>-->
 
-
-<AnchorPane fx:id="mainAnchorPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="forDropShadowTopAnchorPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="730.0" minHeight="-Infinity" minWidth="730.0" prefHeight="410.0" prefWidth="730.0" style="-fx-background-color: FFFFFF;">
+      <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="730.0" minHeight="-Infinity" minWidth="730.0" prefHeight="410.0" prefWidth="730.0" style="-fx-background-color: FFFFFF;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <AnchorPane prefHeight="25.0" prefWidth="200.0" style="-fx-background-color: #91afc5;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
             <AnchorPane fx:id="moovableAnchorPane" layoutX="14.0" layoutY="14.0" prefHeight="21.0" prefWidth="200.0" style="-fx-background-color: #91afc5;" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0" />

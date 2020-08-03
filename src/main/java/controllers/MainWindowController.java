@@ -11,9 +11,11 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
@@ -49,10 +51,13 @@ public class MainWindowController {
     private URL location;
 
     @FXML
+    private AnchorPane forDropShadowTopAnchorPane;
+
+    @FXML
     private AnchorPane mainAnchorPane;
 
     @FXML
-    private AnchorPane anchorPainTodragWindow;
+    private AnchorPane anchorPainToDragWindow;
 
     @FXML
     private SplitPane mainSplitPane;
@@ -87,6 +92,8 @@ public class MainWindowController {
     @FXML
     private Rectangle textFieldRectangle;
 
+
+
     @FXML void close(ActionEvent event){
         System.exit(0);
     }
@@ -115,12 +122,16 @@ public class MainWindowController {
     @FXML
     void initialize() {
 
+        this.forDropShadowTopAnchorPane.setStyle("-fx-background-color: transparent;");
+        this.forDropShadowTopAnchorPane.setPadding(new Insets(10,10,10,10));
+        this.forDropShadowTopAnchorPane.setEffect(new DropShadow());
+
         this.cleanAllNodes();
 
         this.mainAnchorPane.setMinWidth(mainAnchorPane.getPrefWidth());
         this.mainAnchorPane.setMaxWidth(mainAnchorPane.getPrefHeight());
 
-        this.makePaneMoovable(anchorPainTodragWindow);
+        this.makePaneMoovable(mainAnchorPane);
 
         this.textArea.setText(this.getUserTextField());
         this.textArea.setMinWidth(textArea.getPrefWidth());
@@ -133,6 +144,30 @@ public class MainWindowController {
         this.setImagesAndColorToButtons();
 
         this.drawWorkerLabels();
+
+        NewWorkerWindowController newWorkerWindowController = new NewWorkerWindowController(this);
+
+        this.addNewWorkerButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("/fxml/newWorkerWindow.fxml"));
+                loader.setController(newWorkerWindowController);
+                try {loader.load();
+                } catch (IOException a) {
+                    a.printStackTrace();
+                }
+                Parent root = loader.getRoot();
+                Stage stage = new Stage();
+//                stage.initStyle(StageStyle.UNDECORATED);
+//                stage.initStyle(StageStyle.TRANSPARENT);
+                Scene scene = new Scene(root);
+//                scene.setFill(Color.TRANSPARENT);
+                stage.setScene(scene);
+                stage.setResizable(false);
+                stage.show();
+            }
+        });
 
     }
 
@@ -315,6 +350,7 @@ public class MainWindowController {
 
             List<Task> workerTasks = workerList.get(i).getTasks();
 
+
             for (int j = 0; j < workerTasks.size(); j++) {
 
                 Task task = workerTasks.get(j);
@@ -350,12 +386,67 @@ public class MainWindowController {
                         }
                     });
 
+                    MenuItem editTask = new MenuItem("Отредактировать задачу");
+                    MenuItem deleteTask = new MenuItem("Удалить задачу");
+                    MenuItem markByColor = new MenuItem("Пометить цветом");
+
+                    EditTaskWindowController editTaskWindowController = new EditTaskWindowController(this,task);
+                    editTask.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent actionEvent) {
+                            FXMLLoader loader = new FXMLLoader();
+                            loader.setLocation(getClass().getResource("/fxml/newTaskWindow.fxml"));
+                            loader.setController(editTaskWindowController);
+                            try {loader.load();
+                            } catch (IOException a) {
+                                a.printStackTrace();
+                            }
+                            Parent root = loader.getRoot();
+                            Stage stage = new Stage();
+                            stage.initStyle(StageStyle.UNDECORATED);
+                            stage.initStyle(StageStyle.TRANSPARENT);
+                            Scene scene = new Scene(root);
+                            scene.setFill(Color.TRANSPARENT);
+                            stage.setScene(scene);
+                            editTaskWindowController.setStage(stage);
+                            stage.setResizable(false);
+                            stage.show();
+                        }
+                    });
+
+                    DeleteTaskWindowController deleteTaskWindowController = new DeleteTaskWindowController(this, task);
+                    deleteTask.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent actionEvent) {
+                            FXMLLoader loader = new FXMLLoader();
+                            loader.setLocation(getClass().getResource("/fxml/deleteTaskConfirmationWindow.fxml"));
+                            loader.setController(deleteTaskWindowController);
+                            try {loader.load();
+                            } catch (IOException a) {
+                                a.printStackTrace();
+                            }
+                            Parent root = loader.getRoot();
+                            Stage stage = new Stage();
+                            stage.initStyle(StageStyle.UNDECORATED);
+                            stage.initStyle(StageStyle.TRANSPARENT);
+                            Scene scene = new Scene(root);
+                            scene.setFill(Color.TRANSPARENT);
+                            stage.setScene(scene);
+                            editTaskWindowController.setStage(stage);
+                            stage.setResizable(false);
+                            stage.show();                        }
+                    });
+
+                    markByColor.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent actionEvent) {
+
+                        }
+                    });
+
                     if(taskType.equals("quene")){
                         ContextMenu taskRectangleContextMenu = new ContextMenu();
                         MenuItem moveTaskToInWork = new MenuItem("Сделать задачу в работе");
-                        MenuItem editTask = new MenuItem("Отредактировать задачу");
-                        MenuItem deleteTask = new MenuItem("Удалить задачу");
-                        MenuItem markByColor = new MenuItem("Пометить цветом");
 
                         taskRectangleContextMenu.getItems().addAll(moveTaskToInWork,editTask,deleteTask,markByColor);
                         taskRectangle.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
@@ -365,35 +456,7 @@ public class MainWindowController {
                             }
                         });
 
-                        EditTaskWindowController editTaskWindowController = new EditTaskWindowController(this,task);
-                        editTask.setOnAction(new EventHandler<ActionEvent>() {
-                            @Override
-                            public void handle(ActionEvent actionEvent) {
-                                FXMLLoader loader = new FXMLLoader();
-                                loader.setLocation(getClass().getResource("/fxml/newTaskWindow.fxml"));
-                                loader.setController(editTaskWindowController);
-                                try {loader.load();
-                                } catch (IOException a) {
-                                    a.printStackTrace();
-                                }
-                                Parent root = loader.getRoot();
-                                Stage stage = new Stage();
-                                stage.initStyle(StageStyle.UNDECORATED);
-                                stage.setScene(new Scene(root));
-                                editTaskWindowController.setStage(stage);
-                                stage.setResizable(false);
-                                stage.show();
-                            }
-                        });
-
-                        deleteTask.setOnAction(new EventHandler<ActionEvent>() {
-                            @Override
-                            public void handle(ActionEvent actionEvent) {
-                                //тут нужно сделать окошко подтверждения удаления задачи
-                            }
-                        });
-
-                        markByColor.setOnAction(new EventHandler<ActionEvent>() {
+                        moveTaskToInWork.setOnAction(new EventHandler<ActionEvent>() {
                             @Override
                             public void handle(ActionEvent actionEvent) {
 
@@ -404,9 +467,6 @@ public class MainWindowController {
                     if(taskType.equals("inwork")){
                         ContextMenu taskRectangleContextMenu = new ContextMenu();
                         MenuItem moveTaskToInQueue = new MenuItem("Вернуть задачу в очередь");
-                        MenuItem editTask = new MenuItem("Отредактировать задачу");
-                        MenuItem deleteTask = new MenuItem("Удалить задачу");
-                        MenuItem markByColor = new MenuItem("Пометить цветом");
 
                         taskRectangleContextMenu.getItems().addAll(moveTaskToInQueue,editTask,deleteTask,markByColor);
                         taskRectangle.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
@@ -415,8 +475,14 @@ public class MainWindowController {
                                 taskRectangleContextMenu.show(taskRectangle, contextMenuEvent.getScreenX(), contextMenuEvent.getScreenY());
                             }
                         });
-                    }
 
+                        moveTaskToInQueue.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent actionEvent) {
+
+                            }
+                        });
+                    }
 
                     String myString = "- " + workerTasks.get(j).getText();
                     Label taskLabel = new Label();
@@ -601,5 +667,9 @@ public class MainWindowController {
         createTaskFromSelectedMenuItem.getItems().addAll(menuItemsList);
         contextMenu.getItems().addAll(createTaskFromSelectedMenuItem);
         this.textArea.setContextMenu(contextMenu);
+    }
+
+    public User getUser(){
+        return this.rootUser;
     }
 }

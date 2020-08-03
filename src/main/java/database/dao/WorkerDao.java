@@ -11,7 +11,7 @@ import java.util.List;
 
 public class WorkerDao {
         public void save(Worker worker) {
-            Session session = HibernateSessionFactoryUtil.getSessionFactory().getCurrentSession();
+            Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
             Transaction transaction1 = session.beginTransaction();
             session.save(worker);
             transaction1.commit();

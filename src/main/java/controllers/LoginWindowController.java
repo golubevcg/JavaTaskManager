@@ -40,7 +40,7 @@ import java.util.ResourceBundle;
 public class LoginWindowController {
 
     @FXML
-    private AnchorPane mainAnchorPane;
+    private AnchorPane forDropShadowTopAnchorPane;
 
     @FXML
     private AnchorPane anchorPane;
@@ -84,9 +84,10 @@ public class LoginWindowController {
     @FXML
     void initialize() {
 
-//        mainAnchorPane.setPadding(new Insets(20,20,20,20));
-//        mainAnchorPane.setEffect(new DropShadow());
-//        anchorPane.getScene().setFill(Color.TRANSPARENT);
+        this.forDropShadowTopAnchorPane.setStyle("-fx-background-color: transparent;");
+        this.forDropShadowTopAnchorPane.setPadding(new Insets(10,10,10,10));
+        this.forDropShadowTopAnchorPane.setEffect(new DropShadow());
+
 
 
         Main.getStageObj().setResizable(false);
@@ -155,14 +156,17 @@ public class LoginWindowController {
         }
         Parent root = loader.getRoot();
         Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.initStyle(StageStyle.UNDECORATED);
+        Scene scene = new Scene(root);
+        scene.setFill(Color.TRANSPARENT);
+        stage.setScene(scene);
+
         if(controller.getClass()==(MainWindowController.class)){
             ((MainWindowController)controller).setStage(stage);
             FXResizeHelper fxResizeHelper = new FXResizeHelper();
             fxResizeHelper.addResizeListener(stage);
-
         }
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.initStyle(StageStyle.TRANSPARENT);
         stage.show();
     }
 
@@ -185,7 +189,6 @@ public class LoginWindowController {
 
     private void loginUser(String loginText, String loginPassword) {
 
-        UserService userService = new UserService();
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         List<User> list = session.createQuery("FROM User WHERE login = '" + loginText + "'").list();
         session.getTransaction();
