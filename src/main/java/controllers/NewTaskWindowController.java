@@ -45,6 +45,7 @@ public class NewTaskWindowController {
     private MainWindowController mainWindowController;
 
     private Worker worker;
+    private Stage stage;
 
     public NewTaskWindowController(MainWindowController mainWindowController, Worker worker) {
         this.mainWindowController = mainWindowController;
@@ -103,6 +104,10 @@ public class NewTaskWindowController {
                 return true;
             }
         }
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 }
 

@@ -23,12 +23,8 @@ public class DeleteWorkerWindowController {
     private MainWindowController mainWindowController;
 
     private Worker worker;
-    private Stage stage;
 
-    public DeleteWorkerWindowController(MainWindowController mainWindowController, Worker worker) {
-        this.mainWindowController = mainWindowController;
-        this.worker = worker;
-    }
+    private Stage stage;
 
     @FXML
     private AnchorPane AnchorPane;
@@ -38,6 +34,11 @@ public class DeleteWorkerWindowController {
 
     @FXML
     private Button noButton;
+
+    public DeleteWorkerWindowController(MainWindowController mainWindowController, Worker worker) {
+        this.mainWindowController = mainWindowController;
+        this.worker = worker;
+    }
 
     @FXML
     void initialize() {

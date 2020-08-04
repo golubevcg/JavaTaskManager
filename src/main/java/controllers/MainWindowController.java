@@ -327,6 +327,30 @@ public class MainWindowController {
             MenuItem editWorker = new MenuItem("Отредактировать сотрудника");
             MenuItem deleteWorker = new MenuItem("Удалить сотрудника");
 
+            NewTaskWindowController newTaskWindowController = new NewTaskWindowController(this, worker);
+            addTaskToWorker.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    FXMLLoader loader = new FXMLLoader();
+                    loader.setLocation(getClass().getResource("/fxml/newTaskWindow.fxml"));
+                    loader.setController(newTaskWindowController);
+                    try {loader.load();
+                    } catch (IOException a) {
+                        a.printStackTrace();
+                    }
+                    Parent root = loader.getRoot();
+                    Stage stage = new Stage();
+                    stage.initStyle(StageStyle.UNDECORATED);
+                    stage.initStyle(StageStyle.TRANSPARENT);
+                    Scene scene = new Scene(root);
+                    scene.setFill(Color.TRANSPARENT);
+                    stage.setScene(scene);
+                    newTaskWindowController.setStage(stage);
+                    stage.setResizable(false);
+                    stage.show();
+                }
+            });
+
             DeleteWorkerWindowController deleteWorkerWindowController = new DeleteWorkerWindowController(this, worker);
 
             deleteWorker.setOnAction(new EventHandler<ActionEvent>() {
