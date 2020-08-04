@@ -21,7 +21,7 @@ public class Task {
     @Column //three types as string - quene, inwork, done
     private String tasktype;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "worker_id")
     public Worker worker;
 

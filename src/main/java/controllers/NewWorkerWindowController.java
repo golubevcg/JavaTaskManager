@@ -2,7 +2,9 @@ package controllers;
 
 import animations.Shake;
 import database.HibernateSessionFactoryUtil;
+import database.User;
 import database.Worker;
+import database.services.UserService;
 import database.services.WorkerService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -83,6 +85,14 @@ public class NewWorkerWindowController {
             } else {
                 workerService.saveWorker(worker);
                 mainWindowController.getUser().addWorker(worker);
+                UserService userService = new UserService();
+                userService.updateUser(mainWindowController.getUser());
+
+                Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+                List<User> list1 = session.createQuery("FROM User WHERE id = '" + mainWindowController.getUser().getId() + "'").list();
+                session.getTransaction();
+                session.close();
+                mainWindowController.setUser(list1.get(0));
                 return true;
             }
         }

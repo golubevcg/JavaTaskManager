@@ -22,11 +22,7 @@ public class AlertBoxController {
         Button closeButton = new Button();
         closeButton.setText("Close the window");
         closeButton.setOnAction(e -> window.close());
-//        closeButton.setStyle("-fx-background-color: #fafafa;");
-//        VBox layout = new VBox(20);
-//        layout.getChildren().addAll(label, closeButton);
-//        layout.setAlignment(Pos.CENTER);
-//        layout.setStyle("-fx-background-color: #fafafa;");
+
 
         AnchorPane anchorPane = new AnchorPane();
         anchorPane.setMaxWidth(650);

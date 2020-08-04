@@ -6,6 +6,7 @@ import database.HibernateSessionFactoryUtil;
 import database.Task;
 import database.Worker;
 import database.services.TaskService;
+import database.services.WorkerService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -51,13 +52,9 @@ public class NewTaskWindowController {
 
     }
 
-
     @FXML
     private void initialize() {
         inQueenRadioButton.fire();
-
-
-//        public Task(String text, Worker worker, String tasktype)
 
         createButton.setOnAction(e->{
                 if(registerNewUser()==true) {
@@ -75,7 +72,6 @@ public class NewTaskWindowController {
             taskTextfield.playAnim();
             return false;
         } else {
-            //формируем запрос, чтобы проверить, есть ли такая задача в базе данных
             String tasktype;
             if (inQueenRadioButton.isSelected() == true) {
                 tasktype = "quene";
@@ -87,7 +83,6 @@ public class NewTaskWindowController {
             List<String> list = taskService.checkTask(taskText);
 
             if (list.size() >= 1) {
-                //popup window - такая задача уже существует
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("/fxml/alertTaskBoxWindow.fxml"));
                 try {
@@ -101,14 +96,10 @@ public class NewTaskWindowController {
                 stage.show();
                 return false;
             } else {
-                //если всё хорошо - то добавляем новую задачу в базу
-                Session session2 = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-                Transaction transaction1 = session2.beginTransaction();
-                session2.save(task);
-                transaction1.commit();
-                session2.close();
-
+                taskService.saveTask(task);
                 worker.addTask(task);
+                WorkerService workerService = new WorkerService();
+                workerService.updateWorker(worker);
                 return true;
             }
         }

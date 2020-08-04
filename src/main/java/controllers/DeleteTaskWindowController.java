@@ -46,9 +46,9 @@ public class DeleteTaskWindowController {
     void initialize() {
 
         yesButton.setOnAction(e->{
-            Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-            session.createQuery("DELETE FROM Task WHERE id = " + task.getId());
-            session.close();
+            TaskService taskService = new TaskService();
+            taskService.deleteTask(task);
+            task.getWorker().deleteTask(task);
             yesButton.getScene().getWindow().hide();
             mainWindowController.initialize();
         });
@@ -125,11 +125,6 @@ public class DeleteTaskWindowController {
             }
         });
 
-
     }
-
-
-
-
 
 }

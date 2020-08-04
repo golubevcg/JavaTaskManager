@@ -146,7 +146,6 @@ public class MainWindowController {
         this.drawWorkerLabels();
 
         NewWorkerWindowController newWorkerWindowController = new NewWorkerWindowController(this);
-
         this.addNewWorkerButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -282,13 +281,26 @@ public class MainWindowController {
         return this.rootUser.getId();
     }
 
+    private void updateRootUserFromDB(){
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        List<User> list1 = session.createQuery("FROM User WHERE id = '" + this.getUser().getId() + "'").list();
+        session.getTransaction();
+        session.close();
+        this.setUser(list1.get(0));
+    }
+
     private void drawWorkerLabels(){
+
+        this.updateRootUserFromDB();
+
 
         List<Worker> workerList = rootUser.getWorkers();
 
         double additionalHeight = 0;
 
         for (int i = 0; i < workerList.size(); i++) {
+
+            Worker worker = workerList.get(i);
 
             double additionalRectangleHeight = 0;
 
@@ -314,6 +326,31 @@ public class MainWindowController {
             MenuItem addTaskToWorker = new MenuItem("Добавить новую задачу");
             MenuItem editWorker = new MenuItem("Отредактировать сотрудника");
             MenuItem deleteWorker = new MenuItem("Удалить сотрудника");
+
+            DeleteWorkerWindowController deleteWorkerWindowController = new DeleteWorkerWindowController(this, worker);
+
+            deleteWorker.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    FXMLLoader loader = new FXMLLoader();
+                    loader.setLocation(getClass().getResource("/fxml/deleteWorkerConfirmationWindow.fxml"));
+                    loader.setController(deleteWorkerWindowController);
+                    try {loader.load();
+                    } catch (IOException a) {
+                        a.printStackTrace();
+                    }
+                    Parent root = loader.getRoot();
+                    Stage stage = new Stage();
+                    stage.initStyle(StageStyle.UNDECORATED);
+                    stage.initStyle(StageStyle.TRANSPARENT);
+                    Scene scene = new Scene(root);
+                    scene.setFill(Color.TRANSPARENT);
+                    stage.setScene(scene);
+                    stage.setResizable(false);
+                    deleteWorkerWindowController.setStage(stage);
+                    stage.show();
+                }
+            });
 
             workerLabelContextMenu.getItems().addAll(addTaskToWorker,editWorker,deleteWorker);
             workerLabel.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
@@ -350,6 +387,10 @@ public class MainWindowController {
 
             List<Task> workerTasks = workerList.get(i).getTasks();
 
+            System.out.println("++++++++++++++++++++++++++");
+            System.out.println(workerList.get(i).getFirstname() +" "+workerList.get(i).getLastname());
+            System.out.println(workerList.get(i).getTasks().size());
+            System.out.println("++++++++++++++++++++++++++");
 
             for (int j = 0; j < workerTasks.size(); j++) {
 
@@ -444,6 +485,8 @@ public class MainWindowController {
                         }
                     });
 
+                    TaskService taskservise = new TaskService();
+                    MainWindowController thisMainWindowController = this;
                     if(taskType.equals("quene")){
                         ContextMenu taskRectangleContextMenu = new ContextMenu();
                         MenuItem moveTaskToInWork = new MenuItem("Сделать задачу в работе");
@@ -459,7 +502,9 @@ public class MainWindowController {
                         moveTaskToInWork.setOnAction(new EventHandler<ActionEvent>() {
                             @Override
                             public void handle(ActionEvent actionEvent) {
-
+                                task.setTasktype("inwork");
+                                taskservise.updateTask(task);
+                                thisMainWindowController.initialize();
                             }
                         });
                     }
@@ -479,7 +524,9 @@ public class MainWindowController {
                         moveTaskToInQueue.setOnAction(new EventHandler<ActionEvent>() {
                             @Override
                             public void handle(ActionEvent actionEvent) {
-
+                                task.setTasktype("quene");
+                                taskservise.updateTask(task);
+                                thisMainWindowController.initialize();
                             }
                         });
                     }
@@ -672,4 +719,11 @@ public class MainWindowController {
     public User getUser(){
         return this.rootUser;
     }
+
+    public void setUser(User user){this.rootUser = user;}
+
+    public void addToTextArea(String string){
+        this.rootUser.setTextfield(this.textArea.getText() + "\n" + string);
+    }
+
 }
