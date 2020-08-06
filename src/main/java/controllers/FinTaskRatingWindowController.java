@@ -49,9 +49,6 @@ public class FinTaskRatingWindowController {
     @FXML
     private RadioButton buttonRaing4;
 
-
-
-
     @FXML
     private ToggleGroup tgroup1112;
 

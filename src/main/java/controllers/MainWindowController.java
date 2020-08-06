@@ -27,6 +27,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.hibernate.Session;
@@ -34,10 +35,7 @@ import org.hibernate.Transaction;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 public class MainWindowController {
@@ -158,10 +156,10 @@ public class MainWindowController {
                 }
                 Parent root = loader.getRoot();
                 Stage stage = new Stage();
-//                stage.initStyle(StageStyle.UNDECORATED);
-//                stage.initStyle(StageStyle.TRANSPARENT);
+                stage.initStyle(StageStyle.UNDECORATED);
+                stage.initStyle(StageStyle.TRANSPARENT);
                 Scene scene = new Scene(root);
-//                scene.setFill(Color.TRANSPARENT);
+                scene.setFill(Color.TRANSPARENT);
                 stage.setScene(scene);
                 stage.setResizable(false);
                 stage.show();
@@ -194,6 +192,8 @@ public class MainWindowController {
     }
 
     private List<MenuItem> createDefaultMenuItems(TextInputControl t) {
+        String fontStyleToMenuItems = " -fx-font-size: 14px; -fx-font-family: Arial;";
+
         MenuItem cut = new MenuItem("Cut");
         cut.setOnAction(e -> t.cut());
         MenuItem copy = new MenuItem("Copy");
@@ -204,6 +204,13 @@ public class MainWindowController {
         delete.setOnAction(e -> t.deleteText(t.getSelection()));
         MenuItem selectAll = new MenuItem("Select All");
         selectAll.setOnAction(e -> t.selectAll());
+
+        cut.setStyle(fontStyleToMenuItems);
+        copy.setStyle(fontStyleToMenuItems);
+        paste.setStyle(fontStyleToMenuItems);
+        delete.setStyle(fontStyleToMenuItems);
+        selectAll.setStyle(fontStyleToMenuItems);
+
 
         BooleanBinding emptySelection = Bindings.createBooleanBinding(() ->
                         t.getSelection().getLength() == 0,
@@ -273,6 +280,16 @@ public class MainWindowController {
         button.setGraphic(imageView);
     }
 
+    private void setImageToMenuItem(MenuItem menuItem, String imageName, int width, int height){
+        Image image = new Image(imageName);
+        ImageView imageView = new ImageView(image);
+        imageView.setPickOnBounds(true);
+        imageView.setPreserveRatio(true);
+        imageView.setFitWidth(width);
+        imageView.setFitHeight(height);
+        menuItem.setGraphic(imageView);
+    }
+
     public String getUserTextField() {
         return  this.rootUser.getTextfield();
     }
@@ -293,8 +310,8 @@ public class MainWindowController {
 
         this.updateRootUserFromDB();
 
-
         List<Worker> workerList = rootUser.getWorkers();
+        Collections.sort(workerList);
 
         double additionalHeight = 0;
 
@@ -326,6 +343,12 @@ public class MainWindowController {
             MenuItem addTaskToWorker = new MenuItem("Добавить новую задачу");
             MenuItem editWorker = new MenuItem("Отредактировать сотрудника");
             MenuItem deleteWorker = new MenuItem("Удалить сотрудника");
+
+            String fontStyleToMenuItems = " -fx-font-size: 14px; -fx-font-family: Arial;";
+
+            addTaskToWorker.setStyle(fontStyleToMenuItems);
+            editWorker.setStyle(fontStyleToMenuItems);
+            deleteWorker.setStyle(fontStyleToMenuItems);
 
             NewTaskWindowController newTaskWindowController = new NewTaskWindowController(this, worker);
             addTaskToWorker.setOnAction(new EventHandler<ActionEvent>() {
@@ -411,10 +434,7 @@ public class MainWindowController {
 
             List<Task> workerTasks = workerList.get(i).getTasks();
 
-            System.out.println("++++++++++++++++++++++++++");
-            System.out.println(workerList.get(i).getFirstname() +" "+workerList.get(i).getLastname());
-            System.out.println(workerList.get(i).getTasks().size());
-            System.out.println("++++++++++++++++++++++++++");
+            Collections.sort(workerTasks);
 
             for (int j = 0; j < workerTasks.size(); j++) {
 
@@ -423,19 +443,15 @@ public class MainWindowController {
                 String taskType = workerTasks.get(j).getTasktype();
 
                 if(taskType.equals("inwork") || taskType.equals("quene")){
+
                     Rectangle taskRectangle;
                     if(taskType.equals("quene")) {
                         taskRectangle = new Rectangle(253+4,23+2);
                     }else{
                         taskRectangle = new Rectangle(253+4+4+8+15,23+2);
                     }
-                    taskRectangle.setFill(Color.web(standartRectanglesColor));
-                    taskRectangle.setViewOrder(2);
-                    taskRectangle.setArcHeight(rectanglesArcRadius*1.5);
-                    taskRectangle.setArcWidth(rectanglesArcRadius*1.5);
-                    AnchorPane.setTopAnchor(taskRectangle, rectLY1 + 48);
-                    anchorPaneForCards.getChildren().addAll(taskRectangle);
 
+                    taskRectangle.setFill(Color.web(standartRectanglesColor));
                     taskRectangle.setOnMouseEntered(new EventHandler<MouseEvent>() {
                         @Override
                         public void handle(MouseEvent mouseEvent) {
@@ -443,7 +459,6 @@ public class MainWindowController {
                             taskRectangle.setStroke(Paint.valueOf("91afc5"));
                         }
                     });
-
                     taskRectangle.setOnMouseExited(new EventHandler<MouseEvent>() {
                         @Override
                         public void handle(MouseEvent mouseEvent) {
@@ -451,9 +466,209 @@ public class MainWindowController {
                         }
                     });
 
+                    if("#e2e0c8".equals(task.getColor())){
+                            taskRectangle.setFill(Color.web("#e2e0c8"));
+                            taskRectangle.setStroke(Paint.valueOf("#d0cda7"));
+
+                            taskRectangle.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+                                    taskRectangle.setStrokeWidth(strokeWidth);
+                                    taskRectangle.setFill(Color.web("#f4f3e9"));
+                                }
+                            });
+
+                            taskRectangle.setOnMouseExited(new EventHandler<MouseEvent>() {
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+                                    taskRectangle.setStrokeWidth(0);
+                                    taskRectangle.setFill(Color.web("#e2e0c8"));
+                                    taskRectangle.setStroke(Paint.valueOf("#d0cda7"));
+                                }
+                            });
+                        }
+                    if("#c8d7e2".equals(task.getColor())){
+                            taskRectangle.setFill(Color.web("#c8d7e2"));
+                            taskRectangle.setStroke(Paint.valueOf("#a7bfd0"));
+
+                            taskRectangle.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+                                    taskRectangle.setStrokeWidth(strokeWidth);
+                                    taskRectangle.setFill(Color.web("#e9eff4"));
+                                }
+                            });
+
+                            taskRectangle.setOnMouseExited(new EventHandler<MouseEvent>() {
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+                                    taskRectangle.setStrokeWidth(0);
+                                    taskRectangle.setFill(Color.web("#c8d7e2"));
+                                    taskRectangle.setStroke(Paint.valueOf("#a7bfd0"));
+                                }
+                            });
+            }
+                    if("#e2c8ca".equals(task.getColor())){
+                            taskRectangle.setFill(Color.web("#e2c8ca"));
+                            taskRectangle.setStroke(Paint.valueOf("#d0a7aa"));
+
+                            taskRectangle.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+                                    taskRectangle.setStrokeWidth(strokeWidth);
+                                    taskRectangle.setFill(Color.web("#f4e9ea"));
+                                }
+                            });
+
+                            taskRectangle.setOnMouseExited(new EventHandler<MouseEvent>() {
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+                                    taskRectangle.setStrokeWidth(0);
+                                    taskRectangle.setFill(Color.web("#e2c8ca"));
+                                    taskRectangle.setStroke(Paint.valueOf("#d0a7aa"));
+                                }
+                            });
+                    }
+
+                    taskRectangle.setViewOrder(2);
+                    taskRectangle.setArcHeight(rectanglesArcRadius*1.5);
+                    taskRectangle.setArcWidth(rectanglesArcRadius*1.5);
+                    AnchorPane.setTopAnchor(taskRectangle, rectLY1 + 48);
+                    anchorPaneForCards.getChildren().addAll(taskRectangle);
+
+
                     MenuItem editTask = new MenuItem("Отредактировать задачу");
                     MenuItem deleteTask = new MenuItem("Удалить задачу");
-                    MenuItem markByColor = new MenuItem("Пометить цветом");
+                    Menu markByColor = new Menu("Пометить цветом");
+
+                    MenuItem yellow = new MenuItem("#e2e0c8");
+                    MenuItem blue = new MenuItem("#c8d7e2");
+                    MenuItem red = new MenuItem("#e2c8ca");
+                    MenuItem defaultColor = new MenuItem("default");
+
+                    this.setImageToMenuItem(yellow, "e2e0c8.png", 16,16);
+                    this.setImageToMenuItem(blue, "c8d7e2.png", 16,16);
+                    this.setImageToMenuItem(red, "e2c8ca.png", 16,16);
+                    this.setImageToMenuItem(editTask, "editTask.png", 16,16);
+                    this.setImageToMenuItem(deleteTask, "taskCross.png", 16,16);
+                    this.setImageToMenuItem(markByColor, "paintbrush.png", 16,16);
+
+                    editTask.setStyle(fontStyleToMenuItems);
+                    deleteTask.setStyle(fontStyleToMenuItems);
+                    markByColor.setStyle(fontStyleToMenuItems);
+
+                    yellow.setStyle(fontStyleToMenuItems);
+                    blue.setStyle(fontStyleToMenuItems);
+                    red.setStyle(fontStyleToMenuItems);
+                    defaultColor.setStyle(fontStyleToMenuItems);
+
+                    markByColor.getItems().addAll(yellow,blue,red,defaultColor);
+
+                    TaskService taskService = new TaskService();
+
+                    yellow.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent actionEvent) {
+                            task.setColor("#e2e0c8");
+                            taskService.updateTask(task);
+                            taskRectangle.setFill(Color.web("#e2e0c8"));
+                            taskRectangle.setStroke(Paint.valueOf("#d0cda7"));
+
+                            taskRectangle.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+                                    taskRectangle.setStrokeWidth(strokeWidth);
+                                    taskRectangle.setFill(Color.web("#f4f3e9"));
+                                }
+                            });
+
+                            taskRectangle.setOnMouseExited(new EventHandler<MouseEvent>() {
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+                                    taskRectangle.setStrokeWidth(0);
+                                    taskRectangle.setFill(Color.web("#e2e0c8"));
+                                    taskRectangle.setStroke(Paint.valueOf("#d0cda7"));
+                                }
+                            });
+                        }
+                    });
+
+                    blue.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent actionEvent) {
+                            task.setColor("#c8d7e2");
+                            taskService.updateTask(task);
+                            taskRectangle.setFill(Color.web("#c8d7e2"));
+                            taskRectangle.setStroke(Paint.valueOf("#a7bfd0"));
+
+                            taskRectangle.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+                                    taskRectangle.setStrokeWidth(strokeWidth);
+                                    taskRectangle.setFill(Color.web("#e9eff4"));
+                                }
+                            });
+
+                            taskRectangle.setOnMouseExited(new EventHandler<MouseEvent>() {
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+                                    taskRectangle.setStrokeWidth(0);
+                                    taskRectangle.setFill(Color.web("#c8d7e2"));
+                                    taskRectangle.setStroke(Paint.valueOf("#a7bfd0"));
+                                }
+                            });
+                        }
+                    });
+
+                    red.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent actionEvent) {
+                            task.setColor("#e2c8ca");
+                            taskService.updateTask(task);
+                            taskRectangle.setFill(Color.web("#e2c8ca"));
+                            taskRectangle.setStroke(Paint.valueOf("#d0a7aa"));
+
+                            taskRectangle.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+                                    taskRectangle.setStrokeWidth(strokeWidth);
+                                    taskRectangle.setFill(Color.web("#f4e9ea"));
+                                }
+                            });
+
+                            taskRectangle.setOnMouseExited(new EventHandler<MouseEvent>() {
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+                                    taskRectangle.setStrokeWidth(0);
+                                    taskRectangle.setFill(Color.web("#e2c8ca"));
+                                    taskRectangle.setStroke(Paint.valueOf("#d0a7aa"));
+
+                                }
+                            });
+                        }
+                    });
+
+                    defaultColor.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent actionEvent) {
+                            taskRectangle.setFill(Color.web(standartRectanglesColor));
+                            taskService.updateTask(task);
+                            taskRectangle.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+                                    taskRectangle.setStrokeWidth(strokeWidth);
+                                    taskRectangle.setStroke(Paint.valueOf("91afc5"));
+                                }
+                            });
+
+                            taskRectangle.setOnMouseExited(new EventHandler<MouseEvent>() {
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+                                    taskRectangle.setStrokeWidth(0);
+                                }
+                            });
+                        }
+                    });
 
                     EditTaskWindowController editTaskWindowController = new EditTaskWindowController(this,task);
                     editTask.setOnAction(new EventHandler<ActionEvent>() {
@@ -502,20 +717,16 @@ public class MainWindowController {
                             stage.show();                        }
                     });
 
-                    markByColor.setOnAction(new EventHandler<ActionEvent>() {
-                        @Override
-                        public void handle(ActionEvent actionEvent) {
-
-                        }
-                    });
-
-                    TaskService taskservise = new TaskService();
+                    TaskService taskservice = new TaskService();
                     MainWindowController thisMainWindowController = this;
+
                     if(taskType.equals("quene")){
                         ContextMenu taskRectangleContextMenu = new ContextMenu();
                         MenuItem moveTaskToInWork = new MenuItem("Сделать задачу в работе");
+                        moveTaskToInWork.setStyle(fontStyleToMenuItems);
+                        this.setImageToMenuItem(moveTaskToInWork, "moveToWork.png", 16,16);
 
-                        taskRectangleContextMenu.getItems().addAll(moveTaskToInWork,editTask,deleteTask,markByColor);
+                        taskRectangleContextMenu.getItems().addAll(moveTaskToInWork,editTask,markByColor,deleteTask);
                         taskRectangle.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
                             @Override
                             public void handle(ContextMenuEvent contextMenuEvent) {
@@ -527,7 +738,7 @@ public class MainWindowController {
                             @Override
                             public void handle(ActionEvent actionEvent) {
                                 task.setTasktype("inwork");
-                                taskservise.updateTask(task);
+                                taskservice.updateTask(task);
                                 thisMainWindowController.initialize();
                             }
                         });
@@ -536,8 +747,10 @@ public class MainWindowController {
                     if(taskType.equals("inwork")){
                         ContextMenu taskRectangleContextMenu = new ContextMenu();
                         MenuItem moveTaskToInQueue = new MenuItem("Вернуть задачу в очередь");
+                        moveTaskToInQueue.setStyle(fontStyleToMenuItems);
+                        this.setImageToMenuItem(moveTaskToInQueue, "moveToQuene.png",16,16);
 
-                        taskRectangleContextMenu.getItems().addAll(moveTaskToInQueue,editTask,deleteTask,markByColor);
+                        taskRectangleContextMenu.getItems().addAll(moveTaskToInQueue,editTask,markByColor,deleteTask);
                         taskRectangle.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
                             @Override
                             public void handle(ContextMenuEvent contextMenuEvent) {
@@ -549,7 +762,7 @@ public class MainWindowController {
                             @Override
                             public void handle(ActionEvent actionEvent) {
                                 task.setTasktype("quene");
-                                taskservise.updateTask(task);
+                                taskservice.updateTask(task);
                                 thisMainWindowController.initialize();
                             }
                         });
@@ -557,7 +770,7 @@ public class MainWindowController {
 
                     String myString = "- " + workerTasks.get(j).getText();
                     Label taskLabel = new Label();
-                    Font font1 = new Font("Arial", 13);
+                    Font font1 = new Font("Arial", 14);
                     taskLabel.setFont(font1);
                     taskLabel.setText(myString);
                     taskLabel.setPrefWidth(253);
@@ -606,7 +819,6 @@ public class MainWindowController {
                             }
                         });
 
-
                         doneButton.setOnAction(d->{
                             FXMLLoader loader = new FXMLLoader();
                             loader.setLocation(getClass().getResource("/fxml/finTaskRatingWindow.fxml"));
@@ -620,7 +832,6 @@ public class MainWindowController {
                             stage.setScene(new Scene(root));
                             stage.show();
                         });
-
 
                         anchorPaneForCards.getChildren().addAll(doneButton);
                         buttonsItemsList.add(doneButton);
@@ -700,9 +911,14 @@ public class MainWindowController {
     }
 
     public void createTextAreaContextMenus(){
+
+        String fontStyleToMenuItems = " -fx-font-size: 14px; -fx-font-family: Arial;";
+
         ContextMenu contextMenu = new ContextMenu();
         contextMenu.getItems().addAll(createDefaultMenuItems(textArea));
         Menu createTaskFromSelectedMenuItem = new Menu("Создать задачу из выделенного");
+        createTaskFromSelectedMenuItem.setStyle(fontStyleToMenuItems);
+
         List<Menu> menuItemsList = new ArrayList<>();
         for (int i = 0; i < rootUser.getWorkers().size(); i++) {
             Worker worker = rootUser.getWorkers().get(i);
@@ -711,6 +927,11 @@ public class MainWindowController {
             menuItemsList.add(workerMenu);
             MenuItem inWorkMenuItem = new MenuItem("в работу");
             MenuItem inQueueMenuItem = new MenuItem("в очередь");
+
+            inWorkMenuItem.setStyle(fontStyleToMenuItems);
+            inQueueMenuItem.setStyle(fontStyleToMenuItems);
+            workerMenu.setStyle(fontStyleToMenuItems);
+
             workerMenu.getItems().addAll(inWorkMenuItem,inQueueMenuItem);
 
             inWorkMenuItem.setOnAction(d->{

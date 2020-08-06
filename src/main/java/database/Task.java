@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Entity
 @Proxy(lazy=false)
 @Table(name="tasks")
-public class Task {
+public class Task implements Comparable<Task>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -24,6 +24,19 @@ public class Task {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "worker_id")
     public Worker worker;
+
+    @Column
+    private String color = "FFFFFF";
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+
 
 
     public Task(String text, Worker worker, String tasktype) {
@@ -68,5 +81,10 @@ public class Task {
 
     public int getId() {
         return id;
+    }
+
+    @Override
+    public int compareTo(Task o) {
+        return this.getText().compareTo(o.getText());
     }
 }
