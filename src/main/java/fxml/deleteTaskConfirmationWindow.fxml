@@ -5,10 +5,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane fx:id="forDropShadowTopAnchorPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <AnchorPane fx:id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="128.0" prefWidth="244.0" style="-fx-background-color: #fafafa;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="128.0" prefWidth="244.0" style="-fx-background-color: #FFFFFF;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label layoutX="21.0" prefHeight="66.0" prefWidth="222.0" text="Вы уверены что хотите удалить" textOverrun="WORD_ELLIPSIS">
                <font>
@@ -20,8 +19,8 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <Button fx:id="yesButton" layoutX="61.0" layoutY="88.0" mnemonicParsing="false" style="-fx-background-color: #fafafa;" text="Да" />
-            <Button fx:id="noButton" layoutX="143.0" layoutY="88.0" mnemonicParsing="false" style="-fx-background-color: #fafafa;" text="Нет" />
+            <Button fx:id="yesButton" layoutX="61.0" layoutY="88.0" mnemonicParsing="false" text="Да" />
+            <Button fx:id="noButton" layoutX="143.0" layoutY="88.0" mnemonicParsing="false" text="Нет" />
          </children>
       </AnchorPane>
    </children>

@@ -21,7 +21,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -161,15 +163,22 @@ public class EditTaskWindowController {
 
             if (list.size() >= 1) {
                 FXMLLoader loader = new FXMLLoader();
+                AlertTaskWindowController alertTaskWindowController = new AlertTaskWindowController();
                 loader.setLocation(getClass().getResource("/fxml/alertTaskBoxWindow.fxml"));
                 try {
+                    loader.setController(alertTaskWindowController);
                     loader.load();
                 } catch (IOException а) {
                     а.printStackTrace();
                 }
                 Parent root = loader.getRoot();
                 Stage stage = new Stage();
-                stage.setScene(new Scene(root));
+                Scene scene = new Scene(root);
+                scene.setFill(Color.TRANSPARENT);
+                stage.setScene(scene);
+                stage.initStyle(StageStyle.UNDECORATED);
+                stage.initStyle(StageStyle.TRANSPARENT);
+                alertTaskWindowController.setStage(stage);
                 stage.show();
                 return false;
             } else {

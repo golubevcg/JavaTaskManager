@@ -7,10 +7,14 @@ import database.Worker;
 import database.services.TaskService;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -42,8 +46,20 @@ public class DeleteTaskWindowController {
     @FXML
     private Button noButton;
 
+    private double xOffset;
+    private double yOffset;
+    private Stage stage;
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
     @FXML
     void initialize() {
+
+        this.setDropShadow();
+
+        this.makePaneMoovable(AnchorPane);
 
         yesButton.setOnAction(e->{
             TaskService taskService = new TaskService();
@@ -125,6 +141,33 @@ public class DeleteTaskWindowController {
             }
         });
 
+        AnchorPane.setStyle("-fx-background-color: #FFFFFF;" +
+                "-fx-border-color:#91afc5;"+
+                "-fx-background-insets: transparent;"+
+                "-fx-border-radius: 5;"+
+                "-fx-background-radius: 5;"+
+                "-fx-border-width: 1.5;");
+
     }
+
+    private void setDropShadow() {
+        this.forDropShadowTopAnchorPane.setStyle("-fx-background-color: transparent;");
+        this.forDropShadowTopAnchorPane.setPadding(new Insets(10,10,10,10));
+        DropShadow dsh = new DropShadow();
+        dsh.setColor(Color.web("#C6C6C6"));
+        this.forDropShadowTopAnchorPane.setEffect(dsh);
+    }
+
+    private void makePaneMoovable(AnchorPane anchorPane) {
+        anchorPane.setOnMousePressed(e->{
+            xOffset = e.getSceneX();
+            yOffset = e.getSceneY();
+        });
+        anchorPane.setOnMouseDragged(e->{
+            stage.setX(e.getScreenX() - xOffset);
+            stage.setY(e.getScreenY() - yOffset);
+        });
+    }
+
 
 }

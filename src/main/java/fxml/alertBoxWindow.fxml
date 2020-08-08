@@ -1,20 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="300.0" style="-fx-background-color: #fafafa;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="forDropShadowTopAnchorPane" prefHeight="115.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label fx:id="label1" layoutX="83.0" layoutY="50.0" text="Login already exists,">
-         <font>
-            <Font size="15.0" />
-         </font>
-      </Label>
-      <Label fx:id="label2" layoutX="67.0" layoutY="79.0" text="please pick another login">
-         <font>
-            <Font size="15.0" />
-         </font>
-      </Label>
+      <AnchorPane fx:id="AnchorPane" layoutY="23.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="133.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label fx:id="label1" layoutX="22.0" layoutY="22.0" text="Такой логин уже зарегистрирован,">
+               <font>
+                  <Font name="Arial" size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="label2" layoutX="34.0" layoutY="50.0" text="пожалуйста выберите другой.">
+               <font>
+                  <Font name="Arial" size="16.0" />
+               </font>
+            </Label>
+            <Button fx:id="okButton" layoutX="119.0" layoutY="88.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="54.0" text="ок">
+               <font>
+                  <Font name="Arial" size="14.0" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>

@@ -205,19 +205,25 @@ public class RegWindowController {
             List<String> list = userService.checkUserLogin(user.getLogin());
 
         if (list.size() >= 1) {
-                //popup window - такой пользователь уже существует
                 FXMLLoader loader = new FXMLLoader();
+                AlertBoxController alertBoxController = new AlertBoxController();
                 loader.setLocation(getClass().getResource("/fxml/alertBoxWindow.fxml"));
                 try {
+                    loader.setController(alertBoxController);
                     loader.load();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 Parent root = loader.getRoot();
                 Stage stage = new Stage();
-                stage.setScene(new Scene(root));
+                Scene scene = new Scene(root);
+                scene.setFill(Color.TRANSPARENT);
+                stage.setScene(scene);
+                stage.initStyle(StageStyle.UNDECORATED);
+                stage.initStyle(StageStyle.TRANSPARENT);
                 stage.show();
                 return false;
+
             } else {
                 //если всё хорошо - то добавляем нового пользователя в базу
                 userService.saveUser(user);

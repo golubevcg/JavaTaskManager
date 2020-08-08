@@ -84,11 +84,7 @@ public class LoginWindowController {
     @FXML
     void initialize() {
 
-        this.forDropShadowTopAnchorPane.setStyle("-fx-background-color: transparent;");
-        this.forDropShadowTopAnchorPane.setPadding(new Insets(10,10,10,10));
-        this.forDropShadowTopAnchorPane.setEffect(new DropShadow());
-
-
+        this.setDropShadow();
 
         Main.getStageObj().setResizable(false);
         this.setImagesAndColorToButtons();
@@ -135,6 +131,12 @@ public class LoginWindowController {
         Platform.runLater(()->{
         anchorPane.getScene().getAccelerators().put(kc,rn);
         });
+    }
+
+    private void setDropShadow() {
+        this.forDropShadowTopAnchorPane.setStyle("-fx-background-color: transparent;");
+        this.forDropShadowTopAnchorPane.setPadding(new Insets(10,10,10,10));
+        this.forDropShadowTopAnchorPane.setEffect(new DropShadow());
     }
 
     private void setImagesAndColorToButtons() {

@@ -120,9 +120,7 @@ public class MainWindowController {
     @FXML
     void initialize() {
 
-        this.forDropShadowTopAnchorPane.setStyle("-fx-background-color: transparent;");
-        this.forDropShadowTopAnchorPane.setPadding(new Insets(10,10,10,10));
-        this.forDropShadowTopAnchorPane.setEffect(new DropShadow());
+        this.setDropShadow();
 
         this.cleanAllNodes();
 
@@ -156,6 +154,7 @@ public class MainWindowController {
                 }
                 Parent root = loader.getRoot();
                 Stage stage = new Stage();
+                newWorkerWindowController.setStage(stage);
                 stage.initStyle(StageStyle.UNDECORATED);
                 stage.initStyle(StageStyle.TRANSPARENT);
                 Scene scene = new Scene(root);
@@ -163,12 +162,13 @@ public class MainWindowController {
                 stage.setScene(scene);
                 stage.setResizable(false);
                 stage.show();
+                newWorkerWindowController.setStage(stage);
             }
         });
 
     }
 
-    public void cleanAllNodes(){
+    private void cleanAllNodes(){
         for (int i = 0; i < labelsItemsList.size() ; i++) {
             this.anchorPaneForCards.getChildren().remove(labelsItemsList.get(i));
         }
@@ -178,132 +178,6 @@ public class MainWindowController {
         for (int i = 0; i < buttonsItemsList.size() ; i++) {
             this.anchorPaneForCards.getChildren().remove(buttonsItemsList.get(i));
         }
-    }
-
-    private void makePaneMoovable(AnchorPane anchorPane){
-        anchorPane.setOnMousePressed(e->{
-            xOffset = e.getSceneX();
-            yOffset = e.getSceneY();
-        });
-        anchorPane.setOnMouseDragged(e->{
-            stage.setX(e.getScreenX() - xOffset);
-            stage.setY(e.getScreenY() - yOffset);
-        });
-    }
-
-    private List<MenuItem> createDefaultMenuItems(TextInputControl t) {
-        String fontStyleToMenuItems = " -fx-font-size: 14px; -fx-font-family: Arial;";
-
-        MenuItem cut = new MenuItem("Cut");
-        cut.setOnAction(e -> t.cut());
-        MenuItem copy = new MenuItem("Copy");
-        copy.setOnAction(e -> t.copy());
-        MenuItem paste = new MenuItem("Paste");
-        paste.setOnAction(e -> t.paste());
-        MenuItem delete = new MenuItem("Delete");
-        delete.setOnAction(e -> t.deleteText(t.getSelection()));
-        MenuItem selectAll = new MenuItem("Select All");
-        selectAll.setOnAction(e -> t.selectAll());
-
-        cut.setStyle(fontStyleToMenuItems);
-        copy.setStyle(fontStyleToMenuItems);
-        paste.setStyle(fontStyleToMenuItems);
-        delete.setStyle(fontStyleToMenuItems);
-        selectAll.setStyle(fontStyleToMenuItems);
-
-
-        BooleanBinding emptySelection = Bindings.createBooleanBinding(() ->
-                        t.getSelection().getLength() == 0,
-                t.selectionProperty());
-
-        cut.disableProperty().bind(emptySelection);
-        copy.disableProperty().bind(emptySelection);
-        delete.disableProperty().bind(emptySelection);
-
-        return Arrays.asList(cut, copy, paste, delete, new SeparatorMenuItem(), selectAll);
-    }
-
-    private void setImagesAndColorToButtons(){
-        this.setImageToButton(closeButton, "cross.png", 11,20);
-        this.setImageToButton(minimiseButton, "minimize.png", 13,40);
-        this.setImageToButton(addNewWorkerButton, "plus.png", 38,15);
-
-        String standartColorCursorOnButton = "cfdee9";
-
-        closeButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                closeButton.setStyle("-fx-background-color:#F87272");
-            }
-        });
-        closeButton.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                closeButton.setStyle("-fx-background-color: transparent");
-            }
-        });
-
-        minimiseButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                minimiseButton.setStyle("-fx-background-color:#" + standartColorCursorOnButton);
-            }
-        });
-        minimiseButton.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                minimiseButton.setStyle("-fx-background-color: transparent");
-            }
-        });
-
-        addNewWorkerButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                addNewWorkerButton.setStyle("-fx-background-color:#" + standartColorCursorOnButton);
-            }
-        });
-        addNewWorkerButton.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                addNewWorkerButton.setStyle("-fx-background-color: transparent");
-            }
-        });
-    }
-
-    private void setImageToButton(Button button, String imageName, int width, int height){
-        Image image = new Image(imageName);
-        ImageView imageView = new ImageView(image);
-        imageView.setPickOnBounds(true);
-        imageView.setPreserveRatio(true);
-        imageView.setFitWidth(width);
-        imageView.setFitHeight(height);
-        button.setGraphic(imageView);
-    }
-
-    private void setImageToMenuItem(MenuItem menuItem, String imageName, int width, int height){
-        Image image = new Image(imageName);
-        ImageView imageView = new ImageView(image);
-        imageView.setPickOnBounds(true);
-        imageView.setPreserveRatio(true);
-        imageView.setFitWidth(width);
-        imageView.setFitHeight(height);
-        menuItem.setGraphic(imageView);
-    }
-
-    public String getUserTextField() {
-        return  this.rootUser.getTextfield();
-    }
-
-    public int getUserId() {
-        return this.rootUser.getId();
-    }
-
-    private void updateRootUserFromDB(){
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        List<User> list1 = session.createQuery("FROM User WHERE id = '" + this.getUser().getId() + "'").list();
-        session.getTransaction();
-        session.close();
-        this.setUser(list1.get(0));
     }
 
     private void drawWorkerLabels(){
@@ -467,67 +341,67 @@ public class MainWindowController {
                     });
 
                     if("#e2e0c8".equals(task.getColor())){
-                            taskRectangle.setFill(Color.web("#e2e0c8"));
-                            taskRectangle.setStroke(Paint.valueOf("#d0cda7"));
+                        taskRectangle.setFill(Color.web("#e2e0c8"));
+                        taskRectangle.setStroke(Paint.valueOf("#d0cda7"));
 
-                            taskRectangle.setOnMouseEntered(new EventHandler<MouseEvent>() {
-                                @Override
-                                public void handle(MouseEvent mouseEvent) {
-                                    taskRectangle.setStrokeWidth(strokeWidth);
-                                    taskRectangle.setFill(Color.web("#f4f3e9"));
-                                }
-                            });
+                        taskRectangle.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(MouseEvent mouseEvent) {
+                                taskRectangle.setStrokeWidth(strokeWidth);
+                                taskRectangle.setFill(Color.web("#f4f3e9"));
+                            }
+                        });
 
-                            taskRectangle.setOnMouseExited(new EventHandler<MouseEvent>() {
-                                @Override
-                                public void handle(MouseEvent mouseEvent) {
-                                    taskRectangle.setStrokeWidth(0);
-                                    taskRectangle.setFill(Color.web("#e2e0c8"));
-                                    taskRectangle.setStroke(Paint.valueOf("#d0cda7"));
-                                }
-                            });
-                        }
+                        taskRectangle.setOnMouseExited(new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(MouseEvent mouseEvent) {
+                                taskRectangle.setStrokeWidth(0);
+                                taskRectangle.setFill(Color.web("#e2e0c8"));
+                                taskRectangle.setStroke(Paint.valueOf("#d0cda7"));
+                            }
+                        });
+                    }
                     if("#c8d7e2".equals(task.getColor())){
-                            taskRectangle.setFill(Color.web("#c8d7e2"));
-                            taskRectangle.setStroke(Paint.valueOf("#a7bfd0"));
+                        taskRectangle.setFill(Color.web("#c8d7e2"));
+                        taskRectangle.setStroke(Paint.valueOf("#a7bfd0"));
 
-                            taskRectangle.setOnMouseEntered(new EventHandler<MouseEvent>() {
-                                @Override
-                                public void handle(MouseEvent mouseEvent) {
-                                    taskRectangle.setStrokeWidth(strokeWidth);
-                                    taskRectangle.setFill(Color.web("#e9eff4"));
-                                }
-                            });
+                        taskRectangle.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(MouseEvent mouseEvent) {
+                                taskRectangle.setStrokeWidth(strokeWidth);
+                                taskRectangle.setFill(Color.web("#e9eff4"));
+                            }
+                        });
 
-                            taskRectangle.setOnMouseExited(new EventHandler<MouseEvent>() {
-                                @Override
-                                public void handle(MouseEvent mouseEvent) {
-                                    taskRectangle.setStrokeWidth(0);
-                                    taskRectangle.setFill(Color.web("#c8d7e2"));
-                                    taskRectangle.setStroke(Paint.valueOf("#a7bfd0"));
-                                }
-                            });
-            }
+                        taskRectangle.setOnMouseExited(new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(MouseEvent mouseEvent) {
+                                taskRectangle.setStrokeWidth(0);
+                                taskRectangle.setFill(Color.web("#c8d7e2"));
+                                taskRectangle.setStroke(Paint.valueOf("#a7bfd0"));
+                            }
+                        });
+                    }
                     if("#e2c8ca".equals(task.getColor())){
-                            taskRectangle.setFill(Color.web("#e2c8ca"));
-                            taskRectangle.setStroke(Paint.valueOf("#d0a7aa"));
+                        taskRectangle.setFill(Color.web("#e2c8ca"));
+                        taskRectangle.setStroke(Paint.valueOf("#d0a7aa"));
 
-                            taskRectangle.setOnMouseEntered(new EventHandler<MouseEvent>() {
-                                @Override
-                                public void handle(MouseEvent mouseEvent) {
-                                    taskRectangle.setStrokeWidth(strokeWidth);
-                                    taskRectangle.setFill(Color.web("#f4e9ea"));
-                                }
-                            });
+                        taskRectangle.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(MouseEvent mouseEvent) {
+                                taskRectangle.setStrokeWidth(strokeWidth);
+                                taskRectangle.setFill(Color.web("#f4e9ea"));
+                            }
+                        });
 
-                            taskRectangle.setOnMouseExited(new EventHandler<MouseEvent>() {
-                                @Override
-                                public void handle(MouseEvent mouseEvent) {
-                                    taskRectangle.setStrokeWidth(0);
-                                    taskRectangle.setFill(Color.web("#e2c8ca"));
-                                    taskRectangle.setStroke(Paint.valueOf("#d0a7aa"));
-                                }
-                            });
+                        taskRectangle.setOnMouseExited(new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(MouseEvent mouseEvent) {
+                                taskRectangle.setStrokeWidth(0);
+                                taskRectangle.setFill(Color.web("#e2c8ca"));
+                                taskRectangle.setStroke(Paint.valueOf("#d0a7aa"));
+                            }
+                        });
                     }
 
                     taskRectangle.setViewOrder(2);
@@ -712,7 +586,7 @@ public class MainWindowController {
                             Scene scene = new Scene(root);
                             scene.setFill(Color.TRANSPARENT);
                             stage.setScene(scene);
-                            editTaskWindowController.setStage(stage);
+                            deleteTaskWindowController.setStage(stage);
                             stage.setResizable(false);
                             stage.show();                        }
                     });
@@ -879,7 +753,133 @@ public class MainWindowController {
 
     }
 
-    public boolean addNewTaskFromText(String text, Worker worker, String tasktype){
+    private void makePaneMoovable(AnchorPane anchorPane){
+        anchorPane.setOnMousePressed(e->{
+            xOffset = e.getSceneX();
+            yOffset = e.getSceneY();
+        });
+        anchorPane.setOnMouseDragged(e->{
+            stage.setX(e.getScreenX() - xOffset);
+            stage.setY(e.getScreenY() - yOffset);
+        });
+    }
+
+    private List<MenuItem> createDefaultMenuItems(TextInputControl t) {
+        String fontStyleToMenuItems = " -fx-font-size: 14px; -fx-font-family: Arial;";
+
+        MenuItem cut = new MenuItem("Вырезать");
+        cut.setOnAction(e -> t.cut());
+        MenuItem copy = new MenuItem("Скопировать");
+        copy.setOnAction(e -> t.copy());
+        MenuItem paste = new MenuItem("Вставить");
+        paste.setOnAction(e -> t.paste());
+        MenuItem delete = new MenuItem("Удалить");
+        delete.setOnAction(e -> t.deleteText(t.getSelection()));
+        MenuItem selectAll = new MenuItem("Выделить всё");
+        selectAll.setOnAction(e -> t.selectAll());
+
+        cut.setStyle(fontStyleToMenuItems);
+        copy.setStyle(fontStyleToMenuItems);
+        paste.setStyle(fontStyleToMenuItems);
+        delete.setStyle(fontStyleToMenuItems);
+        selectAll.setStyle(fontStyleToMenuItems);
+
+
+        BooleanBinding emptySelection = Bindings.createBooleanBinding(() ->
+                        t.getSelection().getLength() == 0,
+                t.selectionProperty());
+
+        cut.disableProperty().bind(emptySelection);
+        copy.disableProperty().bind(emptySelection);
+        delete.disableProperty().bind(emptySelection);
+
+        return Arrays.asList(cut, copy, paste, delete, new SeparatorMenuItem(), selectAll);
+    }
+
+    private void setImagesAndColorToButtons(){
+        this.setImageToButton(closeButton, "cross.png", 11,20);
+        this.setImageToButton(minimiseButton, "minimize.png", 13,40);
+        this.setImageToButton(addNewWorkerButton, "plus.png", 38,15);
+
+        String standartColorCursorOnButton = "cfdee9";
+
+        closeButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                closeButton.setStyle("-fx-background-color:#F87272");
+            }
+        });
+        closeButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                closeButton.setStyle("-fx-background-color: transparent");
+            }
+        });
+
+        minimiseButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                minimiseButton.setStyle("-fx-background-color:#" + standartColorCursorOnButton);
+            }
+        });
+        minimiseButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                minimiseButton.setStyle("-fx-background-color: transparent");
+            }
+        });
+
+        addNewWorkerButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                addNewWorkerButton.setStyle("-fx-background-color:#" + standartColorCursorOnButton);
+            }
+        });
+        addNewWorkerButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                addNewWorkerButton.setStyle("-fx-background-color: transparent");
+            }
+        });
+    }
+
+    private void setImageToButton(Button button, String imageName, int width, int height){
+        Image image = new Image(imageName);
+        ImageView imageView = new ImageView(image);
+        imageView.setPickOnBounds(true);
+        imageView.setPreserveRatio(true);
+        imageView.setFitWidth(width);
+        imageView.setFitHeight(height);
+        button.setGraphic(imageView);
+    }
+
+    private void setImageToMenuItem(MenuItem menuItem, String imageName, int width, int height){
+        Image image = new Image(imageName);
+        ImageView imageView = new ImageView(image);
+        imageView.setPickOnBounds(true);
+        imageView.setPreserveRatio(true);
+        imageView.setFitWidth(width);
+        imageView.setFitHeight(height);
+        menuItem.setGraphic(imageView);
+    }
+
+    public String getUserTextField() {
+        return  this.rootUser.getTextfield();
+    }
+
+    public int getUserId() {
+        return this.rootUser.getId();
+    }
+
+    private void updateRootUserFromDB(){
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        List<User> list1 = session.createQuery("FROM User WHERE id = '" + this.getUser().getId() + "'").list();
+        session.getTransaction();
+        session.close();
+        this.setUser(list1.get(0));
+    }
+
+    private boolean addNewTaskFromText(String text, Worker worker, String tasktype){
         if (text.isEmpty()) {
             return false;
         } else {
@@ -910,14 +910,16 @@ public class MainWindowController {
         }
     }
 
-    public void createTextAreaContextMenus(){
+    private void createTextAreaContextMenus(){
 
-        String fontStyleToMenuItems = " -fx-font-size: 14px; -fx-font-family: Arial;";
+        String fontStyleToMenuItems = "-fx-font-size: 14px; -fx-font-family: Arial;";
 
         ContextMenu contextMenu = new ContextMenu();
         contextMenu.getItems().addAll(createDefaultMenuItems(textArea));
         Menu createTaskFromSelectedMenuItem = new Menu("Создать задачу из выделенного");
         createTaskFromSelectedMenuItem.setStyle(fontStyleToMenuItems);
+
+
 
         List<Menu> menuItemsList = new ArrayList<>();
         for (int i = 0; i < rootUser.getWorkers().size(); i++) {
@@ -931,6 +933,7 @@ public class MainWindowController {
             inWorkMenuItem.setStyle(fontStyleToMenuItems);
             inQueueMenuItem.setStyle(fontStyleToMenuItems);
             workerMenu.setStyle(fontStyleToMenuItems);
+
 
             workerMenu.getItems().addAll(inWorkMenuItem,inQueueMenuItem);
 
@@ -971,4 +974,9 @@ public class MainWindowController {
         this.rootUser.setTextfield(this.textArea.getText() + "\n" + string);
     }
 
+    private void setDropShadow(){
+        this.forDropShadowTopAnchorPane.setStyle("-fx-background-color: transparent;");
+        this.forDropShadowTopAnchorPane.setPadding(new Insets(10,10,10,10));
+        this.forDropShadowTopAnchorPane.setEffect(new DropShadow());
+    }
 }

@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class AlertBoxController {
+public class AlertTaskWindowController {
 
     @FXML
     private ResourceBundle resources;
@@ -33,10 +33,8 @@ public class AlertBoxController {
     private Label label1;
 
     @FXML
-    private Label label2;
-
-    @FXML
     private Button okButton;
+
 
     private double xOffset;
     private double yOffset;
@@ -101,9 +99,7 @@ public class AlertBoxController {
     private void setDropShadow() {
         this.forDropShadowTopAnchorPane.setStyle("-fx-background-color: transparent;");
         this.forDropShadowTopAnchorPane.setPadding(new Insets(10, 10, 10, 10));
-        DropShadow dsh = new DropShadow();
-        dsh.setColor(Color.web("#C6C6C6"));
-        this.forDropShadowTopAnchorPane.setEffect(dsh);
+        this.forDropShadowTopAnchorPane.setEffect(new DropShadow());
     }
 
     public void setStage(Stage stage) {

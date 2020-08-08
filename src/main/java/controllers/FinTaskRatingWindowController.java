@@ -2,6 +2,7 @@ package controllers;
 
 import database.HibernateSessionFactoryUtil;
 import database.Task;
+import database.services.TaskService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -74,12 +75,9 @@ public class FinTaskRatingWindowController {
         buttonRaing3.setToggleGroup(group);
         buttonRaing4.setToggleGroup(group);
 
-        group.getSelectedToggle();
-
         confirmButton.setOnAction(e->{
 
                 if(group.getSelectedToggle()==(null)){
-                    //вывезти лейбл что нужно выбрать хотя бы одно значение рейтинга
                     FXMLLoader loader = new FXMLLoader();
                     loader.setLocation(getClass().getResource("/fxml/noRatingErrorWindow.fxml"));
                     try {loader.load();
@@ -91,32 +89,30 @@ public class FinTaskRatingWindowController {
                     stage.setScene(new Scene(root));
                     stage.show();
                 }else{
-                    //если эта кнопка нажата тогда обновить задачу в базе данных и вернуть main window
                     RadioButton rb = (RadioButton)group.getSelectedToggle();
-
                     updateTaskStatus(Integer.parseInt(rb.getText()));
-                    //закрыть окно и вернуть main
                     mainWindowController.initialize();
                     confirmButton.getScene().getWindow().hide();
                 }
         });
 
-
     }
 
     private void updateTaskStatus(int value){
-        Session session3 = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Transaction transaction = session3.beginTransaction();
+        task.setTasktype("done");
+        task.setRating(value);
+        TaskService taskService = new TaskService();
+        taskService.updateTask(task);
 
-        Query newQuery = session3.createQuery("UPDATE Task SET " +
-                "tasktype = 'done' WHERE id = " + task.getId());
-        newQuery.executeUpdate();
-
-        Query newQuery1 = session3.createQuery("UPDATE Task SET rating = " + value + " WHERE id= " + task.getId());
-        newQuery1.executeUpdate();
-
-        transaction.commit();
-        session3.close();
+//        Session session3 = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+//        Transaction transaction = session3.beginTransaction();
+//        Query newQuery = session3.createQuery("UPDATE Task SET " +
+//                "tasktype = 'done' WHERE id = " + task.getId());
+//        newQuery.executeUpdate();
+//        Query newQuery1 = session3.createQuery("UPDATE Task SET rating = " + value + " WHERE id= " + task.getId());
+//        newQuery1.executeUpdate();
+//        transaction.commit();
+//        session3.close();
         this.initialize();
     }
 
