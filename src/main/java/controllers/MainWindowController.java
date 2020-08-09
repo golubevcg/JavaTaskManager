@@ -27,7 +27,6 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.hibernate.Session;
@@ -55,7 +54,7 @@ public class MainWindowController {
     private AnchorPane mainAnchorPane;
 
     @FXML
-    private AnchorPane anchorPainToDragWindow;
+    private AnchorPane movableAnchorPane;
 
     @FXML
     private SplitPane mainSplitPane;
@@ -90,7 +89,7 @@ public class MainWindowController {
     @FXML
     private Rectangle textFieldRectangle;
 
-
+    Menu mainMenu = new Menu();
 
     @FXML void close(ActionEvent event){
         System.exit(0);
@@ -124,10 +123,16 @@ public class MainWindowController {
 
         this.cleanAllNodes();
 
+        mainMenuBar.getMenus().add(mainMenu);
+
+        MenuItem addWorker = new MenuItem("Добавить нового сотрудника");
+        MenuItem exit = new MenuItem("Выйти");
+        mainMenu.getItems().addAll(addWorker,exit);
+
         this.mainAnchorPane.setMinWidth(mainAnchorPane.getPrefWidth());
         this.mainAnchorPane.setMaxWidth(mainAnchorPane.getPrefHeight());
 
-        this.makePaneMoovable(mainAnchorPane);
+        this.makePaneMoovable(movableAnchorPane);
 
         this.textArea.setText(this.getUserTextField());
         this.textArea.setMinWidth(textArea.getPrefWidth());
@@ -178,6 +183,8 @@ public class MainWindowController {
         for (int i = 0; i < buttonsItemsList.size() ; i++) {
             this.anchorPaneForCards.getChildren().remove(buttonsItemsList.get(i));
         }
+
+        mainMenuBar.getMenus().removeAll();
     }
 
     private void drawWorkerLabels(){
@@ -696,14 +703,21 @@ public class MainWindowController {
                         doneButton.setOnAction(d->{
                             FXMLLoader loader = new FXMLLoader();
                             loader.setLocation(getClass().getResource("/fxml/finTaskRatingWindow.fxml"));
-                            loader.setController(new FinTaskRatingWindowController(task, this, textArea));
+                            FinTaskRatingWindowController finTaskRatingWindowController = new FinTaskRatingWindowController(task, this);
+                            loader.setController(finTaskRatingWindowController);
                             try {loader.load();
                             } catch (IOException h) {
                                 h.printStackTrace();
                             }
                             Parent root = loader.getRoot();
                             Stage stage = new Stage();
-                            stage.setScene(new Scene(root));
+                            Scene scene = new Scene(root);
+                            scene.setFill(Color.TRANSPARENT);
+                            stage.setScene(scene);
+                            finTaskRatingWindowController.setStage(stage);
+
+                            stage.initStyle(StageStyle.UNDECORATED);
+                            stage.initStyle(StageStyle.TRANSPARENT);
                             stage.show();
                         });
 
@@ -800,6 +814,14 @@ public class MainWindowController {
         this.setImageToButton(closeButton, "cross.png", 11,20);
         this.setImageToButton(minimiseButton, "minimize.png", 13,40);
         this.setImageToButton(addNewWorkerButton, "plus.png", 38,15);
+
+        Image image = new Image("settings.png");
+        ImageView imageView = new ImageView(image);
+        imageView.setPickOnBounds(true);
+        imageView.setPreserveRatio(true);
+        imageView.setFitWidth(34);
+        imageView.setFitHeight(17);
+        mainMenu.setGraphic(imageView);
 
         String standartColorCursorOnButton = "cfdee9";
 

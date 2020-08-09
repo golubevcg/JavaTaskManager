@@ -1,92 +1,128 @@
 package controllers;
 
-import database.HibernateSessionFactoryUtil;
 import database.Task;
 import database.services.TaskService;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import javafx.stage.StageStyle;
 
-import javax.persistence.Query;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 public class FinTaskRatingWindowController {
+
+    @FXML
+    private ResourceBundle resources;
+
+    @FXML
+    private URL location;
+
+    @FXML
+    private AnchorPane forDropShadowTopAnchorPane;
 
     @FXML
     private AnchorPane AnchorPane;
 
     @FXML
+    private AnchorPane moovableAnchorPane;
+
+    @FXML
+    private MenuBar mainMenuBar;
+
+    @FXML
     private Button confirmButton;
 
     @FXML
-    private ToggleGroup tgroup11;
+    private RadioButton buttonRating3;
 
     @FXML
-    private ToggleGroup tgroup111;
+    private RadioButton buttonRating2;
 
     @FXML
-    private ToggleGroup tgroup1111;
-
-
+    private RadioButton buttonRating1;
 
     @FXML
-    private RadioButton buttonRaing1;
+    private Button minimiseButton;
 
     @FXML
-    private RadioButton buttonRaing2;
+    private Button closeButton;
 
-    @FXML
-    private RadioButton buttonRaing3;
 
-    @FXML
-    private RadioButton buttonRaing4;
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
 
-    @FXML
-    private ToggleGroup tgroup1112;
+    @FXML void close(ActionEvent event){
+        stage.close();
+        mainWindowController.initialize();
+    }
+
+    @FXML void min(ActionEvent event){
+        ((Stage)(moovableAnchorPane.getScene().getWindow())).setIconified(true);
+    }
 
     private Task task;
-
     private MainWindowController mainWindowController;
+    private Stage stage;
+    private double xOffset;
+    private double yOffset;
 
-    public TextArea textArea;
-
-
-    public FinTaskRatingWindowController(Task task, MainWindowController mainWindowController, TextArea textArea) {
+    public FinTaskRatingWindowController(Task task, MainWindowController mainWindowController) {
         this.task = task;
         this.mainWindowController = mainWindowController;
-        this.textArea = textArea;
     }
 
     @FXML
     public void initialize() {
 
+        this.setDropShadow();
+        this.makePaneMoovable(moovableAnchorPane);
+        this.setImagesAndColorToButtons();
+
+
         ToggleGroup group = new ToggleGroup();
-        buttonRaing1.setToggleGroup(group);
-        buttonRaing2.setToggleGroup(group);
-        buttonRaing3.setToggleGroup(group);
-        buttonRaing4.setToggleGroup(group);
+        buttonRating1.setToggleGroup(group);
+        buttonRating2.setToggleGroup(group);
+        buttonRating3.setToggleGroup(group);
+
+        String pathToCss = getClass().getResource("/styles.css").toExternalForm();
+        buttonRating1.getStylesheets().add(pathToCss);
+        buttonRating2.getStylesheets().add(pathToCss);
+        buttonRating3.getStylesheets().add(pathToCss);
 
         confirmButton.setOnAction(e->{
 
                 if(group.getSelectedToggle()==(null)){
                     FXMLLoader loader = new FXMLLoader();
+                    NoRatingErrorWindowController noRatingErrorWindowController = new NoRatingErrorWindowController();
                     loader.setLocation(getClass().getResource("/fxml/noRatingErrorWindow.fxml"));
-                    try {loader.load();
+                    try {
+                        loader.setController(noRatingErrorWindowController);
+                        loader.load();
                     } catch (IOException h) {
                         h.printStackTrace();
                     }
                     Parent root = loader.getRoot();
                     Stage stage = new Stage();
-                    stage.setScene(new Scene(root));
+                    Scene scene = new Scene(root);
+                    scene.setFill(Color.TRANSPARENT);
+                    stage.setScene(scene);
+                    stage.initStyle(StageStyle.TRANSPARENT);
+                    stage.initStyle(StageStyle.UNDECORATED);
                     stage.show();
                 }else{
                     RadioButton rb = (RadioButton)group.getSelectedToggle();
@@ -96,6 +132,100 @@ public class FinTaskRatingWindowController {
                 }
         });
 
+        confirmButton.setStyle("-fx-background-color: transparent;" +
+                "-fx-border-color:#FFFFFF;" +
+                "-fx-background-insets: transparent;" +
+                "-fx-faint-focus-color: transparent;" +
+                "-fx-border-radius: 5;" +
+                "-fx-background-radius: 5;" +
+                "-fx-border-width: 1.5;");
+
+        confirmButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                confirmButton.setStyle( "-fx-background-color: transparent;"+
+                        "-fx-border-color:#91afc5;"+
+                        "-fx-background-insets: transparent;"+
+                        "-fx-faint-focus-color: transparent;"+
+                        "-fx-border-radius: 5;"+
+                        "-fx-background-radius: 5;"+
+                        "-fx-border-width: 1.5;");
+            }
+        });
+
+        confirmButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                confirmButton.setStyle("-fx-background-color: transparent;" +
+                        "-fx-border-color:#FFFFFF;" +
+                        "-fx-background-insets: transparent;" +
+                        "-fx-faint-focus-color: transparent;" +
+                        "-fx-border-radius: 5;" +
+                        "-fx-background-radius: 5;" +
+                        "-fx-border-width: 1.5;");
+            }
+        });
+
+    }
+
+    private void setImagesAndColorToButtons() {
+        this.setImageToButton(closeButton, "cross.png", 11,20);
+        this.setImageToButton(minimiseButton, "minimize.png", 13,40);
+
+        String standartColorCursorOnButton = "cfdee9";
+
+        closeButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                closeButton.setStyle("-fx-background-color:#F87272");
+            }
+        });
+        closeButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                closeButton.setStyle("-fx-background-color: transparent");
+            }
+        });
+
+        minimiseButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                minimiseButton.setStyle("-fx-background-color:#" + standartColorCursorOnButton);
+            }
+        });
+        minimiseButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                minimiseButton.setStyle("-fx-background-color: transparent");
+            }
+        });
+    }
+
+    private void makePaneMoovable(javafx.scene.layout.AnchorPane anchorPane) {
+        anchorPane.setOnMousePressed(e->{
+            xOffset = e.getSceneX();
+            yOffset = e.getSceneY();
+        });
+        anchorPane.setOnMouseDragged(e->{
+            stage.setX(e.getScreenX() - xOffset);
+            stage.setY(e.getScreenY() - yOffset);
+        });
+    }
+
+    private void setDropShadow() {
+        this.forDropShadowTopAnchorPane.setStyle("-fx-background-color: transparent;");
+        this.forDropShadowTopAnchorPane.setPadding(new Insets(10,10,10,10));
+        this.forDropShadowTopAnchorPane.setEffect(new DropShadow());
+    }
+
+    private void setImageToButton(Button button, String imageName, int width, int height){
+        Image image = new Image(imageName);
+        ImageView imageView = new ImageView(image);
+        imageView.setPickOnBounds(true);
+        imageView.setPreserveRatio(true);
+        imageView.setFitWidth(width);
+        imageView.setFitHeight(height);
+        button.setGraphic(imageView);
     }
 
     private void updateTaskStatus(int value){
@@ -103,16 +233,6 @@ public class FinTaskRatingWindowController {
         task.setRating(value);
         TaskService taskService = new TaskService();
         taskService.updateTask(task);
-
-//        Session session3 = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-//        Transaction transaction = session3.beginTransaction();
-//        Query newQuery = session3.createQuery("UPDATE Task SET " +
-//                "tasktype = 'done' WHERE id = " + task.getId());
-//        newQuery.executeUpdate();
-//        Query newQuery1 = session3.createQuery("UPDATE Task SET rating = " + value + " WHERE id= " + task.getId());
-//        newQuery1.executeUpdate();
-//        transaction.commit();
-//        session3.close();
         this.initialize();
     }
 
