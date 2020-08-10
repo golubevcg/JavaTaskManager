@@ -32,6 +32,7 @@ import javafx.stage.StageStyle;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import javax.persistence.Query;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
@@ -122,6 +123,9 @@ public class MainWindowController {
         this.setDropShadow();
 
         this.cleanAllNodes();
+
+        textArea.textProperty().addListener(((observableValue, oldvalue, newvalue) ->
+                updateTextfield(this, newvalue)));
 
         mainMenuBar.getMenus().add(mainMenu);
 
@@ -994,6 +998,18 @@ public class MainWindowController {
 
     public void addToTextArea(String string){
         this.rootUser.setTextfield(this.textArea.getText() + "\n" + string);
+    }
+
+    public void updateTextfield(MainWindowController mainWindowController, String string){
+    Session session2 = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+    Transaction transaction2 = session2.beginTransaction();
+    Query newQuery1 = session2.createQuery("UPDATE User SET textfield = "
+            + "'" + string + "'"
+            + " WHERE id = " + mainWindowController.rootUser.getId());
+    newQuery1.executeUpdate();
+    transaction2.commit();
+    session2.close();
+    this.rootUser.setTextfield(string);
     }
 
     private void setDropShadow(){
