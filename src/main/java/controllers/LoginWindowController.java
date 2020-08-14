@@ -69,7 +69,6 @@ public class LoginWindowController {
     @FXML
     private Button closeButton;
 
-
     @FXML void close(ActionEvent event){
         System.exit(0);
     }
@@ -151,6 +150,7 @@ public class LoginWindowController {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource(windowName));
         loader.setController(controller);
+
         try {
             loader.load();
         } catch (IOException e) {
@@ -215,11 +215,6 @@ public class LoginWindowController {
             loginShake.playAnim();
             passwordShake.playAnim();
         }
-    }
-
-    public static void main(String[] args) {
-        LoginWindowController lwc = new LoginWindowController();
-        lwc.initialize();
     }
 
     private void makePaneMoovable(AnchorPane anchorPane){

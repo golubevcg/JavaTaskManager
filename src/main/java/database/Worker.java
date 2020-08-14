@@ -97,10 +97,8 @@ public class Worker implements Comparable<Worker>{
     public String toString() {
         return "Worker{" +
                 "id=" + id +
-
                 ", login='" + login + '\'';
     }
-
 
     @Override
     public int compareTo(Worker o) {

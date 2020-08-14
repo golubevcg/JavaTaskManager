@@ -537,6 +537,7 @@ public class MainWindowController {
                         @Override
                         public void handle(ActionEvent actionEvent) {
                             taskRectangle.setFill(Color.web(standartRectanglesColor));
+                            task.setColor(standartRectanglesColor);
                             taskService.updateTask(task);
                             taskRectangle.setOnMouseEntered(new EventHandler<MouseEvent>() {
                                 @Override
