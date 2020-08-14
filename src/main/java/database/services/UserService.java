@@ -27,4 +27,6 @@ public class UserService {
 
     public List<String> returnWorkersFromUser(User user){ return userDao.returnWorkersFromUser(user); }
 
+    public List<User> returnUsersByLogin(String login) {return userDao.returnUsersByLogin(login);}
+
 }

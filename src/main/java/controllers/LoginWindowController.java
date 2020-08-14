@@ -2,39 +2,26 @@ package controllers;
 
 import Main.Main;
 import animations.Shake;
-import classes.FXResizeHelper;
-import database.HibernateSessionFactoryUtil;
+import classes.SceneOpener;
+import classes.WindowEffects;
+import classes.UIColorAndStyleSettings;
 import database.User;
 import database.services.UserService;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.hibernate.Session;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.List;
-import java.util.ResourceBundle;
 
 
 public class LoginWindowController {
@@ -77,264 +64,87 @@ public class LoginWindowController {
         ((Stage)(anchorPane.getScene().getWindow())).setIconified(true);
     }
 
-    private double xOffset;
-    private double yOffset;
+    private UIColorAndStyleSettings uiColorAndStyleSettings = new UIColorAndStyleSettings();
+    private String loginText;
+    private String loginPassword;
+    private SceneOpener sceneOpener = new SceneOpener();
 
     @FXML
     void initialize() {
 
-        this.setDropShadow();
+        WindowEffects.setDropShadowToWindow(forDropShadowTopAnchorPane);
+        WindowEffects.makePaneMoovable(moovableAnchorPane);
 
         Main.getStageObj().setResizable(false);
-        this.setImagesAndColorToButtons();
-        enterButtonAction();
 
-        this.loginField.setStyle( "-fx-background-color: transparent;"+
-                "-fx-border-color:#91afc5;"+
-                "-fx-background-insets: transparent;"+
-                "-fx-faint-focus-color: transparent;"+
-                "-fx-border-radius: 5;"+
-                "-fx-background-radius: 5;"+
-                "-fx-border-width: 1.5;"+
-                "-fx-padding: 10 10 10 10;");
-
-        this.pwdField.setStyle( "-fx-background-color: transparent;"+
-                "-fx-border-color:#91afc5;"+
-                "-fx-background-insets: transparent;"+
-                "-fx-faint-focus-color: transparent;"+
-                "-fx-border-radius: 5;"+
-                "-fx-background-radius: 5;"+
-                "-fx-border-width: 1.5;"+
-                "-fx-padding: 10 10 10 10;");
-
-        this.makePaneMoovable(moovableAnchorPane);
+        this.setColorAndStylesToButtons();
 
         newUserButton.setOnAction(event-> {
             RegWindowController regWindowController = new RegWindowController();
-            openNewScene("/fxml/regWindow.fxml", newUserButton, regWindowController);
+            SceneOpener sceneOpener = new SceneOpener();
+            sceneOpener.openNewScene("/fxml/regWindow.fxml", newUserButton, regWindowController);
         });
-
-        KeyCombination kc = new KeyCodeCombination(KeyCode.ENTER);
-        Runnable rn = ()->{
-            String loginText = loginField.getText().trim();
-            String loginPassword = DigestUtils.md5Hex(pwdField.getText().trim());
-            if(!loginText.equals("") && !loginPassword.equals("")){
-                loginUser(loginText, loginPassword);
-            }else {
-                Shake loginShake = new Shake(loginField);
-                Shake passwordShake = new Shake(pwdField);
-                loginShake.playAnim();
-                passwordShake.playAnim();
-            }
-        };
-        Platform.runLater(()->{
-        anchorPane.getScene().getAccelerators().put(kc,rn);
-        });
-    }
-
-    private void setDropShadow() {
-        this.forDropShadowTopAnchorPane.setStyle("-fx-background-color: transparent;");
-        this.forDropShadowTopAnchorPane.setPadding(new Insets(10,10,10,10));
-        this.forDropShadowTopAnchorPane.setEffect(new DropShadow());
-    }
-
-    private void setImagesAndColorToButtons() {
-        this.setImageToButton(closeButton, "cross.png", 11,20);
-        this.setImageToButton(minimiseButton, "minimize.png", 13,40);
-        this.setColorsToButtons();
-    }
-
-    public void openNewScene(String windowName, Button button, Object controller){
-
-        button.getScene().getWindow().hide();
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource(windowName));
-        loader.setController(controller);
-
-        try {
-            loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Parent root = loader.getRoot();
-        Stage stage = new Stage();
-        Scene scene = new Scene(root);
-        scene.setFill(Color.TRANSPARENT);
-        stage.setScene(scene);
-
-        if(controller.getClass()==(MainWindowController.class)){
-            ((MainWindowController)controller).setStage(stage);
-            FXResizeHelper fxResizeHelper = new FXResizeHelper();
-            fxResizeHelper.addResizeListener(stage);
-        }
-        stage.initStyle(StageStyle.UNDECORATED);
-        stage.initStyle(StageStyle.TRANSPARENT);
-        stage.show();
-    }
-
-    public void enterButtonAction(){
         enterButton.setOnAction(event->{
-            String loginText = loginField.getText().trim();
-            String loginPassword = DigestUtils.md5Hex(pwdField.getText().trim());
-
-
-            if(!loginText.equals("") && !loginPassword.equals("")){
-                loginUser(loginText, loginPassword);
-            }else {
-                Shake loginShake = new Shake(loginField);
-                Shake passwordShake = new Shake(pwdField);
-                loginShake.playAnim();
-                passwordShake.playAnim();
-            }
+            this.checkIfFieldsAreEmptyElseTryToLogin();
         });
+
+        this.loginField.setStyle( uiColorAndStyleSettings.getDefaultStyleWithBorder() );
+        this.pwdField.setStyle( uiColorAndStyleSettings.getDefaultStyleWithBorder() );
+
+        this.setEnterHotekeyToLogin();
     }
 
-    private void loginUser(String loginText, String loginPassword) {
+    public void checkIfFieldsAreEmptyElseTryToLogin(){
+        if(loginField.getText().equals(("")) && pwdField.getText().equals("")){
+            this.shakeField(loginField);
+            this.shakeField(pwdField);
+        }else{
+            this.checkLoginIfTrueThenOpenNewSceneElseAnim();
+        }
+    }
 
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        List<User> list = session.createQuery("FROM User WHERE login = '" + loginText + "'").list();
-        session.getTransaction();
-        session.close();
+    private void checkLoginIfTrueThenOpenNewSceneElseAnim() {
+        loginText = loginField.getText().trim();
+        loginPassword = DigestUtils.md5Hex(pwdField.getText().trim());
+        UserService userService = new UserService();
+        List<User> list = userService.returnUsersByLogin(loginText);
 
         if (list.size() == 1) {
             User user = list.get(0);
-            if(list.get(0).getPassword().equals(loginPassword)) {
-                enterButton.getScene().getWindow().hide();
+            if (list.get(0).getPassword().equals(loginPassword)) {
                 MainWindowController mainWindowController = new MainWindowController(user);
-                openNewScene("/fxml/mainWindow.fxml", enterButton, mainWindowController);
-
-            }else{
-                Shake loginShake = new Shake(loginField);
-                Shake passwordShake = new Shake(pwdField);
-                loginShake.playAnim();
-                passwordShake.playAnim();
+                sceneOpener.openNewScene("/fxml/mainWindow.fxml", enterButton, mainWindowController);
+            } else {
+                this.shakeField(loginField);
+                this.shakeField(pwdField);
             }
         } else {
-            Shake loginShake = new Shake(loginField);
-            Shake passwordShake = new Shake(pwdField);
-            loginShake.playAnim();
-            passwordShake.playAnim();
+            this.shakeField(loginField);
+            this.shakeField(pwdField);
         }
+
     }
 
-    private void makePaneMoovable(AnchorPane anchorPane){
-        anchorPane.setOnMousePressed(e->{
-            xOffset = e.getSceneX();
-            yOffset = e.getSceneY();
-        });
-        anchorPane.setOnMouseDragged(e->{
-            ((Stage)(anchorPane.getScene().getWindow())).setX(e.getScreenX() - xOffset);
-            ((Stage)(anchorPane.getScene().getWindow())).setY(e.getScreenY() - yOffset);
-        });
+    private void shakeField(Node node){
+        Shake shake = new Shake(node);
+        shake.playAnim();
     }
 
-    private void setImageToButton(Button button, String imageName, int width, int height){
-        Image image = new Image(imageName);
-        ImageView imageView = new ImageView(image);
-        imageView.setPickOnBounds(true);
-        imageView.setPreserveRatio(true);
-        imageView.setFitWidth(width);
-        imageView.setFitHeight(height);
-        button.setGraphic(imageView);
+    private void setColorAndStylesToButtons(){
+        uiColorAndStyleSettings.setImageToButton(closeButton, "cross.png", 11,20);
+        uiColorAndStyleSettings.setImageToButton(minimiseButton, "minimize.png", 13,40);
+        uiColorAndStyleSettings.setDefaultStylesToButtonsAndOnMouseEnteredAndExited(newUserButton);
+        uiColorAndStyleSettings.setDefaultStylesToButtonsAndOnMouseEnteredAndExited(enterButton);
     }
 
-    private void setColorsToButtons(){
-        String standartColorCursorOnButton = "cfdee9";
-
-        closeButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                closeButton.setStyle("-fx-background-color:#F87272");
-            }
+    private void setEnterHotekeyToLogin(){
+        KeyCombination kc = new KeyCodeCombination(KeyCode.ENTER);
+        Runnable rn = ()->{
+            this.checkIfFieldsAreEmptyElseTryToLogin();
+        };
+        Platform.runLater(()->{
+            anchorPane.getScene().getAccelerators().put(kc,rn);
         });
-        closeButton.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                closeButton.setStyle("-fx-background-color: transparent");
-            }
-        });
-
-        minimiseButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                minimiseButton.setStyle("-fx-background-color:#" + standartColorCursorOnButton);
-            }
-        });
-        minimiseButton.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                minimiseButton.setStyle("-fx-background-color: transparent");
-            }
-        });
-
-
-        newUserButton.setStyle("-fx-background-color: transparent;" +
-                "-fx-border-color:#FFFFFF;" +
-                "-fx-background-insets: transparent;" +
-                "-fx-faint-focus-color: transparent;" +
-                "-fx-border-radius: 5;" +
-                "-fx-background-radius: 5;" +
-                "-fx-border-width: 1.5;");
-
-        enterButton.setStyle("-fx-background-color: transparent;" +
-                "-fx-border-color:#FFFFFF;" +
-                "-fx-background-insets: transparent;" +
-                "-fx-faint-focus-color: transparent;" +
-                "-fx-border-radius: 5;" +
-                "-fx-background-radius: 5;" +
-                "-fx-border-width: 1.5;");
-
-        newUserButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                newUserButton.setStyle( "-fx-background-color: transparent;"+
-                        "-fx-border-color:#91afc5;"+
-                        "-fx-background-insets: transparent;"+
-                        "-fx-faint-focus-color: transparent;"+
-                        "-fx-border-radius: 5;"+
-                        "-fx-background-radius: 5;"+
-                        "-fx-border-width: 1.5;");
-            }
-        });
-        newUserButton.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                newUserButton.setStyle("-fx-background-color: transparent;" +
-                        "-fx-border-color:#FFFFFF;" +
-                        "-fx-background-insets: transparent;" +
-                        "-fx-faint-focus-color: transparent;" +
-                        "-fx-border-radius: 5;" +
-                        "-fx-background-radius: 5;" +
-                        "-fx-border-width: 1.5;");
-            }
-        });
-
-        enterButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                enterButton.setStyle( "-fx-background-color: transparent;"+
-                        "-fx-border-color:#91afc5;"+
-                        "-fx-background-insets: transparent;"+
-                        "-fx-faint-focus-color: transparent;"+
-                        "-fx-border-radius: 5;"+
-                        "-fx-background-radius: 5;"+
-                        "-fx-border-width: 1.5;");
-            }
-        });
-        enterButton.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                enterButton.setStyle("-fx-background-color: transparent;" +
-                        "-fx-border-color:#FFFFFF;" +
-                        "-fx-background-insets: transparent;" +
-                        "-fx-faint-focus-color: transparent;" +
-                        "-fx-border-radius: 5;" +
-                        "-fx-background-radius: 5;" +
-                        "-fx-border-width: 1.5;");
-            }
-        });
-
-
     }
 
 }

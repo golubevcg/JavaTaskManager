@@ -1,6 +1,7 @@
 package controllers;
 
 import animations.Shake;
+import classes.WindowEffects;
 import database.HibernateSessionFactoryUtil;
 import database.Task;
 import database.Worker;
@@ -108,7 +109,8 @@ public class EditTaskWindowController {
         this.forDropShadowTopAnchorPane.setPadding(new Insets(10,10,10,10));
         this.forDropShadowTopAnchorPane.setEffect(new DropShadow());
 
-        this.makePaneMoovable(moovableAnchorPane);
+        WindowEffects.makePaneMoovable(moovableAnchorPane);
+
 
         String stylesheetRadioButtons = getClass().getResource("/styles.css").toExternalForm();
         inWorkRadioButton.getStylesheets().add(stylesheetRadioButtons);

@@ -53,4 +53,13 @@ public class UserDao {
         session.close();
         return list;
     }
+
+    public List<User> returnUsersByLogin(String login){
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        List<User> usersList = session.createQuery("FROM User WHERE login = '" + login + "'").list();
+        session.getTransaction();
+        session.close();
+        return usersList;
+
+    }
 }

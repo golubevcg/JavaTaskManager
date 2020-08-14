@@ -1,5 +1,6 @@
 package controllers;
 
+import classes.WindowEffects;
 import database.HibernateSessionFactoryUtil;
 import database.Task;
 import database.User;
@@ -120,7 +121,8 @@ public class MainWindowController {
     @FXML
     void initialize() {
 
-        this.setDropShadow();
+        WindowEffects.setDropShadowToWindow(forDropShadowTopAnchorPane);
+        WindowEffects.makePaneMoovable(movableAnchorPane);
 
         this.cleanAllNodes();
 
@@ -136,7 +138,6 @@ public class MainWindowController {
         this.mainAnchorPane.setMinWidth(mainAnchorPane.getPrefWidth());
         this.mainAnchorPane.setMaxWidth(mainAnchorPane.getPrefHeight());
 
-        this.makePaneMoovable(movableAnchorPane);
 
         this.textArea.setText(this.getUserTextField());
         this.textArea.setMinWidth(textArea.getPrefWidth());
@@ -772,17 +773,6 @@ public class MainWindowController {
 
     }
 
-    private void makePaneMoovable(AnchorPane anchorPane){
-        anchorPane.setOnMousePressed(e->{
-            xOffset = e.getSceneX();
-            yOffset = e.getSceneY();
-        });
-        anchorPane.setOnMouseDragged(e->{
-            stage.setX(e.getScreenX() - xOffset);
-            stage.setY(e.getScreenY() - yOffset);
-        });
-    }
-
     private List<MenuItem> createDefaultMenuItems(TextInputControl t) {
         String fontStyleToMenuItems = " -fx-font-size: 14px; -fx-font-family: Arial;";
 
@@ -1013,9 +1003,4 @@ public class MainWindowController {
     this.rootUser.setTextfield(string);
     }
 
-    private void setDropShadow(){
-        this.forDropShadowTopAnchorPane.setStyle("-fx-background-color: transparent;");
-        this.forDropShadowTopAnchorPane.setPadding(new Insets(10,10,10,10));
-        this.forDropShadowTopAnchorPane.setEffect(new DropShadow());
-    }
 }
