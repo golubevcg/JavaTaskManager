@@ -58,7 +58,12 @@ public class UIColorAndStyleSettings {
 
     private String minimizeHeighlightButtonColor = "cfdee9";
 
-    public void setCloseAndMinimizeButtonStyles(Button closeButton, Button minimiseButton){
+    public void setCloseAndMinimizeButtonStylesAndIcons(Button closeButton, Button minimiseButton){
+
+        this.setImageToButton(closeButton, "cross.png", 11,20);
+        this.setImageToButton(minimiseButton, "minimize.png", 13,40);
+
+
         closeButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {

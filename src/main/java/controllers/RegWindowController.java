@@ -22,7 +22,7 @@ import javafx.stage.Stage;
 
 import java.util.List;
 
-public class RegWindowController {
+public class RegWindowController implements ControllerInterface{
 
     @FXML
     private AnchorPane forDropShadowTopAnchorPane;
@@ -57,20 +57,12 @@ public class RegWindowController {
     @FXML
     private Button closeButton;
 
-    @FXML void close(ActionEvent event){
-        System.exit(0);
-    }
-
-    @FXML void min(ActionEvent event){
-        ((Stage)(moovableAnchorPane.getScene().getWindow())).setIconified(true);
-    }
-
     private SceneOpener sceneOpener = new SceneOpener();
     private LoginWindowController loginWindowController = new LoginWindowController();
     private UIColorAndStyleSettings uiColorAndStyleSettings = new UIColorAndStyleSettings();
 
     @FXML
-    void initialize(){
+    public void initialize(){
         Main.getStageObj().setResizable(false);
 
         WindowEffects.setDropShadowToWindow(forDropShadowTopAnchorPane);
@@ -90,6 +82,16 @@ public class RegWindowController {
             }
 
         });
+    }
+
+    @Override
+    public void min() {
+        ((Stage)(moovableAnchorPane.getScene().getWindow())).setIconified(true);
+    }
+
+    @Override
+    public void close() {
+        System.exit(0);
     }
 
     private boolean registerNewUser() {
@@ -133,13 +135,11 @@ public class RegWindowController {
         }
     }
 
-    private void setColorAndStylesToButtons(){
+    public void setColorAndStylesToButtons(){
 
-        uiColorAndStyleSettings.setImageToButton(closeButton, "cross.png", 11,20);
-        uiColorAndStyleSettings.setImageToButton(minimiseButton, "minimize.png", 13,40);
         uiColorAndStyleSettings.setImageToButton(backButton, "back.png", 18,16);
 
-        uiColorAndStyleSettings.setCloseAndMinimizeButtonStyles(closeButton,minimiseButton);
+        uiColorAndStyleSettings.setCloseAndMinimizeButtonStylesAndIcons(closeButton,minimiseButton);
 
         uiColorAndStyleSettings.setDefaultStylesToButtonsAndOnMouseEnteredAndExited(backButton);
 

@@ -1,5 +1,6 @@
 package controllers;
 
+import classes.UIColorAndStyleSettings;
 import classes.WindowEffects;
 import database.HibernateSessionFactoryUtil;
 import database.Task;
@@ -12,11 +13,9 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
@@ -106,9 +105,10 @@ public class MainWindowController {
     private List<Button> buttonsItemsList = new ArrayList<>();
 
 
-    private double xOffset;
-    private double yOffset;
+//    private double xOffset;
+//    private double yOffset;
     private Stage stage;
+    private UIColorAndStyleSettings uiColorAndStyleSettings = new UIColorAndStyleSettings();
 
     public MainWindowController(User rootUser) {
         this.rootUser = rootUser;
@@ -678,31 +678,23 @@ public class MainWindowController {
                         doneButton.setStyle("-fx-background-color: transparent;");
                         int imgWidth = 18;
                         int imgHeight = 18;
-                        this.setImageToButton(doneButton, "checkboxundone1.png", imgWidth, imgHeight);
+                        uiColorAndStyleSettings.setImageToButton(
+                                doneButton, "checkboxundone1.png", imgWidth, imgHeight);
 
                         doneButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
                             @Override
                             public void handle(MouseEvent mouseEvent) {
-                                Image image = new Image("checkboxdone1.png");
-                                ImageView imageView = new ImageView(image);
-                                imageView.setPickOnBounds(true);
-                                imageView.setPreserveRatio(true);
-                                imageView.setFitWidth(imgWidth);
-                                imageView.setFitHeight(imgHeight);
-                                doneButton.setGraphic(imageView);
+                                uiColorAndStyleSettings.setImageToButton(
+                                        doneButton, "checkboxdone1.png", imgWidth, imgHeight);
+
                             }
                         });
 
                         doneButton.setOnMouseExited(new EventHandler<MouseEvent>() {
                             @Override
                             public void handle(MouseEvent mouseEvent) {
-                                Image image = new Image("checkboxundone1.png");
-                                ImageView imageView = new ImageView(image);
-                                imageView.setPickOnBounds(true);
-                                imageView.setPreserveRatio(true);
-                                imageView.setFitWidth(imgWidth);
-                                imageView.setFitHeight(imgHeight);
-                                doneButton.setGraphic(imageView);
+                                uiColorAndStyleSettings.setImageToButton(
+                                        doneButton, "checkboxundone1.png", imgWidth, imgHeight);
                             }
                         });
 
@@ -793,7 +785,6 @@ public class MainWindowController {
         delete.setStyle(fontStyleToMenuItems);
         selectAll.setStyle(fontStyleToMenuItems);
 
-
         BooleanBinding emptySelection = Bindings.createBooleanBinding(() ->
                         t.getSelection().getLength() == 0,
                 t.selectionProperty());
@@ -806,9 +797,9 @@ public class MainWindowController {
     }
 
     private void setImagesAndColorToButtons(){
-        this.setImageToButton(closeButton, "cross.png", 11,20);
-        this.setImageToButton(minimiseButton, "minimize.png", 13,40);
-        this.setImageToButton(addNewWorkerButton, "plus.png", 38,15);
+        this.uiColorAndStyleSettings.setImageToButton(closeButton, "cross.png", 11,20);
+        this.uiColorAndStyleSettings.setImageToButton(minimiseButton, "minimize.png", 13,40);
+        this.uiColorAndStyleSettings.setImageToButton(addNewWorkerButton, "plus.png", 38,15);
 
         Image image = new Image("settings.png");
         ImageView imageView = new ImageView(image);
@@ -820,31 +811,7 @@ public class MainWindowController {
 
         String standartColorCursorOnButton = "cfdee9";
 
-        closeButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                closeButton.setStyle("-fx-background-color:#F87272");
-            }
-        });
-        closeButton.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                closeButton.setStyle("-fx-background-color: transparent");
-            }
-        });
-
-        minimiseButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                minimiseButton.setStyle("-fx-background-color:#" + standartColorCursorOnButton);
-            }
-        });
-        minimiseButton.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                minimiseButton.setStyle("-fx-background-color: transparent");
-            }
-        });
+        this.uiColorAndStyleSettings.setCloseAndMinimizeButtonStylesAndIcons(closeButton,minimiseButton);
 
         addNewWorkerButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
@@ -858,16 +825,6 @@ public class MainWindowController {
                 addNewWorkerButton.setStyle("-fx-background-color: transparent");
             }
         });
-    }
-
-    private void setImageToButton(Button button, String imageName, int width, int height){
-        Image image = new Image(imageName);
-        ImageView imageView = new ImageView(image);
-        imageView.setPickOnBounds(true);
-        imageView.setPreserveRatio(true);
-        imageView.setFitWidth(width);
-        imageView.setFitHeight(height);
-        button.setGraphic(imageView);
     }
 
     private void setImageToMenuItem(MenuItem menuItem, String imageName, int width, int height){

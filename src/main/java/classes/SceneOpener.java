@@ -32,7 +32,7 @@ public class SceneOpener {
 
         if(controller.getClass()==(MainWindowController.class)){
             ((MainWindowController)controller).setStage(stage);
-            FXResizeHelper fxResizeHelper = new FXResizeHelper();
+            UndecoratedWindowsResizer fxResizeHelper = new UndecoratedWindowsResizer();
             fxResizeHelper.addResizeListener(stage);
         }
         stage.initStyle(StageStyle.UNDECORATED);

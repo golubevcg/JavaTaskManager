@@ -24,7 +24,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import java.util.List;
 
 
-public class LoginWindowController {
+public class LoginWindowController implements ControllerInterface{
 
     @FXML
     private AnchorPane forDropShadowTopAnchorPane;
@@ -56,21 +56,13 @@ public class LoginWindowController {
     @FXML
     private Button closeButton;
 
-    @FXML void close(ActionEvent event){
-        System.exit(0);
-    }
-
-    @FXML void min(ActionEvent event){
-        ((Stage)(anchorPane.getScene().getWindow())).setIconified(true);
-    }
-
     private UIColorAndStyleSettings uiColorAndStyleSettings = new UIColorAndStyleSettings();
     private String loginText;
     private String loginPassword;
     private SceneOpener sceneOpener = new SceneOpener();
 
     @FXML
-    void initialize() {
+    public void initialize() {
 
         WindowEffects.setDropShadowToWindow(forDropShadowTopAnchorPane);
         WindowEffects.makePaneMoovable(moovableAnchorPane);
@@ -91,7 +83,17 @@ public class LoginWindowController {
         this.loginField.setStyle( uiColorAndStyleSettings.getDefaultStyleWithBorder() );
         this.pwdField.setStyle( uiColorAndStyleSettings.getDefaultStyleWithBorder() );
 
-        this.setEnterHotekeyToLogin();
+        this.setEnterHotkeyToLogin();
+    }
+
+    @Override
+    public void min() {
+        ((Stage)(anchorPane.getScene().getWindow())).setIconified(true);
+    }
+
+    @Override
+    public void close() {
+        System.exit(0);
     }
 
     public void checkIfFieldsAreEmptyElseTryToLogin(){
@@ -130,14 +132,13 @@ public class LoginWindowController {
         shake.playAnim();
     }
 
-    private void setColorAndStylesToButtons(){
-        uiColorAndStyleSettings.setImageToButton(closeButton, "cross.png", 11,20);
-        uiColorAndStyleSettings.setImageToButton(minimiseButton, "minimize.png", 13,40);
+     public void setColorAndStylesToButtons(){
+        uiColorAndStyleSettings.setCloseAndMinimizeButtonStylesAndIcons(closeButton, minimiseButton);
         uiColorAndStyleSettings.setDefaultStylesToButtonsAndOnMouseEnteredAndExited(newUserButton);
         uiColorAndStyleSettings.setDefaultStylesToButtonsAndOnMouseEnteredAndExited(enterButton);
     }
 
-    private void setEnterHotekeyToLogin(){
+    private void setEnterHotkeyToLogin(){
         KeyCombination kc = new KeyCodeCombination(KeyCode.ENTER);
         Runnable rn = ()->{
             this.checkIfFieldsAreEmptyElseTryToLogin();
