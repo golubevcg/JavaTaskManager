@@ -751,7 +751,7 @@ public class MainWindowController extends ControllerParent{
             TaskService taskService = new TaskService();
             List<String> list = taskService.checkTask(text);
             if (list.size() >= 1) {
-                sceneOpener.showAlertBox("/fxml/alertTaskBoxWindow.fxml", closeButton);
+                sceneOpener.showAlertBox("/fxml/alertTaskBoxWindow.fxml", new AlertBoxController());
                 return false;
             } else {
                 taskService.saveTask(task);

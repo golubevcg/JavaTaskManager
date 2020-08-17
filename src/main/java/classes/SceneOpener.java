@@ -43,7 +43,7 @@ public class SceneOpener {
         stage.show();
     }
 
-    public void showAlertBox(String windowName, Object controller){
+    public void showAlertBox(String windowName, ControllerParent controller){
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource(windowName));
         loader.setController(controller);
@@ -58,6 +58,7 @@ public class SceneOpener {
         Scene scene = new Scene(root);
         scene.setFill(Color.TRANSPARENT);
         stage.setScene(scene);
+        controller.setStage(stage);
 
         stage.initStyle(StageStyle.UNDECORATED);
         stage.initStyle(StageStyle.TRANSPARENT);

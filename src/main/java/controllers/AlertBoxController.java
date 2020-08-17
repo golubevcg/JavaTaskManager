@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class AlertBoxController {
+public class AlertBoxController extends  ControllerParent{
 
     @FXML
     private ResourceBundle resources;

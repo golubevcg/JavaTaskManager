@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class AlertTaskWindowController {
+public class AlertTaskWindowController extends ControllerParent {
 
     @FXML
     private ResourceBundle resources;
