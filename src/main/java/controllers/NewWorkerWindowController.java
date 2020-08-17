@@ -28,7 +28,7 @@ import org.hibernate.Transaction;
 import java.io.IOException;
 import java.util.List;
 
-public class NewWorkerWindowController {
+public class NewWorkerWindowController extends ControllerParent{
 
 
     @FXML
@@ -77,8 +77,7 @@ public class NewWorkerWindowController {
         this.mainWindowController = mainWindowController;
     }
 
-    @FXML
-    void initialize(){
+    public void initialize(){
 
         this.setDropShadow();
 

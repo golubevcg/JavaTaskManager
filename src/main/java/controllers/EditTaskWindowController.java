@@ -2,9 +2,7 @@ package controllers;
 
 import animations.Shake;
 import classes.WindowEffects;
-import database.HibernateSessionFactoryUtil;
 import database.Task;
-import database.Worker;
 import database.services.TaskService;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -25,16 +23,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.query.Query;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class EditTaskWindowController {
+public class EditTaskWindowController extends ControllerParent{
 
 
     @FXML
@@ -103,7 +98,7 @@ public class EditTaskWindowController {
     }
 
     @FXML
-    private void initialize() {
+    public void initialize() {
 
         this.forDropShadowTopAnchorPane.setStyle("-fx-background-color: transparent;");
         this.forDropShadowTopAnchorPane.setPadding(new Insets(10,10,10,10));

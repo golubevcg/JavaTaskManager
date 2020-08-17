@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class FinTaskRatingWindowController {
+public class FinTaskRatingWindowController extends ControllerParent{
 
     @FXML
     private ResourceBundle resources;

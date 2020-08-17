@@ -23,7 +23,7 @@ import org.hibernate.Transaction;
 import javax.persistence.Query;
 import java.util.List;
 
-public class DeleteWorkerWindowController {
+public class DeleteWorkerWindowController extends ControllerParent{
 
 
     @FXML
@@ -50,7 +50,7 @@ public class DeleteWorkerWindowController {
     }
 
     @FXML
-    void initialize() {
+    public void initialize() {
 
         this.setDropShadow();
 

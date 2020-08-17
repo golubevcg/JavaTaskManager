@@ -22,7 +22,7 @@ import javafx.stage.Stage;
 
 import java.util.List;
 
-public class RegWindowController implements ControllerInterface{
+public class RegWindowController extends ControllerParent{
 
     @FXML
     private AnchorPane forDropShadowTopAnchorPane;
@@ -74,11 +74,11 @@ public class RegWindowController implements ControllerInterface{
         this.setEnterHotekeyToRegister();
 
         backButton.setOnAction(e->{
-            sceneOpener.openNewScene("/fxml/loginWindow.fxml", closeButton, loginWindowController);
+            sceneOpener.openNewScene("/fxml/loginWindow.fxml", closeButton, loginWindowController,true);
         });
         registerButton.setOnAction(event->{
             if(registerNewUser()) {
-                sceneOpener.openNewScene("/fxml/loginWindow.fxml", closeButton, loginWindowController);
+                sceneOpener.openNewScene("/fxml/loginWindow.fxml", closeButton, loginWindowController, true);
             }
 
         });

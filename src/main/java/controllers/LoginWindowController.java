@@ -24,7 +24,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import java.util.List;
 
 
-public class LoginWindowController implements ControllerInterface{
+public class LoginWindowController extends ControllerParent{
 
     @FXML
     private AnchorPane forDropShadowTopAnchorPane;
@@ -74,7 +74,7 @@ public class LoginWindowController implements ControllerInterface{
         newUserButton.setOnAction(event-> {
             RegWindowController regWindowController = new RegWindowController();
             SceneOpener sceneOpener = new SceneOpener();
-            sceneOpener.openNewScene("/fxml/regWindow.fxml", newUserButton, regWindowController);
+            sceneOpener.openNewScene("/fxml/regWindow.fxml", newUserButton, regWindowController, true);
         });
         enterButton.setOnAction(event->{
             this.checkIfFieldsAreEmptyElseTryToLogin();
@@ -115,7 +115,7 @@ public class LoginWindowController implements ControllerInterface{
             User user = list.get(0);
             if (list.get(0).getPassword().equals(loginPassword)) {
                 MainWindowController mainWindowController = new MainWindowController(user);
-                sceneOpener.openNewScene("/fxml/mainWindow.fxml", enterButton, mainWindowController);
+                sceneOpener.openNewScene("/fxml/mainWindow.fxml", enterButton, mainWindowController, true);
             } else {
                 this.shakeField(loginField);
                 this.shakeField(pwdField);

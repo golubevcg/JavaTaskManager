@@ -30,7 +30,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class NewTaskWindowController {
+public class NewTaskWindowController extends ControllerParent{
 
     @FXML
     private ResourceBundle resources;
@@ -90,7 +90,7 @@ public class NewTaskWindowController {
     }
 
     @FXML
-    private void initialize() {
+    public void initialize() {
         this.setDropShadow();
         this.makePaneMoovable(moovableAnchorPane);
         this.setImagesAndColorToButtons();

@@ -1,5 +1,6 @@
 package classes;
 
+import controllers.ControllerParent;
 import controllers.MainWindowController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,8 +14,10 @@ import java.io.IOException;
 
 public class SceneOpener {
 
-    public void openNewScene(String windowName, Button button, Object controller){
-        button.getScene().getWindow().hide();
+    public void openNewScene(String windowName, Button button, ControllerParent controller, boolean CloseInitialWindow){
+        if(CloseInitialWindow) {
+            button.getScene().getWindow().hide();
+        }
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource(windowName));
         loader.setController(controller);
@@ -29,9 +32,9 @@ public class SceneOpener {
         Scene scene = new Scene(root);
         scene.setFill(Color.TRANSPARENT);
         stage.setScene(scene);
+        controller.setStage(stage);
 
         if(controller.getClass()==(MainWindowController.class)){
-            ((MainWindowController)controller).setStage(stage);
             UndecoratedWindowsResizer fxResizeHelper = new UndecoratedWindowsResizer();
             fxResizeHelper.addResizeListener(stage);
         }

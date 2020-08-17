@@ -1,9 +1,6 @@
 package controllers;
 
-import database.HibernateSessionFactoryUtil;
 import database.Task;
-import database.User;
-import database.Worker;
 import database.services.TaskService;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -15,13 +12,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.query.Query;
 
-import java.util.List;
-
-public class DeleteTaskWindowController {
+public class DeleteTaskWindowController extends ControllerParent {
 
     @FXML
     private AnchorPane forDropShadowTopAnchorPane;
@@ -55,7 +47,7 @@ public class DeleteTaskWindowController {
     }
 
     @FXML
-    void initialize() {
+    public void initialize() {
 
         this.setDropShadow();
 
