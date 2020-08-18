@@ -79,7 +79,6 @@ public class TextFieldCheckerEach30sec {
 
         @Override
         public void run() {
-            System.out.println("point3");
             doTask();
         }
 
