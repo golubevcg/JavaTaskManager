@@ -1,16 +1,13 @@
 package controllers;
 
+import classes.UIColorAndStyleSettings;
+import classes.WindowEffects;
 import database.Task;
 import database.services.TaskService;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class DeleteTaskWindowController extends ControllerParent {
@@ -38,9 +35,8 @@ public class DeleteTaskWindowController extends ControllerParent {
     @FXML
     private Button noButton;
 
-    private double xOffset;
-    private double yOffset;
     private Stage stage;
+    private UIColorAndStyleSettings uiColorAndStyleSettings = new UIColorAndStyleSettings();
 
     public void setStage(Stage stage) {
         this.stage = stage;
@@ -49,9 +45,8 @@ public class DeleteTaskWindowController extends ControllerParent {
     @FXML
     public void initialize() {
 
-        this.setDropShadow();
-
-        this.makePaneMoovable(AnchorPane);
+        WindowEffects.setDropShadowToWindow(forDropShadowTopAnchorPane);
+        WindowEffects.makePaneMoovable(AnchorPane);
 
         yesButton.setOnAction(e->{
             TaskService taskService = new TaskService();
@@ -65,101 +60,15 @@ public class DeleteTaskWindowController extends ControllerParent {
             noButton.getScene().getWindow().hide();
         });
 
-        noButton.setStyle("-fx-background-color: transparent;" +
-                "-fx-border-color:#FFFFFF;" +
-                "-fx-background-insets: transparent;" +
-                "-fx-faint-focus-color: transparent;" +
-                "-fx-border-radius: 5;" +
-                "-fx-background-radius: 5;" +
-                "-fx-border-width: 1.5;");
+        uiColorAndStyleSettings.setButtonStyles(noButton,yesButton);
 
-        noButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                noButton.setStyle( "-fx-background-color: transparent;"+
-                        "-fx-border-color:#91afc5;"+
-                        "-fx-background-insets: transparent;"+
-                        "-fx-faint-focus-color: transparent;"+
-                        "-fx-border-radius: 5;"+
-                        "-fx-background-radius: 5;"+
-                        "-fx-border-width: 1.5;");
-            }
-        });
-
-        noButton.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                noButton.setStyle("-fx-background-color: transparent;" +
-                        "-fx-border-color:#FFFFFF;" +
-                        "-fx-background-insets: transparent;" +
-                        "-fx-faint-focus-color: transparent;" +
-                        "-fx-border-radius: 5;" +
-                        "-fx-background-radius: 5;" +
-                        "-fx-border-width: 1.5;");
-            }
-        });
-
-        yesButton.setStyle("-fx-background-color: transparent;" +
-                "-fx-border-color:#FFFFFF;" +
-                "-fx-background-insets: transparent;" +
-                "-fx-faint-focus-color: transparent;" +
-                "-fx-border-radius: 5;" +
-                "-fx-background-radius: 5;" +
-                "-fx-border-width: 1.5;");
-
-        yesButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                yesButton.setStyle( "-fx-background-color: transparent;"+
-                        "-fx-border-color:#91afc5;"+
-                        "-fx-background-insets: transparent;"+
-                        "-fx-faint-focus-color: transparent;"+
-                        "-fx-border-radius: 5;"+
-                        "-fx-background-radius: 5;"+
-                        "-fx-border-width: 1.5;");
-            }
-        });
-
-        yesButton.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                yesButton.setStyle("-fx-background-color: transparent;" +
-                        "-fx-border-color:#FFFFFF;" +
-                        "-fx-background-insets: transparent;" +
-                        "-fx-faint-focus-color: transparent;" +
-                        "-fx-border-radius: 5;" +
-                        "-fx-background-radius: 5;" +
-                        "-fx-border-width: 1.5;");
-            }
-        });
-
-        AnchorPane.setStyle("-fx-background-color: #FFFFFF;" +
-                "-fx-border-color:#91afc5;"+
+        AnchorPane.setStyle("-fx-background-color: "+ uiColorAndStyleSettings.getMainBGUiColor() + ";" +
+                "-fx-border-color:" + uiColorAndStyleSettings.getMainUiBordersColor() + ";" +
                 "-fx-background-insets: transparent;"+
                 "-fx-border-radius: 5;"+
                 "-fx-background-radius: 5;"+
                 "-fx-border-width: 1.5;");
 
     }
-
-    private void setDropShadow() {
-        this.forDropShadowTopAnchorPane.setStyle("-fx-background-color: transparent;");
-        this.forDropShadowTopAnchorPane.setPadding(new Insets(10,10,10,10));
-        DropShadow dsh = new DropShadow();
-        dsh.setColor(Color.web("#C6C6C6"));
-        this.forDropShadowTopAnchorPane.setEffect(dsh);
-    }
-
-    private void makePaneMoovable(AnchorPane anchorPane) {
-        anchorPane.setOnMousePressed(e->{
-            xOffset = e.getSceneX();
-            yOffset = e.getSceneY();
-        });
-        anchorPane.setOnMouseDragged(e->{
-            stage.setX(e.getScreenX() - xOffset);
-            stage.setY(e.getScreenY() - yOffset);
-        });
-    }
-
 
 }

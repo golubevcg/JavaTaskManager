@@ -129,7 +129,7 @@ public class MainWindowController extends ControllerParent{
         textArea.getStylesheets().add(stylesheet);
         this.createTextAreaContextMenus();
 
-        this.setColorAndStylesToButtons();
+        this.setStylesToButtons();
 
         this.drawWorkerLabels();
 
@@ -686,7 +686,7 @@ public class MainWindowController extends ControllerParent{
     }
 
     @Override
-    public void setColorAndStylesToButtons(){
+    public void setStylesToButtons(){
         this.uiColorAndStyleSettings.setImageToButton(closeButton, "cross.png", 11,20);
         this.uiColorAndStyleSettings.setImageToButton(minimiseButton, "minimize.png", 13,40);
         this.uiColorAndStyleSettings.setImageToButton(addNewWorkerButton, "plus.png", 38,15);
@@ -769,8 +769,6 @@ public class MainWindowController extends ControllerParent{
         Menu createTaskFromSelectedMenuItem = new Menu("Создать задачу из выделенного");
         createTaskFromSelectedMenuItem.setStyle(fontStyleToMenuItems);
 
-
-
         List<Menu> menuItemsList = new ArrayList<>();
         for (int i = 0; i < rootUser.getWorkers().size(); i++) {
             Worker worker = rootUser.getWorkers().get(i);
@@ -783,7 +781,6 @@ public class MainWindowController extends ControllerParent{
             inWorkMenuItem.setStyle(fontStyleToMenuItems);
             inQueueMenuItem.setStyle(fontStyleToMenuItems);
             workerMenu.setStyle(fontStyleToMenuItems);
-
 
             workerMenu.getItems().addAll(inWorkMenuItem,inQueueMenuItem);
 

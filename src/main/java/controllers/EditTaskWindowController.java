@@ -7,16 +7,13 @@ import classes.WindowEffects;
 import database.Task;
 import database.services.TaskService;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -94,14 +91,13 @@ public class EditTaskWindowController extends ControllerParent{
         WindowEffects.setDropShadowToWindow(forDropShadowTopAnchorPane);
         WindowEffects.makePaneMoovable(moovableAnchorPane);
 
-
         String stylesheetRadioButtons = getClass().getResource("/styles.css").toExternalForm();
         inWorkRadioButton.getStylesheets().add(stylesheetRadioButtons);
         inQueenRadioButton.getStylesheets().add(stylesheetRadioButtons);
 
         taskTextfield.getStylesheets().add(uiColorAndStyleSettings.getDefaultStyleWithBorder());
 
-        this.setImagesAndColorToButtons();
+        this.setStylesToButtons();
 
         if (task.getTasktype() != "quene") {
             inQueenRadioButton.fire();
@@ -153,27 +149,12 @@ public class EditTaskWindowController extends ControllerParent{
         }
     }
 
-    private void setImagesAndColorToButtons(){
+    @Override
+    public void setStylesToButtons(){
         uiColorAndStyleSettings.setImageToButton(closeButton, "cross.png", 11,20);
         uiColorAndStyleSettings.setImageToButton(minimiseButton, "minimize.png", 13,40);
-
         uiColorAndStyleSettings.setCloseAndMinimizeButtonStylesAndIcons(closeButton,minimiseButton);
-
-        createButton.setStyle( uiColorAndStyleSettings.getDefaultStyleWITHOUTBorder() );
-
-        createButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                createButton.setStyle( uiColorAndStyleSettings.getDefaultStyleWithBorder() );
-            }
-        });
-
-        createButton.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                createButton.setStyle( uiColorAndStyleSettings.getDefaultStyleWITHOUTBorder() );
-            }
-        });
+        uiColorAndStyleSettings.setButtonStyles(createButton);
     }
 }
 

@@ -8,7 +8,8 @@ abstract public class ControllerParent {
 
     public void close() {}
 
-    public void setColorAndStylesToButtons() {}
+    public void setStylesToButtons() {}
 
     public void setStage(Stage stage) {}
+
 }

@@ -8,7 +8,6 @@ import classes.UIColorAndStyleSettings;
 import database.User;
 import database.services.UserService;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -69,7 +68,7 @@ public class LoginWindowController extends ControllerParent{
 
         Main.getStageObj().setResizable(false);
 
-        this.setColorAndStylesToButtons();
+        this.setStylesToButtons();
 
         newUserButton.setOnAction(event-> {
             RegWindowController regWindowController = new RegWindowController();
@@ -132,10 +131,10 @@ public class LoginWindowController extends ControllerParent{
         shake.playAnim();
     }
 
-     public void setColorAndStylesToButtons(){
+    @Override
+    public void setStylesToButtons(){
         uiColorAndStyleSettings.setCloseAndMinimizeButtonStylesAndIcons(closeButton, minimiseButton);
-        uiColorAndStyleSettings.setDefaultStylesToButtonsAndOnMouseEnteredAndExited(newUserButton);
-        uiColorAndStyleSettings.setDefaultStylesToButtonsAndOnMouseEnteredAndExited(enterButton);
+        uiColorAndStyleSettings.setButtonStyles(newUserButton, enterButton);
     }
 
     private void setEnterHotkeyToLogin(){

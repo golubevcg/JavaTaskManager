@@ -11,10 +11,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
 import javax.persistence.Query;
 import java.util.List;
 
@@ -50,90 +48,24 @@ public class DeleteWorkerWindowController extends ControllerParent{
         WindowEffects.makePaneMoovable(AnchorPane);
 
         yesButton.setOnAction(e->{
-            this.deleteTaskCloseWindow();
+            this.deleteTaskCloseWindowAndAddAllTasksToTextfield();
         });
 
         noButton.setOnAction(e->{
             noButton.getScene().getWindow().hide();
         });
 
-        noButton.setStyle("-fx-background-color: transparent;" +
-                "-fx-border-color:#FFFFFF;" +
-                "-fx-background-insets: transparent;" +
-                "-fx-faint-focus-color: transparent;" +
-                "-fx-border-radius: 5;" +
-                "-fx-background-radius: 5;" +
-                "-fx-border-width: 1.5;");
+       uiColorAndStyleSettings.setButtonStyles(noButton,yesButton);
 
-        noButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                noButton.setStyle( "-fx-background-color: transparent;"+
-                        "-fx-border-color:#91afc5;"+
-                        "-fx-background-insets: transparent;"+
-                        "-fx-faint-focus-color: transparent;"+
-                        "-fx-border-radius: 5;"+
-                        "-fx-background-radius: 5;"+
-                        "-fx-border-width: 1.5;");
-            }
-        });
-
-        noButton.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                noButton.setStyle("-fx-background-color: transparent;" +
-                        "-fx-border-color:#FFFFFF;" +
-                        "-fx-background-insets: transparent;" +
-                        "-fx-faint-focus-color: transparent;" +
-                        "-fx-border-radius: 5;" +
-                        "-fx-background-radius: 5;" +
-                        "-fx-border-width: 1.5;");
-            }
-        });
-
-        yesButton.setStyle("-fx-background-color: transparent;" +
-                "-fx-border-color:#FFFFFF;" +
-                "-fx-background-insets: transparent;" +
-                "-fx-faint-focus-color: transparent;" +
-                "-fx-border-radius: 5;" +
-                "-fx-background-radius: 5;" +
-                "-fx-border-width: 1.5;");
-
-        yesButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                yesButton.setStyle( "-fx-background-color: transparent;"+
-                        "-fx-border-color:#91afc5;"+
-                        "-fx-background-insets: transparent;"+
-                        "-fx-faint-focus-color: transparent;"+
-                        "-fx-border-radius: 5;"+
-                        "-fx-background-radius: 5;"+
-                        "-fx-border-width: 1.5;");
-            }
-        });
-
-        yesButton.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                yesButton.setStyle("-fx-background-color: transparent;" +
-                        "-fx-border-color:#FFFFFF;" +
-                        "-fx-background-insets: transparent;" +
-                        "-fx-faint-focus-color: transparent;" +
-                        "-fx-border-radius: 5;" +
-                        "-fx-background-radius: 5;" +
-                        "-fx-border-width: 1.5;");
-            }
-        });
-
-        AnchorPane.setStyle("-fx-background-color: #FFFFFF;" +
-                "-fx-border-color:#91afc5;"+
+        AnchorPane.setStyle("-fx-background-color: "+ uiColorAndStyleSettings.getMainBGUiColor() + ";" +
+                "-fx-border-color:" + uiColorAndStyleSettings.getMainUiBordersColor() + ";" +
                 "-fx-background-insets: transparent;"+
                 "-fx-border-radius: 5;"+
                 "-fx-background-radius: 5;"+
                 "-fx-border-width: 1.5;");
     }
 
-    private void deleteTaskCloseWindow(){
+    private void deleteTaskCloseWindowAndAddAllTasksToTextfield(){
         yesButton.getScene().getWindow().hide();
 
         List<Task> tasks = worker.getTasks();

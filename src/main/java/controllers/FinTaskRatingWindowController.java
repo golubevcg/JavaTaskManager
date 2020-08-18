@@ -1,25 +1,16 @@
 package controllers;
 
+import classes.SceneOpener;
+import classes.UIColorAndStyleSettings;
+import classes.WindowEffects;
 import database.Task;
 import database.services.TaskService;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -78,8 +69,7 @@ public class FinTaskRatingWindowController extends ControllerParent{
     private Task task;
     private MainWindowController mainWindowController;
     private Stage stage;
-    private double xOffset;
-    private double yOffset;
+    private UIColorAndStyleSettings uiColorAndStyleSettings = new UIColorAndStyleSettings();
 
     public FinTaskRatingWindowController(Task task, MainWindowController mainWindowController) {
         this.task = task;
@@ -89,9 +79,9 @@ public class FinTaskRatingWindowController extends ControllerParent{
     @FXML
     public void initialize() {
 
-        this.setDropShadow();
-        this.makePaneMoovable(moovableAnchorPane);
-        this.setImagesAndColorToButtons();
+        WindowEffects.setDropShadowToWindow(forDropShadowTopAnchorPane);
+        WindowEffects.makePaneMoovable(moovableAnchorPane);
+        this.setStylesToButtons();
 
 
         ToggleGroup group = new ToggleGroup();
@@ -107,23 +97,9 @@ public class FinTaskRatingWindowController extends ControllerParent{
         confirmButton.setOnAction(e->{
 
                 if(group.getSelectedToggle()==(null)){
-                    FXMLLoader loader = new FXMLLoader();
                     NoRatingErrorWindowController noRatingErrorWindowController = new NoRatingErrorWindowController();
-                    loader.setLocation(getClass().getResource("/fxml/noRatingErrorWindow.fxml"));
-                    try {
-                        loader.setController(noRatingErrorWindowController);
-                        loader.load();
-                    } catch (IOException h) {
-                        h.printStackTrace();
-                    }
-                    Parent root = loader.getRoot();
-                    Stage stage = new Stage();
-                    Scene scene = new Scene(root);
-                    scene.setFill(Color.TRANSPARENT);
-                    stage.setScene(scene);
-                    stage.initStyle(StageStyle.TRANSPARENT);
-                    stage.initStyle(StageStyle.UNDECORATED);
-                    stage.show();
+                    SceneOpener sceneOpener = new SceneOpener();
+                    sceneOpener.showAlertBox("/fxml/noRatingErrorWindow.fxml", noRatingErrorWindowController);
                 }else{
                     RadioButton rb = (RadioButton)group.getSelectedToggle();
                     updateTaskStatus(Integer.parseInt(rb.getText()));
@@ -132,100 +108,13 @@ public class FinTaskRatingWindowController extends ControllerParent{
                 }
         });
 
-        confirmButton.setStyle("-fx-background-color: transparent;" +
-                "-fx-border-color:#FFFFFF;" +
-                "-fx-background-insets: transparent;" +
-                "-fx-faint-focus-color: transparent;" +
-                "-fx-border-radius: 5;" +
-                "-fx-background-radius: 5;" +
-                "-fx-border-width: 1.5;");
-
-        confirmButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                confirmButton.setStyle( "-fx-background-color: transparent;"+
-                        "-fx-border-color:#91afc5;"+
-                        "-fx-background-insets: transparent;"+
-                        "-fx-faint-focus-color: transparent;"+
-                        "-fx-border-radius: 5;"+
-                        "-fx-background-radius: 5;"+
-                        "-fx-border-width: 1.5;");
-            }
-        });
-
-        confirmButton.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                confirmButton.setStyle("-fx-background-color: transparent;" +
-                        "-fx-border-color:#FFFFFF;" +
-                        "-fx-background-insets: transparent;" +
-                        "-fx-faint-focus-color: transparent;" +
-                        "-fx-border-radius: 5;" +
-                        "-fx-background-radius: 5;" +
-                        "-fx-border-width: 1.5;");
-            }
-        });
 
     }
 
-    private void setImagesAndColorToButtons() {
-        this.setImageToButton(closeButton, "cross.png", 11,20);
-        this.setImageToButton(minimiseButton, "minimize.png", 13,40);
-
-        String standartColorCursorOnButton = "cfdee9";
-
-        closeButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                closeButton.setStyle("-fx-background-color:#F87272");
-            }
-        });
-        closeButton.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                closeButton.setStyle("-fx-background-color: transparent");
-            }
-        });
-
-        minimiseButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                minimiseButton.setStyle("-fx-background-color:#" + standartColorCursorOnButton);
-            }
-        });
-        minimiseButton.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                minimiseButton.setStyle("-fx-background-color: transparent");
-            }
-        });
-    }
-
-    private void makePaneMoovable(javafx.scene.layout.AnchorPane anchorPane) {
-        anchorPane.setOnMousePressed(e->{
-            xOffset = e.getSceneX();
-            yOffset = e.getSceneY();
-        });
-        anchorPane.setOnMouseDragged(e->{
-            stage.setX(e.getScreenX() - xOffset);
-            stage.setY(e.getScreenY() - yOffset);
-        });
-    }
-
-    private void setDropShadow() {
-        this.forDropShadowTopAnchorPane.setStyle("-fx-background-color: transparent;");
-        this.forDropShadowTopAnchorPane.setPadding(new Insets(10,10,10,10));
-        this.forDropShadowTopAnchorPane.setEffect(new DropShadow());
-    }
-
-    private void setImageToButton(Button button, String imageName, int width, int height){
-        Image image = new Image(imageName);
-        ImageView imageView = new ImageView(image);
-        imageView.setPickOnBounds(true);
-        imageView.setPreserveRatio(true);
-        imageView.setFitWidth(width);
-        imageView.setFitHeight(height);
-        button.setGraphic(imageView);
+    @Override
+    public void setStylesToButtons() {
+       uiColorAndStyleSettings.setCloseAndMinimizeButtonStylesAndIcons(closeButton,minimiseButton);
+       uiColorAndStyleSettings.setButtonStyles(confirmButton);
     }
 
     private void updateTaskStatus(int value){

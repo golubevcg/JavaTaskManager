@@ -8,7 +8,6 @@ import classes.WindowEffects;
 import database.User;
 import database.services.UserService;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -68,7 +67,7 @@ public class RegWindowController extends ControllerParent{
         WindowEffects.setDropShadowToWindow(forDropShadowTopAnchorPane);
         WindowEffects.makePaneMoovable(moovableAnchorPane);
 
-        this.setColorAndStylesToButtons();
+        this.setStylesToButtons();
         this.setFieldStyles();
 
         this.setEnterHotekeyToRegister();
@@ -135,16 +134,11 @@ public class RegWindowController extends ControllerParent{
         }
     }
 
-    public void setColorAndStylesToButtons(){
-
+    @Override
+    public void setStylesToButtons(){
         uiColorAndStyleSettings.setImageToButton(backButton, "back.png", 18,16);
-
         uiColorAndStyleSettings.setCloseAndMinimizeButtonStylesAndIcons(closeButton,minimiseButton);
-
-        uiColorAndStyleSettings.setDefaultStylesToButtonsAndOnMouseEnteredAndExited(backButton);
-
-        uiColorAndStyleSettings.setDefaultStylesToButtonsAndOnMouseEnteredAndExited(registerButton);
-
+        uiColorAndStyleSettings.setButtonStyles(backButton,registerButton);
     }
     
     private void setFieldStyles(){

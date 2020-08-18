@@ -37,8 +37,7 @@ public class UIColorAndStyleSettings {
             "-fx-faint-focus-color: transparent;"+
             "-fx-border-radius: 5;"+
             "-fx-background-radius: 5;"+
-            "-fx-border-width: 1.5;"+
-            "-fx-padding: 10 10 10 10;";
+            "-fx-border-width: 1.5;";
 
     private String defaultStyleWITHOUTBorder = "-fx-background-color: transparent;"+
             "-fx-border-color:" + mainBGUiColor + ";" +
@@ -46,8 +45,31 @@ public class UIColorAndStyleSettings {
             "-fx-faint-focus-color: transparent;"+
             "-fx-border-radius: 5;"+
             "-fx-background-radius: 5;"+
-            "-fx-border-width: 1.5;"+
-            "-fx-padding: 10 10 10 10;";
+            "-fx-border-width: 1.5;";
+
+    public void setButtonStyles(Button... button){
+        UIColorAndStyleSettings uiColorAndStyleSettings = new UIColorAndStyleSettings();
+        for (int i = 0; i < button.length; i++) {
+            Button currentButton = button[i];
+
+            currentButton.setStyle( uiColorAndStyleSettings.getDefaultStyleWITHOUTBorder() );
+
+            currentButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    currentButton.setStyle( uiColorAndStyleSettings.getDefaultStyleWithBorder() );
+                }
+            });
+
+            currentButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    currentButton.setStyle( uiColorAndStyleSettings.getDefaultStyleWITHOUTBorder() );
+                }
+            });
+        }
+
+    }
 
     public String getMainUiBordersColor() {
         return mainUiBordersColor;
@@ -117,27 +139,6 @@ public class UIColorAndStyleSettings {
             }
         });
 
-    }
-
-    public void setDefaultStylesToButtonsAndOnMouseEnteredAndExited(Button button){
-
-        UIColorAndStyleSettings uiColorAndStyleSettings = this;
-
-        button.setStyle( uiColorAndStyleSettings.getDefaultStyleWITHOUTBorder());
-
-
-        button.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                button.setStyle( uiColorAndStyleSettings.getDefaultStyleWithBorder() );
-            }
-        });
-        button.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                button.setStyle( uiColorAndStyleSettings.getDefaultStyleWITHOUTBorder() );
-            }
-        });
     }
 
     public String getFontStyleToMenuItems() {
