@@ -145,87 +145,39 @@ public class UIColorAndStyleSettings {
         return fontStyleToMenuItems;
     }
 
-    public void setFontStyleToMenuItems(String fontStyleToMenuItems) {
-        this.fontStyleToMenuItems = fontStyleToMenuItems;
-    }
-
-    public void setMainUiBordersColor(String mainUiBordersColor) {
-        this.mainUiBordersColor = mainUiBordersColor;
-    }
-
-    public void setMainBGUiColor(String mainBGUiColor) {
-        this.mainBGUiColor = mainBGUiColor;
-    }
-
     public String getColor1ToMarkTask() {
         return color1ToMarkTask;
-    }
-
-    public void setColor1ToMarkTask(String color1ToMarkTask) {
-        this.color1ToMarkTask = color1ToMarkTask;
     }
 
     public String getStrokeColor1ToMarkTask() {
         return strokeColor1ToMarkTask;
     }
 
-    public void setStrokeColor1ToMarkTask(String strokeColor1ToMarkTask) {
-        this.strokeColor1ToMarkTask = strokeColor1ToMarkTask;
-    }
-
     public String getColor1HighlightedToMarkTask() {
         return color1HighlightedToMarkTask;
-    }
-
-    public void setColor1HighlightedToMarkTask(String color1HighlightedToMarkTask) {
-        this.color1HighlightedToMarkTask = color1HighlightedToMarkTask;
     }
 
     public String getColor2ToMarkTask() {
         return color2ToMarkTask;
     }
 
-    public void setColor2ToMarkTask(String color2ToMarkTask) {
-        this.color2ToMarkTask = color2ToMarkTask;
-    }
-
     public String getStrokeColor2ToMarkTask() {
         return strokeColor2ToMarkTask;
-    }
-
-    public void setStrokeColor2ToMarkTask(String strokeColor2ToMarkTask) {
-        this.strokeColor2ToMarkTask = strokeColor2ToMarkTask;
     }
 
     public String getColor2HighlightedToMarkTask() {
         return color2HighlightedToMarkTask;
     }
 
-    public void setColor2HighlightedToMarkTask(String color2HighlightedToMarkTask) {
-        this.color2HighlightedToMarkTask = color2HighlightedToMarkTask;
-    }
-
     public String getColor3ToMarkTask() {
         return color3ToMarkTask;
-    }
-
-    public void setColor3ToMarkTask(String color3ToMarkTask) {
-        this.color3ToMarkTask = color3ToMarkTask;
     }
 
     public String getStrokeColor3ToMarkTask() {
         return strokeColor3ToMarkTask;
     }
 
-    public void setStrokeColor3ToMarkTask(String strokeColor3ToMarkTask) {
-        this.strokeColor3ToMarkTask = strokeColor3ToMarkTask;
-    }
-
     public String getColor3HighlightedToMarkTask() {
         return color3HighlightedToMarkTask;
-    }
-
-    public void setColor3HighlightedToMarkTask(String color3HighlightedToMarkTask) {
-        this.color3HighlightedToMarkTask = color3HighlightedToMarkTask;
     }
 }

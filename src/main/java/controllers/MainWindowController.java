@@ -1,8 +1,6 @@
 package controllers;
 
-import classes.SceneOpener;
-import classes.UIColorAndStyleSettings;
-import classes.WindowEffects;
+import classes.*;
 import database.HibernateSessionFactoryUtil;
 import database.Task;
 import database.User;
@@ -109,7 +107,14 @@ public class MainWindowController extends ControllerParent{
         this.cleanAllNodes();
 
         textArea.textProperty().addListener(((observableValue, oldvalue, newvalue) ->
-                updateTextfield(this, newvalue)));
+                {
+                    textArea.setText(newvalue);
+                    rootUser.setTextfield(newvalue);
+                })
+        );
+
+        TextFieldCheckerEach30sec.initialize(this);
+        TextFieldCheckerEach30sec.start();
 
         mainMenuBar.getMenus().add(mainMenu);
 
@@ -728,7 +733,7 @@ public class MainWindowController extends ControllerParent{
     }
 
     public String getUserTextField() {
-        return  this.rootUser.getTextfield();
+        return this.rootUser.getTextfield();
     }
 
     public int getUserId() {
