@@ -693,6 +693,14 @@ public class MainWindowController extends ControllerParent{
         settingsMenu.setStyle( uiColorAndStyleSettings.getFontStyleToMenuItems() );
         quitMenu.setStyle( uiColorAndStyleSettings.getFontStyleToMenuItems() );
 
+        quitMenu.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                sceneOpener.openNewScene("/fxml/loginWindow.fxml",
+                        (Stage) closeButton.getScene().getWindow(), new LoginWindowController(), true);
+            }
+        });
+
     }
 
     private List<MenuItem> createDefaultMenuItems(TextInputControl t) {
