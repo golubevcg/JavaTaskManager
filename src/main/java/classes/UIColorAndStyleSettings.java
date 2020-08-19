@@ -71,6 +71,10 @@ public class UIColorAndStyleSettings {
 
     }
 
+    public void setFontStyleToMenuItems(String fontStyleToMenuItems) {
+        this.fontStyleToMenuItems = fontStyleToMenuItems;
+    }
+
     public String getMainUiBordersColor() {
         return mainUiBordersColor;
     }

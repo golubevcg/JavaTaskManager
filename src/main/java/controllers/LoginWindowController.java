@@ -73,7 +73,7 @@ public class LoginWindowController extends ControllerParent{
         newUserButton.setOnAction(event-> {
             RegWindowController regWindowController = new RegWindowController();
             SceneOpener sceneOpener = new SceneOpener();
-            sceneOpener.openNewScene("/fxml/regWindow.fxml", newUserButton, regWindowController, true);
+            sceneOpener.openNewScene("/fxml/regWindow.fxml", (Stage) closeButton.getScene().getWindow(), regWindowController, true);
         });
         enterButton.setOnAction(event->{
             this.checkIfFieldsAreEmptyElseTryToLogin();
@@ -114,7 +114,7 @@ public class LoginWindowController extends ControllerParent{
             User user = list.get(0);
             if (list.get(0).getPassword().equals(loginPassword)) {
                 MainWindowController mainWindowController = new MainWindowController(user);
-                sceneOpener.openNewScene("/fxml/mainWindow.fxml", enterButton, mainWindowController, true);
+                sceneOpener.openNewScene("/fxml/mainWindow.fxml", (Stage) closeButton.getScene().getWindow(), mainWindowController, true);
             } else {
                 this.shakeField(loginField);
                 this.shakeField(pwdField);

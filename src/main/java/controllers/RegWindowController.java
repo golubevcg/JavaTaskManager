@@ -73,11 +73,11 @@ public class RegWindowController extends ControllerParent{
         this.setEnterHotekeyToRegister();
 
         backButton.setOnAction(e->{
-            sceneOpener.openNewScene("/fxml/loginWindow.fxml", closeButton, loginWindowController,true);
+            sceneOpener.openNewScene("/fxml/loginWindow.fxml", (Stage) closeButton.getScene().getWindow(), loginWindowController,true);
         });
         registerButton.setOnAction(event->{
             if(registerNewUser()) {
-                sceneOpener.openNewScene("/fxml/loginWindow.fxml", closeButton, loginWindowController, true);
+                sceneOpener.openNewScene("/fxml/loginWindow.fxml", (Stage) closeButton.getScene().getWindow(), loginWindowController, true);
             }
 
         });
@@ -125,7 +125,7 @@ public class RegWindowController extends ControllerParent{
 
              if (list.size() >= 1) {
                 AlertBoxController alertBoxController = new AlertBoxController();
-                sceneOpener.showAlertBox("/fxml/alertBoxWindow.fxml", alertBoxController);
+                sceneOpener.showAlertBox("/fxml/alertBoxWindow.fxml", (Stage) closeButton.getScene().getWindow(), alertBoxController);
                 return false;
             } else {
                 userService.saveUser(user);

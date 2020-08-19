@@ -31,7 +31,6 @@ public class TextFieldCheckerEach30sec {
     }
 
     public static TextFieldCheckerEach30sec initialize(MainWindowController mainWindowController) {
-        System.out.println("point1");
         if (timerSingleton == null) {
 
             synchronized (TextFieldCheckerEach30sec.class) {
@@ -40,7 +39,6 @@ public class TextFieldCheckerEach30sec {
                     timerSingleton = new TextFieldCheckerEach30sec(mainWindowController);
                     task = timerSingleton.new TimerTaskJob();
                     isRunning = false;
-                    System.out.println("point2");
                 }
 
             }

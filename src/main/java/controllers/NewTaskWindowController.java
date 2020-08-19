@@ -120,7 +120,7 @@ public class NewTaskWindowController extends ControllerParent{
             if (list.size() >= 1) {
                 AlertTaskWindowController alertTaskWindowController = new AlertTaskWindowController();
                 SceneOpener sceneOpener = new SceneOpener();
-                sceneOpener.showAlertBox("/fxml/alertTaskBoxWindow.fxml", alertTaskWindowController);
+                sceneOpener.showAlertBox("/fxml/alertTaskBoxWindow.fxml", (Stage) closeButton.getScene().getWindow(), alertTaskWindowController);
                 return false;
             } else {
                 taskService.saveTask(task);

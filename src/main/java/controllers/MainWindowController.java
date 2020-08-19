@@ -1,6 +1,9 @@
 package controllers;
 
-import classes.*;
+import classes.SceneOpener;
+import classes.TextFieldCheckerEach30sec;
+import classes.UIColorAndStyleSettings;
+import classes.WindowEffects;
 import database.HibernateSessionFactoryUtil;
 import database.Task;
 import database.User;
@@ -25,8 +28,7 @@ import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
-import javax.persistence.Query;
+
 import java.net.URL;
 import java.util.*;
 
@@ -66,10 +68,22 @@ public class MainWindowController extends ControllerParent{
     private MenuBar mainMenuBar;
 
     @FXML
-    private Button closeButton;
+    private Menu mainMenu;
 
     @FXML
-    private Button addNewWorkerButton;
+    private MenuItem addWorkerMenu;
+
+    @FXML
+    private MenuItem statisticsMenu;
+
+    @FXML
+    private MenuItem settingsMenu;
+
+    @FXML
+    private MenuItem quitMenu;
+
+    @FXML
+    private Button closeButton;
 
     @FXML
     private Button minimiseButton;
@@ -83,7 +97,6 @@ public class MainWindowController extends ControllerParent{
     @FXML
     private Rectangle textFieldRectangle;
 
-    Menu mainMenu = new Menu();
     private List<Label> labelsItemsList = new ArrayList<>();
     private List<Shape> shapesItemsList = new ArrayList<>();
     private List<Button> buttonsItemsList = new ArrayList<>();
@@ -99,6 +112,8 @@ public class MainWindowController extends ControllerParent{
         this.stage = stage;
     }
 
+    private int counter = 0;
+
     public void initialize() {
 
         WindowEffects.setDropShadowToWindow(forDropShadowTopAnchorPane);
@@ -107,24 +122,19 @@ public class MainWindowController extends ControllerParent{
         this.cleanAllNodes();
 
         textArea.textProperty().addListener(((observableValue, oldvalue, newvalue) ->
-                {
-                    textArea.setText(newvalue);
-                    rootUser.setTextfield(newvalue);
-                })
+            {
+                textArea.setText(newvalue);
+                rootUser.setTextfield(newvalue);
+            })
         );
+
+        this.editMenuBarMenus();
 
         TextFieldCheckerEach30sec.initialize(this);
         TextFieldCheckerEach30sec.start();
 
-        mainMenuBar.getMenus().add(mainMenu);
-
-        MenuItem addWorker = new MenuItem("Добавить нового сотрудника");
-        MenuItem exit = new MenuItem("Выйти");
-        mainMenu.getItems().addAll(addWorker,exit);
-
         this.mainAnchorPane.setMinWidth(mainAnchorPane.getPrefWidth());
         this.mainAnchorPane.setMaxWidth(mainAnchorPane.getPrefHeight());
-
 
         this.textArea.setText(this.getUserTextField());
         this.textArea.setMinWidth(textArea.getPrefWidth());
@@ -139,12 +149,13 @@ public class MainWindowController extends ControllerParent{
         this.drawWorkerLabels();
 
         NewWorkerWindowController newWorkerWindowController = new NewWorkerWindowController(this);
-        this.addNewWorkerButton.setOnAction(new EventHandler<ActionEvent>() {
+        addWorkerMenu.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                sceneOpener.openNewScene("/fxml/newWorkerWindow.fxml", closeButton, newWorkerWindowController, false);
+                sceneOpener.openNewScene("/fxml/newWorkerWindow.fxml", (Stage) closeButton.getScene().getWindow(), newWorkerWindowController, false);
             }
         });
+
     }
 
     private void cleanAllNodes(){
@@ -158,7 +169,6 @@ public class MainWindowController extends ControllerParent{
             this.anchorPaneForCards.getChildren().remove(buttonsItemsList.get(i));
         }
 
-        mainMenuBar.getMenus().removeAll();
     }
 
     private void drawWorkerLabels(){
@@ -205,7 +215,7 @@ public class MainWindowController extends ControllerParent{
             addTaskToWorker.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
-                    sceneOpener.openNewScene("/fxml/newTaskWindow.fxml", closeButton, newTaskWindowController, false);
+                    sceneOpener.openNewScene("/fxml/newTaskWindow.fxml", (Stage) closeButton.getScene().getWindow(), newTaskWindowController, false);
                 }
             });
 
@@ -213,7 +223,7 @@ public class MainWindowController extends ControllerParent{
             deleteWorker.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
-                    sceneOpener.openNewScene("/fxml/deleteWorkerConfirmationWindow.fxml", closeButton, deleteWorkerWindowController, false);
+                    sceneOpener.openNewScene("/fxml/deleteWorkerConfirmationWindow.fxml", (Stage) closeButton.getScene().getWindow(), deleteWorkerWindowController, false);
                 }
             });
 
@@ -366,9 +376,9 @@ public class MainWindowController extends ControllerParent{
                     AnchorPane.setTopAnchor(taskRectangle, rectLY1 + 48);
                     anchorPaneForCards.getChildren().addAll(taskRectangle);
 
-
                     MenuItem editTask = new MenuItem("Отредактировать задачу");
                     MenuItem deleteTask = new MenuItem("Удалить задачу");
+                    MenuItem returnToTextfield = new MenuItem("Вернуть задачу в записи");
                     Menu markByColor = new Menu("Пометить цветом");
 
                     MenuItem yellow = new MenuItem("#e2e0c8");
@@ -382,9 +392,12 @@ public class MainWindowController extends ControllerParent{
                     uiColorAndStyleSettings.setImageToMenuItem(editTask, "editTask.png", 16,16);
                     uiColorAndStyleSettings.setImageToMenuItem(deleteTask, "taskCross.png", 16,16);
                     uiColorAndStyleSettings.setImageToMenuItem(markByColor, "paintbrush.png", 16,16);
+                    uiColorAndStyleSettings.setImageToMenuItem(returnToTextfield, "returnToTextfield.png", 16,16);
+
 
                     editTask.setStyle( uiColorAndStyleSettings.getFontStyleToMenuItems() );
                     deleteTask.setStyle( uiColorAndStyleSettings.getFontStyleToMenuItems() );
+                    returnToTextfield.setStyle( uiColorAndStyleSettings.getFontStyleToMenuItems() );
                     markByColor.setStyle( uiColorAndStyleSettings.getFontStyleToMenuItems() );
 
                     yellow.setStyle( uiColorAndStyleSettings.getFontStyleToMenuItems() );
@@ -393,6 +406,13 @@ public class MainWindowController extends ControllerParent{
                     defaultColor.setStyle( uiColorAndStyleSettings.getFontStyleToMenuItems() );
 
                     markByColor.getItems().addAll(yellow,blue,red,defaultColor);
+
+                    returnToTextfield.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent actionEvent) {
+                           removeTaskAddTaskTextToTextfield(task);
+                        }
+                    });
 
                     TaskService taskService = new TaskService();
 
@@ -502,7 +522,7 @@ public class MainWindowController extends ControllerParent{
                     editTask.setOnAction(new EventHandler<ActionEvent>() {
                         @Override
                         public void handle(ActionEvent actionEvent) {
-                            sceneOpener.openNewScene("/fxml/newTaskWindow.fxml", closeButton, editTaskWindowController, false);
+                            sceneOpener.openNewScene("/fxml/newTaskWindow.fxml", (Stage) closeButton.getScene().getWindow(), editTaskWindowController, false);
                         }
                     });
 
@@ -510,7 +530,7 @@ public class MainWindowController extends ControllerParent{
                     deleteTask.setOnAction(new EventHandler<ActionEvent>() {
                         @Override
                         public void handle(ActionEvent actionEvent) {
-                            sceneOpener.openNewScene("/fxml/deleteTaskConfirmationWindow.fxml", closeButton, deleteTaskWindowController, false);
+                            sceneOpener.openNewScene("/fxml/deleteTaskConfirmationWindow.fxml", (Stage) closeButton.getScene().getWindow(), deleteTaskWindowController, false);
                         }
                     });
 
@@ -523,7 +543,7 @@ public class MainWindowController extends ControllerParent{
                         moveTaskToInWork.setStyle( uiColorAndStyleSettings.getFontStyleToMenuItems() );
                         uiColorAndStyleSettings.setImageToMenuItem(moveTaskToInWork, "moveToWork.png", 16,16);
 
-                        taskRectangleContextMenu.getItems().addAll(moveTaskToInWork,editTask,markByColor,deleteTask);
+                        taskRectangleContextMenu.getItems().addAll(moveTaskToInWork,editTask,markByColor, returnToTextfield, deleteTask);
                         taskRectangle.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
                             @Override
                             public void handle(ContextMenuEvent contextMenuEvent) {
@@ -547,7 +567,7 @@ public class MainWindowController extends ControllerParent{
                         moveTaskToInQueue.setStyle( uiColorAndStyleSettings.getFontStyleToMenuItems() );
                         uiColorAndStyleSettings.setImageToMenuItem(moveTaskToInQueue, "moveToQuene.png",16,16);
 
-                        taskRectangleContextMenu.getItems().addAll(moveTaskToInQueue,editTask,markByColor,deleteTask);
+                        taskRectangleContextMenu.getItems().addAll(moveTaskToInQueue,editTask,markByColor, returnToTextfield, deleteTask);
                         taskRectangle.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
                             @Override
                             public void handle(ContextMenuEvent contextMenuEvent) {
@@ -610,7 +630,7 @@ public class MainWindowController extends ControllerParent{
 
                         doneButton.setOnAction(d->{
                             FinTaskRatingWindowController finTaskRatingWindowController = new FinTaskRatingWindowController(task, this);
-                            sceneOpener.openNewScene("/fxml/finTaskRatingWindow.fxml", closeButton, finTaskRatingWindowController, false);
+                            sceneOpener.openNewScene("/fxml/finTaskRatingWindow.fxml", (Stage) closeButton.getScene().getWindow(), finTaskRatingWindowController, false);
                         });
 
                         anchorPaneForCards.getChildren().addAll(doneButton);
@@ -659,8 +679,24 @@ public class MainWindowController extends ControllerParent{
 
     }
 
+    private void editMenuBarMenus(){
+        Image image = new Image("settings.png");
+        ImageView imageView = new ImageView(image);
+        imageView.setPickOnBounds(true);
+        imageView.setPreserveRatio(true);
+        imageView.setFitWidth(34);
+        imageView.setFitHeight(17);
+        mainMenu.setGraphic(imageView);
+
+        addWorkerMenu.setStyle( uiColorAndStyleSettings.getFontStyleToMenuItems() );
+        statisticsMenu.setStyle( uiColorAndStyleSettings.getFontStyleToMenuItems() );
+        settingsMenu.setStyle( uiColorAndStyleSettings.getFontStyleToMenuItems() );
+        quitMenu.setStyle( uiColorAndStyleSettings.getFontStyleToMenuItems() );
+
+    }
+
     private List<MenuItem> createDefaultMenuItems(TextInputControl t) {
-        String fontStyleToMenuItems = " -fx-font-size: 14px; -fx-font-family: Arial;";
+        String fontStyleToMenuItems = uiColorAndStyleSettings.getFontStyleToMenuItems();
 
         MenuItem cut = new MenuItem("Вырезать");
         cut.setOnAction(e -> t.cut());
@@ -694,32 +730,7 @@ public class MainWindowController extends ControllerParent{
     public void setStylesToButtons(){
         this.uiColorAndStyleSettings.setImageToButton(closeButton, "cross.png", 11,20);
         this.uiColorAndStyleSettings.setImageToButton(minimiseButton, "minimize.png", 13,40);
-        this.uiColorAndStyleSettings.setImageToButton(addNewWorkerButton, "plus.png", 38,15);
-
-        Image image = new Image("settings.png");
-        ImageView imageView = new ImageView(image);
-        imageView.setPickOnBounds(true);
-        imageView.setPreserveRatio(true);
-        imageView.setFitWidth(34);
-        imageView.setFitHeight(17);
-        mainMenu.setGraphic(imageView);
-
-        String standartColorCursorOnButton = "cfdee9";
-
         this.uiColorAndStyleSettings.setCloseAndMinimizeButtonStylesAndIcons(closeButton,minimiseButton);
-
-        addNewWorkerButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                addNewWorkerButton.setStyle("-fx-background-color:#" + standartColorCursorOnButton);
-            }
-        });
-        addNewWorkerButton.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                addNewWorkerButton.setStyle("-fx-background-color: transparent");
-            }
-        });
     }
 
     @Override
@@ -756,7 +767,7 @@ public class MainWindowController extends ControllerParent{
             TaskService taskService = new TaskService();
             List<String> list = taskService.checkTask(text);
             if (list.size() >= 1) {
-                sceneOpener.showAlertBox("/fxml/alertTaskBoxWindow.fxml", new AlertBoxController());
+                sceneOpener.showAlertBox("/fxml/alertTaskBoxWindow.fxml",(Stage) closeButton.getScene().getWindow(), new AlertBoxController());
                 return false;
             } else {
                 taskService.saveTask(task);
@@ -767,7 +778,7 @@ public class MainWindowController extends ControllerParent{
 
     private void createTextAreaContextMenus(){
 
-        String fontStyleToMenuItems = "-fx-font-size: 14px; -fx-font-family: Arial;";
+        String fontStyleToMenuItems = uiColorAndStyleSettings.getFontStyleToMenuItems();
 
         ContextMenu contextMenu = new ContextMenu();
         contextMenu.getItems().addAll(createDefaultMenuItems(textArea));
@@ -826,16 +837,12 @@ public class MainWindowController extends ControllerParent{
         this.rootUser.setTextfield(this.textArea.getText() + "\n" + string);
     }
 
-    public void updateTextfield(MainWindowController mainWindowController, String string){
-    Session session2 = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-    Transaction transaction2 = session2.beginTransaction();
-    Query newQuery1 = session2.createQuery("UPDATE User SET textfield = "
-            + "'" + string + "'"
-            + " WHERE id = " + mainWindowController.rootUser.getId());
-    newQuery1.executeUpdate();
-    transaction2.commit();
-    session2.close();
-    this.rootUser.setTextfield(string);
+    private void removeTaskAddTaskTextToTextfield(Task task){
+        textArea.setText( textArea.getText() + "\n" + task.getText());
+        TaskService taskService = new TaskService();
+        taskService.deleteTask(task);
+        this.initialize();
     }
+
 
 }

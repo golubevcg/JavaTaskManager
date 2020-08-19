@@ -14,9 +14,9 @@ import java.io.IOException;
 
 public class SceneOpener {
 
-    public void openNewScene(String windowName, Button button, ControllerParent controller, boolean CloseInitialWindow){
+    public void openNewScene(String windowName, Stage currentStage, ControllerParent controller, boolean CloseInitialWindow){
         if(CloseInitialWindow) {
-            button.getScene().getWindow().hide();
+            currentStage.hide();
         }
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource(windowName));
@@ -28,22 +28,31 @@ public class SceneOpener {
             e.printStackTrace();
         }
         Parent root = loader.getRoot();
-        Stage stage = new Stage();
+        Stage newStage = new Stage();
         Scene scene = new Scene(root);
         scene.setFill(Color.TRANSPARENT);
-        stage.setScene(scene);
-        controller.setStage(stage);
+        newStage.setScene(scene);
+        controller.setStage(newStage);
 
         if(controller.getClass()==(MainWindowController.class)){
             UndecoratedWindowsResizer fxResizeHelper = new UndecoratedWindowsResizer();
-            fxResizeHelper.addResizeListener(stage);
+            fxResizeHelper.addResizeListener(newStage);
         }
-        stage.initStyle(StageStyle.UNDECORATED);
-        stage.initStyle(StageStyle.TRANSPARENT);
-        stage.show();
+        newStage.initStyle(StageStyle.UNDECORATED);
+        newStage.initStyle(StageStyle.TRANSPARENT);
+
+//        double centerXPositionOfMainScene = newStage.getX() - newStage.getWidth()/2d;
+//        double centerYPositionOfMainScene = newStage.getY() - newStage.getHeight()/2d;
+//        newStage.setOnShown(ev -> {
+//            newStage.setX(centerXPositionOfMainScene - newStage.getWidth()/2d);
+//            newStage.setY(centerYPositionOfMainScene - newStage.getHeight()/2d);
+//            newStage.show();
+//        });
+        newStage.show();
+
     }
 
-    public void showAlertBox(String windowName, ControllerParent controller){
+    public void showAlertBox(String windowName, Stage currentStage, ControllerParent controller){
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource(windowName));
         loader.setController(controller);
@@ -54,14 +63,21 @@ public class SceneOpener {
             e.printStackTrace();
         }
         Parent root = loader.getRoot();
-        Stage stage = new Stage();
+        Stage newStage = new Stage();
         Scene scene = new Scene(root);
         scene.setFill(Color.TRANSPARENT);
-        stage.setScene(scene);
-        controller.setStage(stage);
+        newStage.setScene(scene);
+        controller.setStage(newStage);
 
-        stage.initStyle(StageStyle.UNDECORATED);
-        stage.initStyle(StageStyle.TRANSPARENT);
-        stage.show();
+        double centerXPositionOfMainScene = currentStage.getX() - currentStage.getWidth()/2d;
+        double centerYPositionOfMainScene = currentStage.getY() - currentStage.getHeight()/2d;
+        newStage.initStyle(StageStyle.UNDECORATED);
+        newStage.initStyle(StageStyle.TRANSPARENT);
+        newStage.setOnShown(ev -> {
+            newStage.setX(centerXPositionOfMainScene - newStage.getWidth()/2d);
+            newStage.setY(centerYPositionOfMainScene - newStage.getHeight()/2d);
+            newStage.show();
+        });
+        newStage.show();
     }
 }

@@ -26,7 +26,6 @@ public class EditTaskWindowController extends ControllerParent{
     @FXML
     private URL location;
 
-
     @FXML
     private AnchorPane forDropShadowTopAnchorPane;
 
@@ -137,7 +136,7 @@ public class EditTaskWindowController extends ControllerParent{
 
             if (list.size() >= 1) {
                 AlertTaskWindowController alertTaskWindowController = new AlertTaskWindowController();
-                sceneOpener.showAlertBox("/fxml/alertTaskBoxWindow.fxml", alertTaskWindowController);
+                sceneOpener.showAlertBox("/fxml/alertTaskBoxWindow.fxml", (Stage) closeButton.getScene().getWindow(), alertTaskWindowController);
                 return false;
             } else {
                 this.task.setText(taskTextfield.getText());
