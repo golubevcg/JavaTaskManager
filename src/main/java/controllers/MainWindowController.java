@@ -136,7 +136,7 @@ public class MainWindowController extends ControllerParent{
         this.mainAnchorPane.setMinWidth(mainAnchorPane.getPrefWidth());
         this.mainAnchorPane.setMaxWidth(mainAnchorPane.getPrefHeight());
 
-        this.textArea.setText(this.getUserTextField());
+        this.textArea.setText(this.getTextField());
         this.textArea.setMinWidth(textArea.getPrefWidth());
         this.textArea.setMaxHeight(textArea.getPrefHeight());
         this.textArea.setWrapText(true);
@@ -701,6 +701,17 @@ public class MainWindowController extends ControllerParent{
             }
         });
 
+        StatisticsWindowController statisticsWindowController = new StatisticsWindowController();
+        statisticsWindowController.setRootUser(rootUser);
+        statisticsWindowController.setMainWindowController(this);
+        statisticsMenu.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+         ;
+                sceneOpener.openNewScene("/fxml/statisticsWindow.fxml", (Stage) closeButton.getScene().getWindow(), statisticsWindowController, false);
+            }
+        });
+
     }
 
     private List<MenuItem> createDefaultMenuItems(TextInputControl t) {
@@ -751,8 +762,12 @@ public class MainWindowController extends ControllerParent{
         System.exit(0);
     }
 
-    public String getUserTextField() {
-        return this.rootUser.getTextfield();
+    public String getTextField() {
+        if(textArea.getText().isEmpty()){
+            return "";
+        }else {
+            return this.textArea.getText();
+        }
     }
 
     public int getUserId() {
@@ -842,7 +857,7 @@ public class MainWindowController extends ControllerParent{
     public void setUser(User user){this.rootUser = user;}
 
     public void addToTextArea(String string){
-        this.rootUser.setTextfield(this.textArea.getText() + "\n" + string);
+        this.textArea.setText(this.textArea.getText() + "\n" + string);
     }
 
     private void removeTaskAddTaskTextToTextfield(Task task){
@@ -851,6 +866,5 @@ public class MainWindowController extends ControllerParent{
         taskService.deleteTask(task);
         this.initialize();
     }
-
 
 }

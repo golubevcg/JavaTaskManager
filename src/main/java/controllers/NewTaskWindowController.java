@@ -61,6 +61,7 @@ public class NewTaskWindowController extends ControllerParent{
 
     @FXML void close(ActionEvent event){
         stage.close();
+        mainWindowController.getUser().setTextfield(mainWindowController.getTextField());
         mainWindowController.initialize();
     }
 
@@ -93,6 +94,7 @@ public class NewTaskWindowController extends ControllerParent{
 
         createButton.setOnAction(e->{
                 if(checkTask()==true) {
+                    mainWindowController.getUser().setTextfield(mainWindowController.getTextField());
                     mainWindowController.initialize();
                     createButton.getScene().getWindow().hide();
                 }

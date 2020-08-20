@@ -128,6 +128,7 @@ public class RegWindowController extends ControllerParent{
                 sceneOpener.showAlertBox("/fxml/alertBoxWindow.fxml", (Stage) closeButton.getScene().getWindow(), alertBoxController);
                 return false;
             } else {
+                user.setTextfield("");
                 userService.saveUser(user);
                 return true;
             }

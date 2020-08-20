@@ -53,6 +53,7 @@ public class DeleteTaskWindowController extends ControllerParent {
             taskService.deleteTask(task);
             task.getWorker().deleteTask(task);
             yesButton.getScene().getWindow().hide();
+            mainWindowController.getUser().setTextfield(mainWindowController.getTextField());
             mainWindowController.initialize();
         });
 

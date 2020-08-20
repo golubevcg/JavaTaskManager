@@ -49,6 +49,7 @@ public class NewWorkerWindowController extends ControllerParent{
 
     @FXML void close(ActionEvent event){
         stage.close();
+        mainWindowController.getUser().setTextfield(mainWindowController.getTextField());
         mainWindowController.initialize();
     }
 
@@ -75,6 +76,7 @@ public class NewWorkerWindowController extends ControllerParent{
 
         registerButton.setOnAction(e->{
             if(registerNewUser(mainWindowController)==true) {
+                mainWindowController.getUser().setTextfield(mainWindowController.getTextField());
                 mainWindowController.initialize();
                 registerButton.getScene().getWindow().hide();
             }

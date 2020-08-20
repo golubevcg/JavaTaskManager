@@ -71,7 +71,7 @@ public class TextFieldCheckerEach30sec {
 
     private class TimerTaskJob extends TimerTask {
 
-        private volatile String currentTextField;
+        private volatile String currentTextField = "";
         private volatile String previousTextField = "";
         private int counter = 0;
 
@@ -93,14 +93,16 @@ public class TextFieldCheckerEach30sec {
 
         private void doTask() {
 
-            currentTextField = mainWindowController.getUserTextField();
+            currentTextField = mainWindowController.getTextField();
+
             if(counter==0){
                 previousTextField = currentTextField;
             }
             counter++;
 
-            if(previousTextField.equals(currentTextField)) {
-            }else{
+
+            if (previousTextField.equals(currentTextField)) {
+            } else {
                 this.updateTextField();
             }
 
@@ -117,6 +119,7 @@ public class TextFieldCheckerEach30sec {
             session2.close();
             previousTextField = currentTextField;
             mainWindowController.getUser().setTextfield(currentTextField);
+            System.out.println("Textfield has been updated!");
         }
 
     }

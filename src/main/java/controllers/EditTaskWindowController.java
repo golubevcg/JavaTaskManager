@@ -59,6 +59,7 @@ public class EditTaskWindowController extends ControllerParent{
 
     @FXML void close(ActionEvent event){
         stage.close();
+        mainWindowController.getUser().setTextfield(mainWindowController.getTextField());
         mainWindowController.initialize();
     }
 
@@ -89,6 +90,7 @@ public class EditTaskWindowController extends ControllerParent{
 
         WindowEffects.setDropShadowToWindow(forDropShadowTopAnchorPane);
         WindowEffects.makePaneMoovable(moovableAnchorPane);
+
 
         String stylesheetRadioButtons = getClass().getResource("/styles.css").toExternalForm();
         inWorkRadioButton.getStylesheets().add(stylesheetRadioButtons);
@@ -142,6 +144,7 @@ public class EditTaskWindowController extends ControllerParent{
                 this.task.setText(taskTextfield.getText());
                 this.task.setTasktype(tasktype);
                 taskService.updateTask(task);
+                mainWindowController.getUser().setTextfield(mainWindowController.getTextField());
                 mainWindowController.initialize();
                 return true;
             }

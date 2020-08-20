@@ -12,6 +12,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class FinTaskRatingWindowController extends ControllerParent{
@@ -59,6 +60,7 @@ public class FinTaskRatingWindowController extends ControllerParent{
 
     @FXML void close(ActionEvent event){
         stage.close();
+        mainWindowController.getUser().setTextfield(mainWindowController.getTextField());
         mainWindowController.initialize();
     }
 
@@ -103,6 +105,7 @@ public class FinTaskRatingWindowController extends ControllerParent{
                 }else{
                     RadioButton rb = (RadioButton)group.getSelectedToggle();
                     updateTaskStatus(Integer.parseInt(rb.getText()));
+                    mainWindowController.getUser().setTextfield(mainWindowController.getTextField());
                     mainWindowController.initialize();
                     confirmButton.getScene().getWindow().hide();
                 }
@@ -119,6 +122,7 @@ public class FinTaskRatingWindowController extends ControllerParent{
 
     private void updateTaskStatus(int value){
         task.setTasktype("done");
+        task.setDateOfFinishingTask(LocalDate.now());
         task.setRating(value);
         TaskService taskService = new TaskService();
         taskService.updateTask(task);

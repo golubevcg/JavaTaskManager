@@ -3,6 +3,7 @@ package database;
 import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Proxy(lazy=false)
@@ -28,6 +29,9 @@ public class Task implements Comparable<Task>{
     @Column
     private String color = "FFFFFF";
 
+    @Column
+    private LocalDate date;
+
     public String getColor() {
         return color;
     }
@@ -36,9 +40,6 @@ public class Task implements Comparable<Task>{
         this.color = color;
     }
 
-
-
-
     public Task(String text, Worker worker, String tasktype) {
         this.text = text;
         this.worker = worker;
@@ -46,10 +47,6 @@ public class Task implements Comparable<Task>{
     }
 
     public Task(){}
-
-    public String getText() {
-        return text;
-    }
 
     public void setText(String text) {
         this.text = text;
@@ -81,6 +78,18 @@ public class Task implements Comparable<Task>{
 
     public int getId() {
         return id;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public LocalDate getDateOfFinishingTask() {
+        return date;
+    }
+
+    public void setDateOfFinishingTask(LocalDate dateOfFinishingTask) {
+        this.date = dateOfFinishingTask;
     }
 
     @Override
