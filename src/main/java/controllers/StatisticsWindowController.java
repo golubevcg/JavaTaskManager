@@ -1,13 +1,5 @@
 package controllers;
 
-import java.net.URL;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
-
 import classes.UIColorAndStyleSettings;
 import classes.WindowEffects;
 import database.Task;
@@ -22,6 +14,12 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+import java.net.URL;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+import java.util.ResourceBundle;
+
 public class StatisticsWindowController extends ControllerParent{
 
     @FXML
@@ -35,6 +33,15 @@ public class StatisticsWindowController extends ControllerParent{
 
     @FXML
     private AnchorPane anchorPane;
+
+    @FXML
+    private TabPane tabPane;
+
+    @FXML
+    private Tab statistics1;
+
+    @FXML
+    private Tab statistics2;
 
     @FXML
     private BarChart<String, Number> barChart;
@@ -80,7 +87,6 @@ public class StatisticsWindowController extends ControllerParent{
     UIColorAndStyleSettings uiColorAndStyleSettings = new UIColorAndStyleSettings();
     User rootUser = new User();
     List<Worker> workersList = rootUser.getWorkers();
-    ObservableSet<CheckMenuItem> setOfSelectedCheckBoxesOfWorkersInStatisticsMenu = FXCollections.observableSet();
     ObservableMap<CheckMenuItem,Worker> MapOfSelectedCheckBoxesOfWorkersInStatisticsMenu = FXCollections.observableHashMap();
     XYChart.Series barChartSeries = new XYChart.Series();
 
@@ -226,6 +232,10 @@ public class StatisticsWindowController extends ControllerParent{
         }else{
             return date.isAfter(firstDateValue)&&date.isBefore(secondDateValue);
         }
+
+    }
+
+    private void setupLineChart(){
 
     }
 
