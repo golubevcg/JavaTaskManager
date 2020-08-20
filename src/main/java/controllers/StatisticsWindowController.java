@@ -186,8 +186,6 @@ public class StatisticsWindowController extends ControllerParent{
 
         barChart.setLegendVisible(false);
         barChart.setAnimated(false);
-
-        barChart.setTitle("Показатели за всё время");
     }
 
     private void cleanBarChart(){
