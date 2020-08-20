@@ -2,6 +2,8 @@ package controllers;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -41,10 +43,10 @@ public class StatisticsWindowController extends ControllerParent{
     private PieChart pieChart;
 
     @FXML
-    private DatePicker firstDate;
+    private DatePicker firstDatePicker;
 
     @FXML
-    private DatePicker secondDate;
+    private DatePicker secondDatePicker;
 
     @FXML
     private MenuButton workersMenuButton;
@@ -82,12 +84,18 @@ public class StatisticsWindowController extends ControllerParent{
     ObservableMap<CheckMenuItem,Worker> MapOfSelectedCheckBoxesOfWorkersInStatisticsMenu = FXCollections.observableHashMap();
     XYChart.Series barChartSeries = new XYChart.Series();
 
+    private LocalDate firstDateValue = LocalDate.of(2020,01,01);
+    private LocalDate secondDateValue = LocalDate.now().plusDays(1);
+
 
     @FXML
     void initialize() {
 
         WindowEffects.setDropShadowToWindow(forDropShadowTopAnchorPane);
         WindowEffects.makePaneMoovable(movableAnchorPane);
+
+        firstDatePicker.setValue(firstDateValue);
+        secondDatePicker.setValue(secondDateValue);
 
         this.setStylesToButtons();
 
@@ -111,14 +119,18 @@ public class StatisticsWindowController extends ControllerParent{
     }
 
     private int countFinalValueForWorker(Worker worker){
+
         List<Task> tasksList = worker.getTasks();
         int sum = 0;
 
         for (int i = 0; i < tasksList.size(); i++) {
+
             Task task = tasksList.get(i);
-            if(task.getTasktype().equals("done")){
+
+            if (("done").equals(task.getTasktype()) && this.checkTaskDate(task.getDateOfFinishingTask())) {
                 sum += task.getRating();
             }
+
         }
         return sum;
     }
@@ -167,6 +179,7 @@ public class StatisticsWindowController extends ControllerParent{
 
 
         barChart.setLegendVisible(false);
+        barChart.setAnimated(false);
 
         barChart.setTitle("Показатели за всё время");
     }
@@ -178,14 +191,14 @@ public class StatisticsWindowController extends ControllerParent{
 
     private void setupDatePicker(){
 
-
-        firstDate.valueProperty().addListener((observableValue, oldValue, newValue)->{
-            LocalDate firstDateValue = firstDate.getValue();
-            System.out.println(firstDateValue);
+        firstDatePicker.valueProperty().addListener((observableValue, oldValue, newValue)->{
+            firstDateValue = firstDatePicker.getValue();
+            this.updateStatistics();
         });
 
-        secondDate.valueProperty().addListener((observableValue, oldValue, newValue)->{
-            System.out.println(secondDate.getValue());
+        secondDatePicker.valueProperty().addListener((observableValue, oldValue, newValue)->{
+            secondDateValue = secondDatePicker.getValue();
+            this.updateStatistics();
         });
     }
 
@@ -205,4 +218,15 @@ public class StatisticsWindowController extends ControllerParent{
     public void setStage(Stage stage) {
         this.stage = stage;
     }
+
+    private boolean checkTaskDate(LocalDate date){
+
+        if(firstDateValue==null || secondDateValue==null || date==null){
+            return false;
+        }else{
+            return date.isAfter(firstDateValue)&&date.isBefore(secondDateValue);
+        }
+
+    }
+
 }

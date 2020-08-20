@@ -92,7 +92,6 @@ public class TextFieldCheckerEach30sec {
         }
 
         private void doTask() {
-
             currentTextField = mainWindowController.getTextField();
 
             if(counter==0){

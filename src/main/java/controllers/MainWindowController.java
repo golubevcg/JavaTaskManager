@@ -121,28 +121,27 @@ public class MainWindowController extends ControllerParent{
 
         this.cleanAllNodes();
 
-        textArea.textProperty().addListener(((observableValue, oldvalue, newvalue) ->
-            {
-                textArea.setText(newvalue);
-                rootUser.setTextfield(newvalue);
-            })
-        );
-
         this.editMenuBarMenus();
-
-        TextFieldCheckerEach30sec.initialize(this);
-        TextFieldCheckerEach30sec.start();
 
         this.mainAnchorPane.setMinWidth(mainAnchorPane.getPrefWidth());
         this.mainAnchorPane.setMaxWidth(mainAnchorPane.getPrefHeight());
 
-        this.textArea.setText(this.getTextField());
+        this.textArea.setText(this.rootUser.getTextfield());
         this.textArea.setMinWidth(textArea.getPrefWidth());
         this.textArea.setMaxHeight(textArea.getPrefHeight());
         this.textArea.setWrapText(true);
         String stylesheet = getClass().getResource("/styles.css").toExternalForm();
         textArea.getStylesheets().add(stylesheet);
         this.createTextAreaContextMenus();
+        textArea.textProperty().addListener(((observableValue, oldvalue, newvalue) ->
+                {
+                    textArea.setText(newvalue);
+                    rootUser.setTextfield(newvalue);
+                })
+        );
+
+        TextFieldCheckerEach30sec.initialize(this);
+        TextFieldCheckerEach30sec.start();
 
         this.setStylesToButtons();
 

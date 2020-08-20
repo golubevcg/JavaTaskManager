@@ -160,7 +160,9 @@ public class RegWindowController extends ControllerParent{
     private void setEnterHotekeyToRegister(){
         KeyCombination kc = new KeyCodeCombination(KeyCode.ENTER);
         Runnable rn = ()->{
-            this.registerNewUser();
+            if(registerNewUser()) {
+                sceneOpener.openNewScene("/fxml/loginWindow.fxml", (Stage) closeButton.getScene().getWindow(), loginWindowController, true);
+            }
         };
         Platform.runLater(()->{
             anchorPane.getScene().getAccelerators().put(kc,rn);
