@@ -5,28 +5,26 @@ import classes.WindowEffects;
 import database.Task;
 import database.User;
 import database.Worker;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
-import javafx.collections.ObservableSet;
 import javafx.fxml.FXML;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-import java.net.URL;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 public class StatisticsWindowController extends ControllerParent{
-
-    @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
 
     @FXML
     private AnchorPane forDropShadowTopAnchorPane;
@@ -35,19 +33,31 @@ public class StatisticsWindowController extends ControllerParent{
     private AnchorPane anchorPane;
 
     @FXML
-    private TabPane tabPane;
+    private AnchorPane anchorPainTodragWindow1;
 
     @FXML
-    private Tab statistics1;
+    private AnchorPane movableAnchorPane;
 
     @FXML
-    private Tab statistics2;
-
-    @FXML
-    private BarChart<String, Number> barChart;
+    private AnchorPane anchorPaneForCharts;
 
     @FXML
     private PieChart pieChart;
+
+    @FXML
+    private AreaChart<Number,Number> areaChart;
+
+    @FXML
+    private MenuButton graphicsTimeStep;
+
+    @FXML
+    private RadioMenuItem days;
+
+    @FXML
+    private RadioMenuItem weeks;
+
+    @FXML
+    private RadioMenuItem months;
 
     @FXML
     private DatePicker firstDatePicker;
@@ -59,16 +69,11 @@ public class StatisticsWindowController extends ControllerParent{
     private MenuButton workersMenuButton;
 
     @FXML
-    private AnchorPane anchorPainTodragWindow1;
-
-    @FXML
-    private AnchorPane movableAnchorPane;
-
-    @FXML
     private Button closeButton;
 
     @FXML
     private Button minimiseButton;
+
 
     @Override
     public void min() {
@@ -88,11 +93,17 @@ public class StatisticsWindowController extends ControllerParent{
     User rootUser = new User();
     List<Worker> workersList = rootUser.getWorkers();
     ObservableMap<CheckMenuItem,Worker> MapOfSelectedCheckBoxesOfWorkersInStatisticsMenu = FXCollections.observableHashMap();
-    XYChart.Series barChartSeries = new XYChart.Series();
 
     private LocalDate firstDateValue = LocalDate.of(2020,01,01);
     private LocalDate secondDateValue = LocalDate.now().plusDays(1);
-
+    private double finalSumForPieChart = 0;
+    private ToggleGroup timeStepToggleGroup = new ToggleGroup();
+    private Map<LocalDate, Integer> ratingFromDaysMap = new HashMap<>();
+    private Map<Integer, Integer> ratingFromWeeksMap = new HashMap<>();
+    private Map<Integer, Integer> ratingFromMonthsMap = new HashMap<>();
+    NumberAxis areaChartXAxis = new NumberAxis();
+    NumberAxis areaChartYAxis = new NumberAxis();
+//    DateAxis areaChartXTESTDATEAXIS = new DateAxis();
 
     @FXML
     void initialize() {
@@ -103,13 +114,19 @@ public class StatisticsWindowController extends ControllerParent{
         firstDatePicker.setValue(firstDateValue);
         secondDatePicker.setValue(secondDateValue);
 
+        finalSumForPieChart = this.countFullSumForPieChart(rootUser.getWorkers());
+
         this.setStylesToButtons();
+
+        this.setupTimeStepToggleGroup();
 
         this.setupDatePicker();
 
         this.createWorkersRadioMenusInWorkersMenu();
 
-        this.setupBarChart();
+        this.setupPieChart();
+
+        this.setupListenerToTimeStepForAreaChart();
 
     }
 
@@ -138,7 +155,16 @@ public class StatisticsWindowController extends ControllerParent{
             }
 
         }
+
         return sum;
+    }
+
+    private double countFullSumForPieChart(List<Worker> workerList){
+        int sumValueForWorker = 0;
+        for (int i = 0; i < workerList.size(); i++) {
+            sumValueForWorker += countFinalValueForWorker(workerList.get(i));
+        }
+        return sumValueForWorker;
     }
 
     private void createWorkersRadioMenusInWorkersMenu(){
@@ -148,7 +174,13 @@ public class StatisticsWindowController extends ControllerParent{
             Worker worker = workersList.get(i);
 
             CheckMenuItem checkMenuItem = new CheckMenuItem(worker.getFirstname() + worker.getLastname());
-            checkMenuItem.setSelected(true);
+
+            if(countFinalValueForWorker(workersList.get(i))==0){
+            }else
+            {
+                checkMenuItem.setSelected(true);
+            }
+
             workersMenuButton.getItems().addAll(checkMenuItem);
 
             MapOfSelectedCheckBoxesOfWorkersInStatisticsMenu.put(checkMenuItem, worker);
@@ -158,51 +190,57 @@ public class StatisticsWindowController extends ControllerParent{
                 } else {
                     MapOfSelectedCheckBoxesOfWorkersInStatisticsMenu.remove(checkMenuItem);
                 }
-                this.updateStatistics();
+                this.updatePieChart();
             });
         }
 
     }
 
-    private void updateStatistics() {
-        this.cleanBarChart();
-        this.setupBarChart();
+    private void updatePieChart() {
+        pieChart.getData().clear();
+        this.setupPieChart();
+    }
+
+    private void updateAreaChart(){
+        this.setupAreaChart();
     }
 
     private int counter = 0;
 
-    private void setupBarChart(){
-        CategoryAxis xAxis = new CategoryAxis();
-        NumberAxis yAxis = new NumberAxis();
-        xAxis.setLabel("Сотрудник");
-        yAxis.setLabel("Показатели");
+    private void setupPieChart(){
+
+
         for (Map.Entry<CheckMenuItem, Worker> entry: MapOfSelectedCheckBoxesOfWorkersInStatisticsMenu.entrySet())
         {
-            Worker worker = entry.getValue();
-            barChartSeries.getData().add(new XYChart.Data(worker.getFirstname().charAt(0) + "." + worker.getLastname(), this.countFinalValueForWorker(worker)));
+            if( countFinalValueForWorker(entry.getValue())==0){
+            }else {
+                double valueForWorker = countFinalValueForWorker(entry.getValue());
+
+                double persentage = 100 * (valueForWorker / finalSumForPieChart);
+
+                ObservableList<PieChart.Data> pieChartData =
+                        FXCollections.observableArrayList(new PieChart.Data(entry.getValue().getLastname()
+                                + "\n" + persentage + "%",
+                                countFinalValueForWorker(entry.getValue())));
+                pieChart.getData().addAll(pieChartData);
+            }
         }
-        barChart.getData().addAll(barChartSeries);
 
-
-        barChart.setLegendVisible(false);
-        barChart.setAnimated(false);
-    }
-
-    private void cleanBarChart(){
-        barChartSeries.getData().clear();
-        barChart.getData().clear();
+        pieChart.setAnimated(false);
+        pieChart.setLegendVisible(false);
+        pieChart.setLabelLineLength(25);
     }
 
     private void setupDatePicker(){
 
         firstDatePicker.valueProperty().addListener((observableValue, oldValue, newValue)->{
             firstDateValue = firstDatePicker.getValue();
-            this.updateStatistics();
+            this.updatePieChart();
         });
 
         secondDatePicker.valueProperty().addListener((observableValue, oldValue, newValue)->{
             secondDateValue = secondDatePicker.getValue();
-            this.updateStatistics();
+            this.updatePieChart();
         });
     }
 
@@ -233,7 +271,78 @@ public class StatisticsWindowController extends ControllerParent{
 
     }
 
-    private void setupLineChart(){
+    private void setupAreaChart(){
+
+        areaChart = new AreaChart<Number, Number>(areaChartXAxis, areaChartYAxis);
+
+        List<Worker> workersList = rootUser.getWorkers();
+        for (int i = 0; i < workersList.size(); i++) {
+
+            XYChart.Series<Number, Number> currentWorkerSeries = new XYChart.Series<Number, Number>();
+
+            switch(((RadioMenuItem) timeStepToggleGroup.getSelectedToggle()).getText()){
+                case "Дни":
+                    this.countRatingFromDays(workersList.get(i));
+
+                    int k = 0;
+                    for (Map.Entry<LocalDate,Integer> entry: ratingFromDaysMap.entrySet()) {
+                        currentWorkerSeries.getData().add(new XYChart.Data<Number, Number>(k, entry.getValue()));
+                        System.out.println("added pait key\\value:" + k + " " + entry.getValue());
+                        k++;
+                    }
+
+                case "Недели":
+
+                case "Месяцы":
+            }
+
+            areaChart.getData().addAll(currentWorkerSeries);
+        }
+    }
+
+    private void setupTimeStepToggleGroup(){
+        days.setToggleGroup(timeStepToggleGroup);
+        weeks.setToggleGroup(timeStepToggleGroup);
+        months.setToggleGroup(timeStepToggleGroup);
+    }
+
+    private void countRatingFromDays(Worker worker){
+
+        long daysAmountBetweenTwoDates = DAYS.between(firstDateValue, secondDateValue);
+
+        for (int i = 0; i <daysAmountBetweenTwoDates; i++) {
+
+            int sum = 0;
+
+            List<Task> tasksList = worker.getTasks();
+            for (int k = 0; k < tasksList.size(); k++) {
+
+                if( ("done").equals(tasksList.get(k).getTasktype()) &&
+                        ( firstDateValue.plusDays(i) ).equals( tasksList.get(k).getDateOfFinishingTask() ))
+                {
+                        sum+=tasksList.get(k).getRating();
+                }
+
+            }
+
+            if(sum!=0) {
+                ratingFromDaysMap.put(firstDateValue.plusDays(i), sum);
+            }
+
+        }
+
+    }
+
+    private void setupListenerToTimeStepForAreaChart(){
+
+        timeStepToggleGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            @Override
+            public void changed(ObservableValue<? extends Toggle> ov, Toggle oldToggle, Toggle newToggle) {
+                if(timeStepToggleGroup.getSelectedToggle()!=null){
+                    updateAreaChart();
+                }
+            }
+        });
 
     }
 
