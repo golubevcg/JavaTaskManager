@@ -16,11 +16,9 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+import java.text.DecimalFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
@@ -44,8 +42,11 @@ public class StatisticsWindowController extends ControllerParent{
     @FXML
     private PieChart pieChart;
 
+    NumberAxis areaChartXAxis = new NumberAxis();
+    NumberAxis areaChartYAxis = new NumberAxis();
+
     @FXML
-    private AreaChart<Number,Number> areaChart;
+    private AreaChart<Number,Number> areaChart = new AreaChart<Number, Number>(areaChartXAxis, areaChartYAxis);
 
     @FXML
     private MenuButton graphicsTimeStep;
@@ -98,12 +99,6 @@ public class StatisticsWindowController extends ControllerParent{
     private LocalDate secondDateValue = LocalDate.now().plusDays(1);
     private double finalSumForPieChart = 0;
     private ToggleGroup timeStepToggleGroup = new ToggleGroup();
-    private Map<LocalDate, Integer> ratingFromDaysMap = new HashMap<>();
-    private Map<Integer, Integer> ratingFromWeeksMap = new HashMap<>();
-    private Map<Integer, Integer> ratingFromMonthsMap = new HashMap<>();
-    NumberAxis areaChartXAxis = new NumberAxis();
-    NumberAxis areaChartYAxis = new NumberAxis();
-//    DateAxis areaChartXTESTDATEAXIS = new DateAxis();
 
     @FXML
     void initialize() {
@@ -205,8 +200,6 @@ public class StatisticsWindowController extends ControllerParent{
         this.setupAreaChart();
     }
 
-    private int counter = 0;
-
     private void setupPieChart(){
 
 
@@ -220,7 +213,7 @@ public class StatisticsWindowController extends ControllerParent{
 
                 ObservableList<PieChart.Data> pieChartData =
                         FXCollections.observableArrayList(new PieChart.Data(entry.getValue().getLastname()
-                                + "\n" + persentage + "%",
+                                + "\n" + new DecimalFormat("###.##").format(persentage) + "%",
                                 countFinalValueForWorker(entry.getValue())));
                 pieChart.getData().addAll(pieChartData);
             }
@@ -273,31 +266,28 @@ public class StatisticsWindowController extends ControllerParent{
 
     private void setupAreaChart(){
 
-        areaChart = new AreaChart<Number, Number>(areaChartXAxis, areaChartYAxis);
+        areaChartXAxis.setLowerBound(0);
+        areaChartXAxis.setUpperBound(DAYS.between(firstDateValue, secondDateValue));
+        areaChartXAxis.setTickUnit(1);
+
+        areaChartYAxis.setLowerBound(0);
+        areaChartYAxis.setUpperBound(5);
+        areaChartYAxis.setTickUnit(1);
+
 
         List<Worker> workersList = rootUser.getWorkers();
         for (int i = 0; i < workersList.size(); i++) {
-
-            XYChart.Series<Number, Number> currentWorkerSeries = new XYChart.Series<Number, Number>();
-
-            switch(((RadioMenuItem) timeStepToggleGroup.getSelectedToggle()).getText()){
-                case "Дни":
-                    this.countRatingFromDays(workersList.get(i));
-
-                    int k = 0;
-                    for (Map.Entry<LocalDate,Integer> entry: ratingFromDaysMap.entrySet()) {
+            Map<LocalDate, Integer> currentWorkerMap = this.countRatingFromDays(workersList.get(i));
+            XYChart.Series<Number, Number> currentWorkerSeries = new XYChart.Series<>();
+            currentWorkerSeries.setName(workersList.get(i).getLastname());
+            int k = 0;
+                    for (Map.Entry<LocalDate,Integer> entry: currentWorkerMap.entrySet()) {
                         currentWorkerSeries.getData().add(new XYChart.Data<Number, Number>(k, entry.getValue()));
-                        System.out.println("added pait key\\value:" + k + " " + entry.getValue());
                         k++;
                     }
-
-                case "Недели":
-
-                case "Месяцы":
-            }
-
             areaChart.getData().addAll(currentWorkerSeries);
         }
+
     }
 
     private void setupTimeStepToggleGroup(){
@@ -306,7 +296,9 @@ public class StatisticsWindowController extends ControllerParent{
         months.setToggleGroup(timeStepToggleGroup);
     }
 
-    private void countRatingFromDays(Worker worker){
+    private Map<LocalDate,Integer> countRatingFromDays(Worker worker){
+
+        Map<LocalDate, Integer> ratingFromDaysMap = new TreeMap<>();
 
         long daysAmountBetweenTwoDates = DAYS.between(firstDateValue, secondDateValue);
 
@@ -330,6 +322,8 @@ public class StatisticsWindowController extends ControllerParent{
             }
 
         }
+
+        return ratingFromDaysMap;
 
     }
 
