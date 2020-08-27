@@ -41,13 +41,6 @@ public class SceneOpener {
         newStage.initStyle(StageStyle.UNDECORATED);
         newStage.initStyle(StageStyle.TRANSPARENT);
 
-//        double centerXPositionOfMainScene = newStage.getX() - newStage.getWidth()/2d;
-//        double centerYPositionOfMainScene = newStage.getY() - newStage.getHeight()/2d;
-//        newStage.setOnShown(ev -> {
-//            newStage.setX(centerXPositionOfMainScene - newStage.getWidth()/2d);
-//            newStage.setY(centerYPositionOfMainScene - newStage.getHeight()/2d);
-//            newStage.show();
-//        });
         newStage.show();
 
     }
@@ -69,15 +62,8 @@ public class SceneOpener {
         newStage.setScene(scene);
         controller.setStage(newStage);
 
-        double centerXPositionOfMainScene = currentStage.getX() - currentStage.getWidth()/2d;
-        double centerYPositionOfMainScene = currentStage.getY() - currentStage.getHeight()/2d;
         newStage.initStyle(StageStyle.UNDECORATED);
         newStage.initStyle(StageStyle.TRANSPARENT);
-        newStage.setOnShown(ev -> {
-            newStage.setX(centerXPositionOfMainScene - newStage.getWidth()/2d);
-            newStage.setY(centerYPositionOfMainScene - newStage.getHeight()/2d);
-            newStage.show();
-        });
         newStage.show();
     }
 }

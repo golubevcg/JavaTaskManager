@@ -758,7 +758,8 @@ public class MainWindowController extends ControllerParent{
 
     @Override
     public void close() {
-        System.exit(0);
+        CloseWindowConfirmationController closeWindowConfirmationController = new CloseWindowConfirmationController(stage);
+        sceneOpener.showAlertBox("/fxml/closeWindowConfirmation.fxml", stage, closeWindowConfirmationController);
     }
 
     public String getTextField() {

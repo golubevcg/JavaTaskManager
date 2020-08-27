@@ -109,7 +109,6 @@ public class StatisticsWindowController extends ControllerParent{
         firstDatePicker.setValue(firstDateValue);
         secondDatePicker.setValue(secondDateValue);
 
-        finalSumForPieChart = this.countFullSumForPieChart(rootUser.getWorkers());
 
         this.setStylesToButtons();
 
@@ -202,6 +201,7 @@ public class StatisticsWindowController extends ControllerParent{
 
     private void setupPieChart(){
 
+        finalSumForPieChart = this.countFullSumForPieChart(rootUser.getWorkers());
 
         for (Map.Entry<CheckMenuItem, Worker> entry: MapOfSelectedCheckBoxesOfWorkersInStatisticsMenu.entrySet())
         {
