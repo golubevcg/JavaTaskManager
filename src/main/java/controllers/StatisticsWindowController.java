@@ -11,6 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
+import javafx.geometry.Side;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -42,11 +43,11 @@ public class StatisticsWindowController extends ControllerParent{
     @FXML
     private PieChart pieChart;
 
-    NumberAxis areaChartXAxis = new NumberAxis();
-    NumberAxis areaChartYAxis = new NumberAxis();
+    CategoryAxis lineChartXAxis = new CategoryAxis();
+    NumberAxis lineChartYAxis = new NumberAxis();
 
     @FXML
-    private AreaChart<Number,Number> areaChart = new AreaChart<Number, Number>(areaChartXAxis, areaChartYAxis);
+    private LineChart<String,Number> lineChart = new LineChart<String, Number>(lineChartXAxis, lineChartYAxis);
 
     @FXML
     private MenuButton graphicsTimeStep;
@@ -99,6 +100,7 @@ public class StatisticsWindowController extends ControllerParent{
     private LocalDate secondDateValue = LocalDate.now().plusDays(1);
     private double finalSumForPieChart = 0;
     private ToggleGroup timeStepToggleGroup = new ToggleGroup();
+    private ArrayList<String> daysList = new ArrayList<>();
 
     @FXML
     void initialize() {
@@ -109,6 +111,7 @@ public class StatisticsWindowController extends ControllerParent{
         firstDatePicker.setValue(firstDateValue);
         secondDatePicker.setValue(secondDateValue);
 
+        days.setSelected(true);
 
         this.setStylesToButtons();
 
@@ -120,7 +123,9 @@ public class StatisticsWindowController extends ControllerParent{
 
         this.setupPieChart();
 
-        this.setupListenerToTimeStepForAreaChart();
+        this.setupListenerToTimeStepForLineChart();
+
+        this.setupLineChart();
 
     }
 
@@ -191,12 +196,13 @@ public class StatisticsWindowController extends ControllerParent{
     }
 
     private void updatePieChart() {
-        pieChart.getData().clear();
+        this.pieChart.getData().clear();
         this.setupPieChart();
     }
 
-    private void updateAreaChart(){
-        this.setupAreaChart();
+    private void updateLineChart(){
+        this.lineChart.getData().clear();
+        this.setupLineChart();
     }
 
     private void setupPieChart(){
@@ -205,16 +211,18 @@ public class StatisticsWindowController extends ControllerParent{
 
         for (Map.Entry<CheckMenuItem, Worker> entry: MapOfSelectedCheckBoxesOfWorkersInStatisticsMenu.entrySet())
         {
-            if( countFinalValueForWorker(entry.getValue())==0){
-            }else {
-                double valueForWorker = countFinalValueForWorker(entry.getValue());
 
+            double valueForWorker = countFinalValueForWorker(entry.getValue());
+
+            if( valueForWorker==0){
+            }else {
                 double persentage = 100 * (valueForWorker / finalSumForPieChart);
 
                 ObservableList<PieChart.Data> pieChartData =
                         FXCollections.observableArrayList(new PieChart.Data(entry.getValue().getLastname()
                                 + "\n" + new DecimalFormat("###.##").format(persentage) + "%",
-                                countFinalValueForWorker(entry.getValue())));
+                                valueForWorker));
+
                 pieChart.getData().addAll(pieChartData);
             }
         }
@@ -229,11 +237,13 @@ public class StatisticsWindowController extends ControllerParent{
         firstDatePicker.valueProperty().addListener((observableValue, oldValue, newValue)->{
             firstDateValue = firstDatePicker.getValue();
             this.updatePieChart();
+            this.updateLineChart();
         });
 
         secondDatePicker.valueProperty().addListener((observableValue, oldValue, newValue)->{
             secondDateValue = secondDatePicker.getValue();
             this.updatePieChart();
+            this.updateLineChart();
         });
     }
 
@@ -264,29 +274,41 @@ public class StatisticsWindowController extends ControllerParent{
 
     }
 
-    private void setupAreaChart(){
+    private void setupLineChart(){
 
-        areaChartXAxis.setLowerBound(0);
-        areaChartXAxis.setUpperBound(DAYS.between(firstDateValue, secondDateValue));
-        areaChartXAxis.setTickUnit(1);
+        for (int i = 0; i < DAYS.between(firstDateValue, secondDateValue); i++) {
+            daysList.add(firstDateValue.plusDays(i).getDayOfMonth() + "."
+                    + String.format("%02d", firstDateValue.plusDays(i).getMonthValue()));
+        }
 
-        areaChartYAxis.setLowerBound(0);
-        areaChartYAxis.setUpperBound(5);
-        areaChartYAxis.setTickUnit(1);
+        lineChartXAxis.getCategories().clear();
 
+        lineChartXAxis.setCategories(FXCollections.<String>observableArrayList(daysList));
+        lineChartXAxis.invalidateRange(daysList);
+
+        lineChartYAxis.setLowerBound(0);
+        lineChartYAxis.setUpperBound(5);
+        lineChartYAxis.setTickUnit(1);
 
         List<Worker> workersList = rootUser.getWorkers();
         for (int i = 0; i < workersList.size(); i++) {
             Map<LocalDate, Integer> currentWorkerMap = this.countRatingFromDays(workersList.get(i));
-            XYChart.Series<Number, Number> currentWorkerSeries = new XYChart.Series<>();
+            XYChart.Series<String, Number> currentWorkerSeries = new XYChart.Series<>();
             currentWorkerSeries.setName(workersList.get(i).getLastname());
             int k = 0;
                     for (Map.Entry<LocalDate,Integer> entry: currentWorkerMap.entrySet()) {
-                        currentWorkerSeries.getData().add(new XYChart.Data<Number, Number>(k, entry.getValue()));
+
+                        currentWorkerSeries.getData().add(
+                                new XYChart.Data<String, Number>(entry.getKey().getDayOfMonth()
+                                        + "." + String.format("%02d", firstDateValue.plusDays(i).getMonthValue()),
+                                        entry.getValue()));
                         k++;
                     }
-            areaChart.getData().addAll(currentWorkerSeries);
+            lineChart.getData().addAll(currentWorkerSeries);
         }
+
+        lineChart.setLegendSide(Side.LEFT);
+        lineChart.setAnimated(false);
 
     }
 
@@ -327,13 +349,14 @@ public class StatisticsWindowController extends ControllerParent{
 
     }
 
-    private void setupListenerToTimeStepForAreaChart(){
+    private void setupListenerToTimeStepForLineChart(){
+
 
         timeStepToggleGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
             @Override
             public void changed(ObservableValue<? extends Toggle> ov, Toggle oldToggle, Toggle newToggle) {
                 if(timeStepToggleGroup.getSelectedToggle()!=null){
-                    updateAreaChart();
+                    updateLineChart();
                 }
             }
         });

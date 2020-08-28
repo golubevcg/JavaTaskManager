@@ -861,7 +861,7 @@ public class MainWindowController extends ControllerParent{
     }
 
     private void removeTaskAddTaskTextToTextfield(Task task){
-        textArea.setText( textArea.getText() + "\n" + task.getText());
+        textArea.setText( textArea.getText() + "\n" + "\n" + task.getText());
         TaskService taskService = new TaskService();
         taskService.deleteTask(task);
         this.initialize();

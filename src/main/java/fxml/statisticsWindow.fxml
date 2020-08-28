@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.chart.AreaChart?>
 <?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
@@ -22,15 +22,7 @@
             </AnchorPane>
         <AnchorPane fx:id="anchorPaneForCharts" minHeight="0.0" minWidth="0.0" prefHeight="355.0" prefWidth="722.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="28.0">
                <children>
-                  <AreaChart fx:id="areaChart" layoutX="332.0" layoutY="9.0" prefHeight="320.0" prefWidth="391.0">
-                    <xAxis>
-                      <CategoryAxis side="BOTTOM" />
-                    </xAxis>
-                    <yAxis>
-                      <NumberAxis side="LEFT" />
-                    </yAxis>
-                  </AreaChart>
-                  <PieChart fx:id="pieChart" layoutX="3.0" layoutY="2.0" prefHeight="355.0" prefWidth="370.0" />
+                  <PieChart fx:id="pieChart" layoutX="8.0" layoutY="9.0" prefHeight="337.0" prefWidth="342.0" />
                   <MenuButton fx:id="graphicsTimeStep" layoutX="557.0" layoutY="329.0" mnemonicParsing="false" text="Размерность графика">
                     <items>
                         <RadioMenuItem fx:id="days" mnemonicParsing="false" text="Дни" />
@@ -38,6 +30,14 @@
                         <RadioMenuItem fx:id="months" mnemonicParsing="false" text="Месяцы" />
                     </items>
                   </MenuButton>
+                  <LineChart fx:id="lineChart" layoutX="328.0" layoutY="8.0" prefHeight="326.0" prefWidth="385.0">
+                    <xAxis>
+                      <CategoryAxis side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis side="LEFT" />
+                    </yAxis>
+                  </LineChart>
                </children>
             </AnchorPane>
             <DatePicker fx:id="firstDatePicker" layoutX="131.0" layoutY="408.0" prefHeight="26.0" prefWidth="99.0" />
