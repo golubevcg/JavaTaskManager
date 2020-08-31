@@ -190,6 +190,7 @@ public class StatisticsWindowController extends ControllerParent{
                     MapOfSelectedCheckBoxesOfWorkersInStatisticsMenu.remove(checkMenuItem);
                 }
                 this.updatePieChart();
+                this.updateLineChart();
             });
         }
 
@@ -283,28 +284,28 @@ public class StatisticsWindowController extends ControllerParent{
 
         lineChartXAxis.getCategories().clear();
 
-        lineChartXAxis.setCategories(FXCollections.<String>observableArrayList(daysList));
-        lineChartXAxis.invalidateRange(daysList);
+        ObservableList<String> observableList = FXCollections.observableList(daysList);
 
-        lineChartYAxis.setLowerBound(0);
-        lineChartYAxis.setUpperBound(5);
-        lineChartYAxis.setTickUnit(1);
+        lineChartXAxis.setCategories(observableList);
 
         List<Worker> workersList = rootUser.getWorkers();
-        for (int i = 0; i < workersList.size(); i++) {
-            Map<LocalDate, Integer> currentWorkerMap = this.countRatingFromDays(workersList.get(i));
+        int i = 0;
+        for (Map.Entry<CheckMenuItem, Worker> entry: MapOfSelectedCheckBoxesOfWorkersInStatisticsMenu.entrySet()) {
+
+            TreeMap<LocalDate, Integer> currentWorkerMap = this.countRatingFromDays(workersList.get(i));
+
             XYChart.Series<String, Number> currentWorkerSeries = new XYChart.Series<>();
-            currentWorkerSeries.setName(workersList.get(i).getLastname());
-            int k = 0;
-                    for (Map.Entry<LocalDate,Integer> entry: currentWorkerMap.entrySet()) {
+            currentWorkerSeries.setName(entry.getValue().getLastname());
+
+                    for (Map.Entry<LocalDate,Integer> newEntry: currentWorkerMap.entrySet()) {
 
                         currentWorkerSeries.getData().add(
-                                new XYChart.Data<String, Number>(entry.getKey().getDayOfMonth()
+                                new XYChart.Data<String, Number>(newEntry.getKey().getDayOfMonth()
                                         + "." + String.format("%02d", firstDateValue.plusDays(i).getMonthValue()),
-                                        entry.getValue()));
-                        k++;
+                                        newEntry.getValue()));
                     }
             lineChart.getData().addAll(currentWorkerSeries);
+                    i++;
         }
 
         lineChart.setLegendSide(Side.LEFT);
@@ -318,9 +319,9 @@ public class StatisticsWindowController extends ControllerParent{
         months.setToggleGroup(timeStepToggleGroup);
     }
 
-    private Map<LocalDate,Integer> countRatingFromDays(Worker worker){
+    private TreeMap<LocalDate,Integer> countRatingFromDays(Worker worker){
 
-        Map<LocalDate, Integer> ratingFromDaysMap = new TreeMap<>();
+        TreeMap<LocalDate, Integer> ratingFromDaysMap = new TreeMap<>();
 
         long daysAmountBetweenTwoDates = DAYS.between(firstDateValue, secondDateValue);
 
@@ -332,7 +333,8 @@ public class StatisticsWindowController extends ControllerParent{
             for (int k = 0; k < tasksList.size(); k++) {
 
                 if( ("done").equals(tasksList.get(k).getTasktype()) &&
-                        ( firstDateValue.plusDays(i) ).equals( tasksList.get(k).getDateOfFinishingTask() ))
+                        ( firstDateValue.plusDays(i) ).equals( tasksList.get(k).getDateOfFinishingTask())
+                        && tasksList.get(k).getDateOfFinishingTask()!=null)
                 {
                         sum+=tasksList.get(k).getRating();
                 }
@@ -350,7 +352,6 @@ public class StatisticsWindowController extends ControllerParent{
     }
 
     private void setupListenerToTimeStepForLineChart(){
-
 
         timeStepToggleGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
             @Override
