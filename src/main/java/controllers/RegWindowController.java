@@ -73,11 +73,13 @@ public class RegWindowController extends ControllerParent{
         this.setEnterHotekeyToRegister();
 
         backButton.setOnAction(e->{
-            sceneOpener.openNewScene("/fxml/loginWindow.fxml", (Stage) closeButton.getScene().getWindow(), loginWindowController,true);
+            Stage loginWindowStage = new Stage();
+            sceneOpener.openNewScene("/fxml/loginWindow.fxml", loginWindowStage, (Stage) closeButton.getScene().getWindow(), loginWindowController,true);
         });
         registerButton.setOnAction(event->{
             if(registerNewUser()) {
-                sceneOpener.openNewScene("/fxml/loginWindow.fxml", (Stage) closeButton.getScene().getWindow(), loginWindowController, true);
+                Stage loginWindowStage = new Stage();
+                sceneOpener.openNewScene("/fxml/loginWindow.fxml", loginWindowStage, (Stage) closeButton.getScene().getWindow(), loginWindowController, true);
             }
 
         });
@@ -161,7 +163,8 @@ public class RegWindowController extends ControllerParent{
         KeyCombination kc = new KeyCodeCombination(KeyCode.ENTER);
         Runnable rn = ()->{
             if(registerNewUser()) {
-                sceneOpener.openNewScene("/fxml/loginWindow.fxml", (Stage) closeButton.getScene().getWindow(), loginWindowController, true);
+                Stage loginWindowStage = new Stage();
+                sceneOpener.openNewScene("/fxml/loginWindow.fxml", loginWindowStage, (Stage) closeButton.getScene().getWindow(), loginWindowController, true);
             }
         };
         Platform.runLater(()->{

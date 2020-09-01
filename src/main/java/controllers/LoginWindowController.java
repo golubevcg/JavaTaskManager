@@ -8,16 +8,17 @@ import classes.UIColorAndStyleSettings;
 import database.User;
 import database.services.UserService;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.List;
@@ -63,6 +64,8 @@ public class LoginWindowController extends ControllerParent{
     @FXML
     public void initialize() {
 
+
+
         WindowEffects.setDropShadowToWindow(forDropShadowTopAnchorPane);
         WindowEffects.makePaneMoovable(moovableAnchorPane);
 
@@ -73,7 +76,8 @@ public class LoginWindowController extends ControllerParent{
         newUserButton.setOnAction(event-> {
             RegWindowController regWindowController = new RegWindowController();
             SceneOpener sceneOpener = new SceneOpener();
-            sceneOpener.openNewScene("/fxml/regWindow.fxml", (Stage) closeButton.getScene().getWindow(), regWindowController, true);
+            Stage regWindowStage = new Stage();
+            sceneOpener.openNewScene("/fxml/regWindow.fxml", regWindowStage, (Stage) closeButton.getScene().getWindow(), regWindowController, true);
         });
         enterButton.setOnAction(event->{
             this.checkIfFieldsAreEmptyElseTryToLogin();
@@ -83,6 +87,7 @@ public class LoginWindowController extends ControllerParent{
         this.pwdField.setStyle( uiColorAndStyleSettings.getDefaultStyleWithBorder() );
 
         this.setEnterHotkeyToLogin();
+
     }
 
     @Override
@@ -114,7 +119,8 @@ public class LoginWindowController extends ControllerParent{
             User user = list.get(0);
             if (list.get(0).getPassword().equals(loginPassword)) {
                 MainWindowController mainWindowController = new MainWindowController(user);
-                sceneOpener.openNewScene("/fxml/mainWindow.fxml", (Stage) closeButton.getScene().getWindow(), mainWindowController, true);
+                Stage mainWindowStage = new Stage();
+                sceneOpener.openNewScene("/fxml/mainWindow.fxml", mainWindowStage, (Stage) closeButton.getScene().getWindow(), mainWindowController, true);
             } else {
                 this.shakeField(loginField);
                 this.shakeField(pwdField);

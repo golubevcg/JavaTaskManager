@@ -15,6 +15,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
@@ -148,10 +150,12 @@ public class MainWindowController extends ControllerParent{
         this.drawWorkerLabels();
 
         NewWorkerWindowController newWorkerWindowController = new NewWorkerWindowController(this);
+        Stage newWorkerStage = new Stage();
+
         addWorkerMenu.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                sceneOpener.openNewScene("/fxml/newWorkerWindow.fxml", (Stage) closeButton.getScene().getWindow(), newWorkerWindowController, false);
+                sceneOpener.openNewScene("/fxml/newWorkerWindow.fxml", newWorkerStage, stage,newWorkerWindowController, false);
             }
         });
 
@@ -214,7 +218,8 @@ public class MainWindowController extends ControllerParent{
             addTaskToWorker.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
-                    sceneOpener.openNewScene("/fxml/newTaskWindow.fxml", (Stage) closeButton.getScene().getWindow(), newTaskWindowController, false);
+                    Stage newTaskWindowStage = new Stage();
+                    sceneOpener.openNewScene("/fxml/newTaskWindow.fxml", newTaskWindowStage, (Stage) closeButton.getScene().getWindow(), newTaskWindowController, false);
                 }
             });
 
@@ -222,7 +227,8 @@ public class MainWindowController extends ControllerParent{
             deleteWorker.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
-                    sceneOpener.openNewScene("/fxml/deleteWorkerConfirmationWindow.fxml", (Stage) closeButton.getScene().getWindow(), deleteWorkerWindowController, false);
+                    Stage deleteWorkerConfirmWStage = new Stage();
+                    sceneOpener.openNewScene("/fxml/deleteWorkerConfirmationWindow.fxml", deleteWorkerConfirmWStage, (Stage) closeButton.getScene().getWindow(), deleteWorkerWindowController, false);
                 }
             });
 
@@ -521,7 +527,9 @@ public class MainWindowController extends ControllerParent{
                     editTask.setOnAction(new EventHandler<ActionEvent>() {
                         @Override
                         public void handle(ActionEvent actionEvent) {
-                            sceneOpener.openNewScene("/fxml/newTaskWindow.fxml", (Stage) closeButton.getScene().getWindow(), editTaskWindowController, false);
+                            Stage newTaskWindowStage = new Stage();
+
+                            sceneOpener.openNewScene("/fxml/newTaskWindow.fxml", newTaskWindowStage, (Stage) closeButton.getScene().getWindow(), editTaskWindowController, false);
                         }
                     });
 
@@ -529,7 +537,8 @@ public class MainWindowController extends ControllerParent{
                     deleteTask.setOnAction(new EventHandler<ActionEvent>() {
                         @Override
                         public void handle(ActionEvent actionEvent) {
-                            sceneOpener.openNewScene("/fxml/deleteTaskConfirmationWindow.fxml", (Stage) closeButton.getScene().getWindow(), deleteTaskWindowController, false);
+                            Stage deleteTaskConfirmStage = new Stage();
+                            sceneOpener.openNewScene("/fxml/deleteTaskConfirmationWindow.fxml", deleteTaskConfirmStage, (Stage) closeButton.getScene().getWindow(), deleteTaskWindowController, false);
                         }
                     });
 
@@ -629,7 +638,8 @@ public class MainWindowController extends ControllerParent{
 
                         doneButton.setOnAction(d->{
                             FinTaskRatingWindowController finTaskRatingWindowController = new FinTaskRatingWindowController(task, this);
-                            sceneOpener.openNewScene("/fxml/finTaskRatingWindow.fxml", (Stage) closeButton.getScene().getWindow(), finTaskRatingWindowController, false);
+                            Stage finTaskRatingWindowStage = new Stage();
+                            sceneOpener.openNewScene("/fxml/finTaskRatingWindow.fxml", finTaskRatingWindowStage, (Stage) closeButton.getScene().getWindow(), finTaskRatingWindowController, false);
                         });
 
                         anchorPaneForCards.getChildren().addAll(doneButton);
@@ -695,7 +705,8 @@ public class MainWindowController extends ControllerParent{
         quitMenu.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                sceneOpener.openNewScene("/fxml/loginWindow.fxml",
+                Stage loginWindowStage = new Stage();
+                sceneOpener.openNewScene("/fxml/loginWindow.fxml", loginWindowStage,
                         (Stage) closeButton.getScene().getWindow(), new LoginWindowController(), true);
             }
         });
@@ -706,8 +717,8 @@ public class MainWindowController extends ControllerParent{
         statisticsMenu.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-         ;
-                sceneOpener.openNewScene("/fxml/statisticsWindow.fxml", (Stage) closeButton.getScene().getWindow(), statisticsWindowController, false);
+                Stage statisticsWindowStage = new Stage();
+                sceneOpener.openNewScene("/fxml/statisticsWindow.fxml", statisticsWindowStage, (Stage) closeButton.getScene().getWindow(), statisticsWindowController, false);
             }
         });
 
