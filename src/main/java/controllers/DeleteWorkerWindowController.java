@@ -69,11 +69,15 @@ public class DeleteWorkerWindowController extends ControllerParent{
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("\n" + worker.getFirstname() + " " + worker.getLastname() + ", оставшиеся задачи: \n");
         for (int i = 0; i <tasks.size() ; i++) {
-            stringBuilder.append(" -" + tasks.get(i).getText() + ";\n");
+
+            if(!("done".equals(tasks.get(i).getTasktype()))){
+                stringBuilder.append(" -" + tasks.get(i).getText() + ";\n");
+            }
+
         }
         mainWindowController.addToTextArea(stringBuilder.toString());
     }
-    
+
     private void deleteTaskCloseWindow(){
         yesButton.getScene().getWindow().hide();
 
