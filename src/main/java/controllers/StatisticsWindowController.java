@@ -5,21 +5,20 @@ import classes.WindowEffects;
 import database.Task;
 import database.User;
 import database.Worker;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
-import javafx.geometry.Side;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-
 import java.text.DecimalFormat;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
@@ -48,18 +47,6 @@ public class StatisticsWindowController extends ControllerParent{
 
     @FXML
     private LineChart<String,Number> lineChart = new LineChart<String, Number>(lineChartXAxis, lineChartYAxis);
-
-    @FXML
-    private MenuButton graphicsTimeStep;
-
-    @FXML
-    private RadioMenuItem days;
-
-    @FXML
-    private RadioMenuItem weeks;
-
-    @FXML
-    private RadioMenuItem months;
 
     @FXML
     private DatePicker firstDatePicker;
@@ -111,19 +98,13 @@ public class StatisticsWindowController extends ControllerParent{
         firstDatePicker.setValue(firstDateValue);
         secondDatePicker.setValue(secondDateValue);
 
-        days.setSelected(true);
-
         this.setStylesToButtons();
-
-        this.setupTimeStepToggleGroup();
 
         this.setupDatePicker();
 
         this.createWorkersRadioMenusInWorkersMenu();
 
         this.setupPieChart();
-
-        this.setupListenerToTimeStepForLineChart();
 
         this.setupLineChart();
 
@@ -141,20 +122,14 @@ public class StatisticsWindowController extends ControllerParent{
     }
 
     private int countFinalValueForWorker(Worker worker){
-
         List<Task> tasksList = worker.getTasks();
         int sum = 0;
-
         for (int i = 0; i < tasksList.size(); i++) {
-
             Task task = tasksList.get(i);
-
             if (("done").equals(task.getTasktype()) && this.checkTaskDate(task.getDateOfFinishingTask())) {
                 sum += task.getRating();
             }
-
         }
-
         return sum;
     }
 
@@ -208,13 +183,13 @@ public class StatisticsWindowController extends ControllerParent{
 
     private void setupPieChart(){
 
+        anchorPaneForCharts.layout();
+
         finalSumForPieChart = this.countFullSumForPieChart(rootUser.getWorkers());
 
         for (Map.Entry<CheckMenuItem, Worker> entry: MapOfSelectedCheckBoxesOfWorkersInStatisticsMenu.entrySet())
         {
-
             double valueForWorker = countFinalValueForWorker(entry.getValue());
-
             if( valueForWorker==0){
             }else {
                 double persentage = 100 * (valueForWorker / finalSumForPieChart);
@@ -229,18 +204,17 @@ public class StatisticsWindowController extends ControllerParent{
         }
 
         pieChart.setAnimated(false);
-        pieChart.setLegendVisible(false);
-        pieChart.setLabelLineLength(25);
+        pieChart.setLabelLineLength(15);
+
     }
 
     private void setupDatePicker(){
-
         firstDatePicker.valueProperty().addListener((observableValue, oldValue, newValue)->{
             firstDateValue = firstDatePicker.getValue();
             this.updatePieChart();
             this.updateLineChart();
-        });
 
+        });
         secondDatePicker.valueProperty().addListener((observableValue, oldValue, newValue)->{
             secondDateValue = secondDatePicker.getValue();
             this.updatePieChart();
@@ -266,13 +240,11 @@ public class StatisticsWindowController extends ControllerParent{
     }
 
     private boolean checkTaskDate(LocalDate date){
-
         if(firstDateValue==null || secondDateValue==null || date==null){
             return false;
         }else{
             return date.isAfter(firstDateValue)&&date.isBefore(secondDateValue);
         }
-
     }
 
     private void setupLineChart(){
@@ -288,35 +260,25 @@ public class StatisticsWindowController extends ControllerParent{
 
         lineChartXAxis.setCategories(observableList);
 
+
         List<Worker> workersList = rootUser.getWorkers();
-        int i = 0;
+
         for (Map.Entry<CheckMenuItem, Worker> entry: MapOfSelectedCheckBoxesOfWorkersInStatisticsMenu.entrySet()) {
-
-            TreeMap<LocalDate, Integer> currentWorkerMap = this.countRatingFromDays(workersList.get(i));
-
+            TreeMap<LocalDate, Integer> currentWorkerMap = this.countRatingFromDays(entry.getValue());
             XYChart.Series<String, Number> currentWorkerSeries = new XYChart.Series<>();
             currentWorkerSeries.setName(entry.getValue().getLastname());
 
                     for (Map.Entry<LocalDate,Integer> newEntry: currentWorkerMap.entrySet()) {
-
                         currentWorkerSeries.getData().add(
                                 new XYChart.Data<String, Number>(newEntry.getKey().getDayOfMonth()
-                                        + "." + String.format("%02d", firstDateValue.plusDays(i).getMonthValue()),
+                                        + "." + String.format("%02d", newEntry.getKey().getMonthValue()),
                                         newEntry.getValue()));
                     }
+
             lineChart.getData().addAll(currentWorkerSeries);
-                    i++;
         }
 
-        lineChart.setLegendSide(Side.LEFT);
         lineChart.setAnimated(false);
-
-    }
-
-    private void setupTimeStepToggleGroup(){
-        days.setToggleGroup(timeStepToggleGroup);
-        weeks.setToggleGroup(timeStepToggleGroup);
-        months.setToggleGroup(timeStepToggleGroup);
     }
 
     private TreeMap<LocalDate,Integer> countRatingFromDays(Worker worker){
@@ -348,19 +310,6 @@ public class StatisticsWindowController extends ControllerParent{
         }
 
         return ratingFromDaysMap;
-
-    }
-
-    private void setupListenerToTimeStepForLineChart(){
-
-        timeStepToggleGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-            @Override
-            public void changed(ObservableValue<? extends Toggle> ov, Toggle oldToggle, Toggle newToggle) {
-                if(timeStepToggleGroup.getSelectedToggle()!=null){
-                    updateLineChart();
-                }
-            }
-        });
 
     }
 

@@ -103,7 +103,8 @@ public class MainWindowController extends ControllerParent{
     private Stage stage;
     private UIColorAndStyleSettings uiColorAndStyleSettings = new UIColorAndStyleSettings();
     private SceneOpener sceneOpener = new SceneOpener();
-    CloseWindowConfirmationController closeWindowConfirmationController = new CloseWindowConfirmationController(stage);
+    CloseWindowConfirmationController closeWindowConfirmationController =
+            new CloseWindowConfirmationController(this.stage);
     Stage closeWindowStage = new Stage();
 
     public MainWindowController(User rootUser) {
@@ -810,7 +811,6 @@ public class MainWindowController extends ControllerParent{
     public void min() {
         ((Stage)(mainAnchorPane.getScene().getWindow())).setIconified(true);
     }
-
 
     @Override
     public void close() {

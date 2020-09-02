@@ -8,29 +8,21 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.RadioMenuItem?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane fx:id="forDropShadowTopAnchorPane" prefHeight="448.0" prefWidth="722.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="449.0" prefWidth="722.0" style="-fx-background-color: #FFFFFF;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="476.0" prefWidth="749.0" style="-fx-background-color: #FFFFFF;" AnchorPane.bottomAnchor="-0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <AnchorPane fx:id="anchorPainTodragWindow1" layoutX="24.0" layoutY="24.0" prefHeight="28.0" prefWidth="919.0" style="-fx-background-color: #91afc5;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <AnchorPane fx:id="movableAnchorPane" prefHeight="20.0" prefWidth="919.0" style="-fx-background-color: #91afc5;" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0" />
                </children>
             </AnchorPane>
-        <AnchorPane fx:id="anchorPaneForCharts" minHeight="0.0" minWidth="0.0" prefHeight="355.0" prefWidth="722.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="28.0">
+        <AnchorPane fx:id="anchorPaneForCharts" minHeight="0.0" minWidth="0.0" prefHeight="387.0" prefWidth="749.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="28.0">
                <children>
-                  <PieChart fx:id="pieChart" layoutX="8.0" layoutY="9.0" prefHeight="337.0" prefWidth="342.0" />
-                  <MenuButton fx:id="graphicsTimeStep" layoutX="557.0" layoutY="329.0" mnemonicParsing="false" text="Размерность графика">
-                    <items>
-                        <RadioMenuItem fx:id="days" mnemonicParsing="false" text="Дни" />
-                        <RadioMenuItem fx:id="weeks" mnemonicParsing="false" text="Недели" />
-                        <RadioMenuItem fx:id="months" mnemonicParsing="false" text="Месяцы" />
-                    </items>
-                  </MenuButton>
-                  <LineChart fx:id="lineChart" layoutX="328.0" layoutY="8.0" prefHeight="326.0" prefWidth="385.0">
+                  <PieChart fx:id="pieChart" layoutX="8.0" layoutY="2.0" prefHeight="382.0" prefWidth="366.0" AnchorPane.leftAnchor="0.0" />
+                  <LineChart fx:id="lineChart" layoutX="340.0" prefHeight="387.0" prefWidth="409.0">
                     <xAxis>
                       <CategoryAxis side="BOTTOM" />
                     </xAxis>
@@ -40,14 +32,14 @@
                   </LineChart>
                </children>
             </AnchorPane>
-            <DatePicker fx:id="firstDatePicker" layoutX="131.0" layoutY="408.0" prefHeight="26.0" prefWidth="99.0" />
-            <DatePicker fx:id="secondDatePicker" layoutX="248.0" layoutY="409.0" prefHeight="26.0" prefWidth="94.0" />
-            <MenuButton fx:id="workersMenuButton" layoutX="14.0" layoutY="407.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="99.0" text="Сотрудники" />
-            <Label layoutX="131.0" layoutY="379.0" prefHeight="35.0" prefWidth="99.0" text="Первичная дата:" />
-            <Label layoutX="249.0" layoutY="380.0" prefHeight="35.0" prefWidth="93.0" text="Конечная дата:" />
+            <DatePicker fx:id="firstDatePicker" layoutX="131.0" layoutY="435.0" prefHeight="26.0" prefWidth="99.0" />
+            <DatePicker fx:id="secondDatePicker" layoutX="248.0" layoutY="436.0" prefHeight="26.0" prefWidth="99.0" />
+            <MenuButton fx:id="workersMenuButton" layoutX="14.0" layoutY="434.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="99.0" text="Сотрудники" />
+            <Label layoutX="131.0" layoutY="406.0" prefHeight="35.0" prefWidth="99.0" text="Первичная дата:" />
+            <Label layoutX="249.0" layoutY="407.0" prefHeight="35.0" prefWidth="93.0" text="Конечная дата:" />
             <Button fx:id="closeButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#close" style="-fx-background-color: transparent;" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="1.0" />
             <Button fx:id="minimiseButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#min" prefHeight="0.0" prefWidth="21.0" style="-fx-background-color: transparent;" AnchorPane.rightAnchor="44.0" AnchorPane.topAnchor="1.0" />
-            <Label layoutX="376.0" layoutY="407.0" prefHeight="28.0" prefWidth="336.0" text="Цифры в графиках - сложность задачи * количество задач" />
+            <Label layoutX="376.0" layoutY="434.0" prefHeight="28.0" prefWidth="336.0" text="Цифры в графиках - сложность задачи * количество задач" />
          </children>
       </AnchorPane>
    </children>
