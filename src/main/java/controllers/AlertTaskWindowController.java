@@ -1,7 +1,7 @@
 package controllers;
 
-import classes.UIColorAndStyleSettings;
-import classes.WindowEffects;
+import additionalClasses.UIColorAndStyleSettings;
+import additionalClasses.WindowEffects;
 import database.Worker;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

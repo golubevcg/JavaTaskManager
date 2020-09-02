@@ -1,9 +1,9 @@
 package controllers;
 
-import classes.SceneOpener;
-import classes.TextFieldCheckerEach30sec;
-import classes.UIColorAndStyleSettings;
-import classes.WindowEffects;
+import additionalClasses.SceneOpener;
+import additionalClasses.TextFieldCheckerEach30sec;
+import additionalClasses.UIColorAndStyleSettings;
+import additionalClasses.WindowEffects;
 import database.HibernateSessionFactoryUtil;
 import database.Task;
 import database.User;
@@ -31,7 +31,6 @@ import org.hibernate.Session;
 
 import java.net.URL;
 import java.util.*;
-
 
 public class MainWindowController extends ControllerParent{
 
@@ -420,6 +419,7 @@ public class MainWindowController extends ControllerParent{
         MenuItem editTask = new MenuItem("Отредактировать задачу");
         MenuItem deleteTask = new MenuItem("Удалить задачу");
         MenuItem returnToTextfield = new MenuItem("Вернуть задачу в записи");
+        Menu changeWorker = new Menu("Переназначить сотрудника");
         Menu markByColor = new Menu("Пометить цветом");
         MenuItem yellow = new MenuItem("#e2e0c8");
         MenuItem blue = new MenuItem("#c8d7e2");
@@ -438,6 +438,7 @@ public class MainWindowController extends ControllerParent{
         deleteTask.setStyle( uiColorAndStyleSettings.getFontStyleToMenuItems() );
         returnToTextfield.setStyle( uiColorAndStyleSettings.getFontStyleToMenuItems() );
         markByColor.setStyle( uiColorAndStyleSettings.getFontStyleToMenuItems() );
+        changeWorker.setStyle( uiColorAndStyleSettings.getFontStyleToMenuItems() );
 
         yellow.setStyle( uiColorAndStyleSettings.getFontStyleToMenuItems() );
         blue.setStyle( uiColorAndStyleSettings.getFontStyleToMenuItems() );
@@ -445,6 +446,24 @@ public class MainWindowController extends ControllerParent{
         defaultColor.setStyle( uiColorAndStyleSettings.getFontStyleToMenuItems() );
 
         markByColor.getItems().addAll(yellow,blue,red,defaultColor);
+
+        for (int i = 0; i < rootUser.getWorkers().size(); i++) {
+            Worker worker = rootUser.getWorkers().get(i);
+            MenuItem workerMenu = new MenuItem(worker.getFirstname()
+                    + " " + worker.getLastname());
+            changeWorker.getItems().add(workerMenu);
+
+            workerMenu.setStyle(uiColorAndStyleSettings.getFontStyleToMenuItems());
+
+            workerMenu.setOnAction(d->{
+                worker.addTask(task);
+                task.getWorker().deleteTask(task);
+                TaskService taskService = new TaskService();
+                taskService.updateTask(task);
+                this.initialize();
+            });
+
+        }
 
         returnToTextfield.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -615,7 +634,7 @@ public class MainWindowController extends ControllerParent{
             uiColorAndStyleSettings.setImageToMenuItem(moveTaskToInQueue, "moveToQuene.png",16,16);
 
             taskRectangleContextMenu.getItems()
-                    .addAll(moveTaskToInQueue,editTask,markByColor, returnToTextfield, deleteTask);
+                    .addAll(moveTaskToInQueue,editTask,markByColor, returnToTextfield, deleteTask, changeWorker);
             taskRectangle.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
                 @Override
                 public void handle(ContextMenuEvent contextMenuEvent) {

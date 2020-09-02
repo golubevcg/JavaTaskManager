@@ -37,7 +37,6 @@
               <items>
                   <MenuItem fx:id="addWorkerMenu" mnemonicParsing="false" text="Добавить сотрудника" />
                 <MenuItem fx:id="statisticsMenu" mnemonicParsing="false" text="Статистика" />
-                  <MenuItem fx:id="settingsMenu" mnemonicParsing="false" text="Настройки" />
                   <MenuItem fx:id="quitMenu" mnemonicParsing="false" text="Выйти" />
               </items>
             </Menu>

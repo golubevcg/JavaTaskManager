@@ -1,4 +1,4 @@
-package classes;
+package additionalClasses;
 
 import controllers.ControllerParent;
 import controllers.MainWindowController;

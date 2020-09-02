@@ -1,4 +1,4 @@
-package classes;
+package additionalClasses;
 
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;

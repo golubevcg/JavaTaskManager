@@ -2,9 +2,9 @@ package controllers;
 
 import Main.Main;
 import animations.Shake;
-import classes.SceneOpener;
-import classes.UIColorAndStyleSettings;
-import classes.WindowEffects;
+import additionalClasses.SceneOpener;
+import additionalClasses.UIColorAndStyleSettings;
+import additionalClasses.WindowEffects;
 import database.User;
 import database.services.UserService;
 import javafx.application.Platform;

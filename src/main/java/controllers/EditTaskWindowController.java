@@ -1,9 +1,9 @@
 package controllers;
 
 import animations.Shake;
-import classes.SceneOpener;
-import classes.UIColorAndStyleSettings;
-import classes.WindowEffects;
+import additionalClasses.SceneOpener;
+import additionalClasses.UIColorAndStyleSettings;
+import additionalClasses.WindowEffects;
 import database.Task;
 import database.services.TaskService;
 import javafx.event.ActionEvent;

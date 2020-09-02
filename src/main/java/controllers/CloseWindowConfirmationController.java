@@ -1,7 +1,7 @@
 package controllers;
 
-import classes.UIColorAndStyleSettings;
-import classes.WindowEffects;
+import additionalClasses.UIColorAndStyleSettings;
+import additionalClasses.WindowEffects;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;

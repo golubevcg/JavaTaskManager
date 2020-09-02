@@ -1,7 +1,7 @@
 package controllers;
 
-import classes.UIColorAndStyleSettings;
-import classes.WindowEffects;
+import additionalClasses.UIColorAndStyleSettings;
+import additionalClasses.WindowEffects;
 import database.Task;
 import database.services.TaskService;
 import javafx.fxml.FXML;

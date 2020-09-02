@@ -1,4 +1,4 @@
-package classes;
+package additionalClasses;
 
 import javafx.geometry.Insets;
 import javafx.scene.effect.DropShadow;

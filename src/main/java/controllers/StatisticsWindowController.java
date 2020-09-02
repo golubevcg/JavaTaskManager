@@ -1,7 +1,7 @@
 package controllers;
 
-import classes.UIColorAndStyleSettings;
-import classes.WindowEffects;
+import additionalClasses.UIColorAndStyleSettings;
+import additionalClasses.WindowEffects;
 import database.Task;
 import database.User;
 import database.Worker;
@@ -115,30 +115,18 @@ public class StatisticsWindowController extends ControllerParent{
         uiColorAndStyleSettings.setCloseAndMinimizeButtonStylesAndIcons(closeButton,minimiseButton);
     }
 
-    public void setRootUser(User rootUser) {
-        this.rootUser = rootUser;
-        workersList = rootUser.getWorkers();
+    private void setupDatePicker(){
+        firstDatePicker.valueProperty().addListener((observableValue, oldValue, newValue)->{
+            firstDateValue = firstDatePicker.getValue();
+            this.updatePieChart();
+            this.updateLineChart();
 
-    }
-
-    private int countFinalValueForWorker(Worker worker){
-        List<Task> tasksList = worker.getTasks();
-        int sum = 0;
-        for (int i = 0; i < tasksList.size(); i++) {
-            Task task = tasksList.get(i);
-            if (("done").equals(task.getTasktype()) && this.checkTaskDate(task.getDateOfFinishingTask())) {
-                sum += task.getRating();
-            }
-        }
-        return sum;
-    }
-
-    private double countFullSumForPieChart(List<Worker> workerList){
-        int sumValueForWorker = 0;
-        for (int i = 0; i < workerList.size(); i++) {
-            sumValueForWorker += countFinalValueForWorker(workerList.get(i));
-        }
-        return sumValueForWorker;
+        });
+        secondDatePicker.valueProperty().addListener((observableValue, oldValue, newValue)->{
+            secondDateValue = secondDatePicker.getValue();
+            this.updatePieChart();
+            this.updateLineChart();
+        });
     }
 
     private void createWorkersRadioMenusInWorkersMenu(){
@@ -171,16 +159,6 @@ public class StatisticsWindowController extends ControllerParent{
 
     }
 
-    private void updatePieChart() {
-        this.pieChart.getData().clear();
-        this.setupPieChart();
-    }
-
-    private void updateLineChart(){
-        this.lineChart.getData().clear();
-        this.setupLineChart();
-    }
-
     private void setupPieChart(){
 
         anchorPaneForCharts.layout();
@@ -208,18 +186,74 @@ public class StatisticsWindowController extends ControllerParent{
 
     }
 
-    private void setupDatePicker(){
-        firstDatePicker.valueProperty().addListener((observableValue, oldValue, newValue)->{
-            firstDateValue = firstDatePicker.getValue();
-            this.updatePieChart();
-            this.updateLineChart();
+    private void setupLineChart(){
 
-        });
-        secondDatePicker.valueProperty().addListener((observableValue, oldValue, newValue)->{
-            secondDateValue = secondDatePicker.getValue();
-            this.updatePieChart();
-            this.updateLineChart();
-        });
+        for (int i = 0; i < DAYS.between(firstDateValue, secondDateValue); i++) {
+            daysList.add(firstDateValue.plusDays(i).getDayOfMonth() + "."
+                    + String.format("%02d", firstDateValue.plusDays(i).getMonthValue()));
+        }
+
+        lineChartXAxis.getCategories().clear();
+
+        ObservableList<String> observableList = FXCollections.observableList(daysList);
+
+        lineChartXAxis.setCategories(observableList);
+
+
+        List<Worker> workersList = rootUser.getWorkers();
+
+        for (Map.Entry<CheckMenuItem, Worker> entry: MapOfSelectedCheckBoxesOfWorkersInStatisticsMenu.entrySet()) {
+            TreeMap<LocalDate, Integer> currentWorkerMap = this.countRatingFromDays(entry.getValue());
+            XYChart.Series<String, Number> currentWorkerSeries = new XYChart.Series<>();
+            currentWorkerSeries.setName(entry.getValue().getLastname());
+
+            for (Map.Entry<LocalDate,Integer> newEntry: currentWorkerMap.entrySet()) {
+                currentWorkerSeries.getData().add(
+                        new XYChart.Data<String, Number>(newEntry.getKey().getDayOfMonth()
+                                + "." + String.format("%02d", newEntry.getKey().getMonthValue()),
+                                newEntry.getValue()));
+            }
+
+            lineChart.getData().addAll(currentWorkerSeries);
+        }
+
+        lineChart.setAnimated(false);
+    }
+
+    public void setRootUser(User rootUser) {
+        this.rootUser = rootUser;
+        workersList = rootUser.getWorkers();
+
+    }
+
+    private int countFinalValueForWorker(Worker worker){
+        List<Task> tasksList = worker.getTasks();
+        int sum = 0;
+        for (int i = 0; i < tasksList.size(); i++) {
+            Task task = tasksList.get(i);
+            if (("done").equals(task.getTasktype()) && this.checkTaskDate(task.getDateOfFinishingTask())) {
+                sum += task.getRating();
+            }
+        }
+        return sum;
+    }
+
+    private double countFullSumForPieChart(List<Worker> workerList){
+        int sumValueForWorker = 0;
+        for (int i = 0; i < workerList.size(); i++) {
+            sumValueForWorker += countFinalValueForWorker(workerList.get(i));
+        }
+        return sumValueForWorker;
+    }
+
+    private void updatePieChart() {
+        this.pieChart.getData().clear();
+        this.setupPieChart();
+    }
+
+    private void updateLineChart(){
+        this.lineChart.getData().clear();
+        this.setupLineChart();
     }
 
     public MainWindowController getMainWindowController() {
@@ -245,40 +279,6 @@ public class StatisticsWindowController extends ControllerParent{
         }else{
             return date.isAfter(firstDateValue)&&date.isBefore(secondDateValue);
         }
-    }
-
-    private void setupLineChart(){
-
-        for (int i = 0; i < DAYS.between(firstDateValue, secondDateValue); i++) {
-            daysList.add(firstDateValue.plusDays(i).getDayOfMonth() + "."
-                    + String.format("%02d", firstDateValue.plusDays(i).getMonthValue()));
-        }
-
-        lineChartXAxis.getCategories().clear();
-
-        ObservableList<String> observableList = FXCollections.observableList(daysList);
-
-        lineChartXAxis.setCategories(observableList);
-
-
-        List<Worker> workersList = rootUser.getWorkers();
-
-        for (Map.Entry<CheckMenuItem, Worker> entry: MapOfSelectedCheckBoxesOfWorkersInStatisticsMenu.entrySet()) {
-            TreeMap<LocalDate, Integer> currentWorkerMap = this.countRatingFromDays(entry.getValue());
-            XYChart.Series<String, Number> currentWorkerSeries = new XYChart.Series<>();
-            currentWorkerSeries.setName(entry.getValue().getLastname());
-
-                    for (Map.Entry<LocalDate,Integer> newEntry: currentWorkerMap.entrySet()) {
-                        currentWorkerSeries.getData().add(
-                                new XYChart.Data<String, Number>(newEntry.getKey().getDayOfMonth()
-                                        + "." + String.format("%02d", newEntry.getKey().getMonthValue()),
-                                        newEntry.getValue()));
-                    }
-
-            lineChart.getData().addAll(currentWorkerSeries);
-        }
-
-        lineChart.setAnimated(false);
     }
 
     private TreeMap<LocalDate,Integer> countRatingFromDays(Worker worker){

@@ -2,14 +2,12 @@ package controllers;
 
 import Main.Main;
 import animations.Shake;
-import classes.SceneOpener;
-import classes.WindowEffects;
-import classes.UIColorAndStyleSettings;
+import additionalClasses.SceneOpener;
+import additionalClasses.WindowEffects;
+import additionalClasses.UIColorAndStyleSettings;
 import database.User;
 import database.services.UserService;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -18,7 +16,6 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.List;

@@ -1,17 +1,14 @@
 package controllers;
 
-import classes.UIColorAndStyleSettings;
-import classes.WindowEffects;
-import database.HibernateSessionFactoryUtil;
+import additionalClasses.UIColorAndStyleSettings;
+import additionalClasses.WindowEffects;
 import database.Task;
 import database.Worker;
 import database.services.WorkerService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import javax.persistence.Query;
+
 import java.util.List;
 
 public class DeleteWorkerWindowController extends ControllerParent{
