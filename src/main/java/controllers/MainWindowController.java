@@ -75,8 +75,6 @@ public class MainWindowController extends ControllerParent{
     @FXML
     private MenuItem statisticsMenu;
 
-    @FXML
-    private MenuItem settingsMenu;
 
     @FXML
     private MenuItem quitMenu;
@@ -762,7 +760,6 @@ public class MainWindowController extends ControllerParent{
 
         addWorkerMenu.setStyle( uiColorAndStyleSettings.getFontStyleToMenuItems() );
         statisticsMenu.setStyle( uiColorAndStyleSettings.getFontStyleToMenuItems() );
-        settingsMenu.setStyle( uiColorAndStyleSettings.getFontStyleToMenuItems() );
         quitMenu.setStyle( uiColorAndStyleSettings.getFontStyleToMenuItems() );
 
         Stage loginWindowStage = new Stage();
