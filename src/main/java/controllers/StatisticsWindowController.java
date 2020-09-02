@@ -83,7 +83,7 @@ public class StatisticsWindowController extends ControllerParent{
     List<Worker> workersList = rootUser.getWorkers();
     ObservableMap<CheckMenuItem,Worker> MapOfSelectedCheckBoxesOfWorkersInStatisticsMenu = FXCollections.observableHashMap();
 
-    private LocalDate firstDateValue = LocalDate.of(2020,01,01);
+    private LocalDate firstDateValue = LocalDate.of(2020, LocalDate.now().getMonth().minus(1).getValue(), 01);
     private LocalDate secondDateValue = LocalDate.now().plusDays(1);
     private double finalSumForPieChart = 0;
     private ToggleGroup timeStepToggleGroup = new ToggleGroup();
@@ -91,6 +91,7 @@ public class StatisticsWindowController extends ControllerParent{
 
     @FXML
     void initialize() {
+
 
         WindowEffects.setDropShadowToWindow(forDropShadowTopAnchorPane);
         WindowEffects.makePaneMoovable(movableAnchorPane);
