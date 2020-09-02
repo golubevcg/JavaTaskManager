@@ -96,12 +96,15 @@ public class FinTaskRatingWindowController extends ControllerParent{
         buttonRating2.getStylesheets().add(pathToCss);
         buttonRating3.getStylesheets().add(pathToCss);
 
+        NoRatingErrorWindowController noRatingErrorWindowController = new NoRatingErrorWindowController();
+        Stage noRatingErrorWindowStage = new Stage();
+        SceneOpener sceneOpener = new SceneOpener();
         confirmButton.setOnAction(e->{
 
                 if(group.getSelectedToggle()==(null)){
-                    NoRatingErrorWindowController noRatingErrorWindowController = new NoRatingErrorWindowController();
-                    SceneOpener sceneOpener = new SceneOpener();
-                    sceneOpener.showAlertBox("/fxml/noRatingErrorWindow.fxml", (Stage) closeButton.getScene().getWindow(), noRatingErrorWindowController);
+                    sceneOpener.openNewScene("/fxml/noRatingErrorWindow.fxml", noRatingErrorWindowStage,
+                            (Stage) closeButton.getScene().getWindow(),
+                            noRatingErrorWindowController, false);
                 }else{
                     RadioButton rb = (RadioButton)group.getSelectedToggle();
                     updateTaskStatus(Integer.parseInt(rb.getText()));

@@ -72,11 +72,10 @@ public class LoginWindowController extends ControllerParent{
         Main.getStageObj().setResizable(false);
 
         this.setStylesToButtons();
+        RegWindowController regWindowController = new RegWindowController();
+        Stage regWindowStage = new Stage();
 
         newUserButton.setOnAction(event-> {
-            RegWindowController regWindowController = new RegWindowController();
-            SceneOpener sceneOpener = new SceneOpener();
-            Stage regWindowStage = new Stage();
             sceneOpener.openNewScene("/fxml/regWindow.fxml", regWindowStage, (Stage) closeButton.getScene().getWindow(), regWindowController, true);
         });
         enterButton.setOnAction(event->{

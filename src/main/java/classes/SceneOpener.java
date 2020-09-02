@@ -23,8 +23,6 @@ public class SceneOpener {
             currentStage.hide();
         }
 
-
-
         if(!newStage.isShowing()) {
 
             FXMLLoader loader = new FXMLLoader();
@@ -54,7 +52,6 @@ public class SceneOpener {
             newStage.setX(currentWindowXCenter - newStage.getWidth()/2);
             newStage.setY(currentWindowYCenter - newStage.getHeight()/2);
 
-
         }else{
             newStage.toFront();
             newStage.setX(currentWindowXCenter - newStage.getWidth()/2);
@@ -63,26 +60,5 @@ public class SceneOpener {
 
     }
 
-    public void showAlertBox(String windowName, Stage currentStage, ControllerParent controller){
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource(windowName));
-        loader.setController(controller);
-
-        try {
-            loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Parent root = loader.getRoot();
-        Stage newStage = new Stage();
-        Scene scene = new Scene(root);
-        scene.setFill(Color.TRANSPARENT);
-        newStage.setScene(scene);
-        controller.setStage(newStage);
-
-        newStage.initStyle(StageStyle.UNDECORATED);
-        newStage.initStyle(StageStyle.TRANSPARENT);
-        newStage.show();
-    }
 
 }

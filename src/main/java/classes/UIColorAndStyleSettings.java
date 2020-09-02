@@ -10,26 +10,19 @@ import javafx.scene.input.MouseEvent;
 public class UIColorAndStyleSettings {
 
     private String mainUiBordersColor = "#91afc5";
-
     private String mainBGUiColor = "#FFFFFF";
-
     private String minimizeHeighlightButtonColor = "cfdee9";
-
     private String fontStyleToMenuItems = " -fx-font-size: 14px; -fx-font-family: Arial;";
-
     private String color1ToMarkTask = "#e2e0c8";
     private String strokeColor1ToMarkTask = "#d0cda7";
     private String color1HighlightedToMarkTask = "#f4f3e9";
-
     private String color2ToMarkTask = "#c8d7e2";
     private String strokeColor2ToMarkTask = "#a7bfd0";
     private String color2HighlightedToMarkTask = "#e9eff4";
-
     private String color3ToMarkTask = "#e2c8ca";
     private String strokeColor3ToMarkTask = "#d0a7aa";
     private String color3HighlightedToMarkTask = "#f4e9ea";
-
-
+    private double strokeWidth = 1.5;
 
     private String defaultStyleWithBorder = "-fx-background-color: transparent;"+
             "-fx-border-color:" + mainUiBordersColor + ";" +
@@ -183,5 +176,9 @@ public class UIColorAndStyleSettings {
 
     public String getColor3HighlightedToMarkTask() {
         return color3HighlightedToMarkTask;
+    }
+
+    public double getStrokeWidth() {
+        return strokeWidth;
     }
 }

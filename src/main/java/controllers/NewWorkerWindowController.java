@@ -117,7 +117,10 @@ public class NewWorkerWindowController extends ControllerParent{
             if (list.size() >= 1) {
                 AlertBoxController alertBoxController = new AlertBoxController();
                 SceneOpener sceneOpener = new SceneOpener();
-                sceneOpener.showAlertBox("/fxml/alertBoxWindow.fxml", (Stage) closeButton.getScene().getWindow(), alertBoxController);
+                Stage alertBoxWindowStage = new Stage();
+                sceneOpener.openNewScene("/fxml/alertBoxWindow.fxml", alertBoxWindowStage,
+                        (Stage) closeButton.getScene().getWindow(),
+                        alertBoxController, false);
                 return false;
             } else {
                 workerService.saveWorker(worker);

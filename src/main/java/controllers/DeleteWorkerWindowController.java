@@ -46,7 +46,8 @@ public class DeleteWorkerWindowController extends ControllerParent{
         WindowEffects.makePaneMoovable(AnchorPane);
 
         yesButton.setOnAction(e->{
-            this.deleteTaskCloseWindowAndAddAllTasksToTextfield();
+            this.addAllTasksTextToTextfield();
+            this.deleteTaskCloseWindow();
         });
 
         noButton.setOnAction(e->{
@@ -63,17 +64,18 @@ public class DeleteWorkerWindowController extends ControllerParent{
                 "-fx-border-width: 1.5;");
     }
 
-    private void deleteTaskCloseWindowAndAddAllTasksToTextfield(){
-        yesButton.getScene().getWindow().hide();
-
+    private void addAllTasksTextToTextfield(){
         List<Task> tasks = worker.getTasks();
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("\n" + worker.getFirstname() + " " + worker.getLastname() + ", оставшиеся задачи: \n");
         for (int i = 0; i <tasks.size() ; i++) {
             stringBuilder.append(" -" + tasks.get(i).getText() + ";\n");
         }
-
         mainWindowController.addToTextArea(stringBuilder.toString());
+    }
+    
+    private void deleteTaskCloseWindow(){
+        yesButton.getScene().getWindow().hide();
 
         WorkerService workerService = new WorkerService();
         workerService.deleteWorker(worker);

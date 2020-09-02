@@ -71,15 +71,17 @@ public class RegWindowController extends ControllerParent{
         this.setFieldStyles();
 
         this.setEnterHotekeyToRegister();
-
+        Stage loginWindowStage = new Stage();
         backButton.setOnAction(e->{
-            Stage loginWindowStage = new Stage();
-            sceneOpener.openNewScene("/fxml/loginWindow.fxml", loginWindowStage, (Stage) closeButton.getScene().getWindow(), loginWindowController,true);
+            sceneOpener.openNewScene("/fxml/loginWindow.fxml", loginWindowStage,
+                    (Stage) closeButton.getScene().getWindow(), loginWindowController,true);
         });
+
+        Stage regWindowStage = new Stage();
         registerButton.setOnAction(event->{
             if(registerNewUser()) {
-                Stage loginWindowStage = new Stage();
-                sceneOpener.openNewScene("/fxml/loginWindow.fxml", loginWindowStage, (Stage) closeButton.getScene().getWindow(), loginWindowController, true);
+                sceneOpener.openNewScene("/fxml/loginWindow.fxml", regWindowStage,
+                        (Stage) closeButton.getScene().getWindow(), loginWindowController, true);
             }
 
         });
@@ -127,7 +129,10 @@ public class RegWindowController extends ControllerParent{
 
              if (list.size() >= 1) {
                 AlertBoxController alertBoxController = new AlertBoxController();
-                sceneOpener.showAlertBox("/fxml/alertBoxWindow.fxml", (Stage) closeButton.getScene().getWindow(), alertBoxController);
+                Stage alertBoxStage = new Stage();
+                sceneOpener.openNewScene("/fxml/alertBoxWindow.fxml", alertBoxStage,
+                        (Stage) closeButton.getScene().getWindow(), alertBoxController,
+                        false);
                 return false;
             } else {
                 user.setTextfield("");
@@ -164,7 +169,8 @@ public class RegWindowController extends ControllerParent{
         Runnable rn = ()->{
             if(registerNewUser()) {
                 Stage loginWindowStage = new Stage();
-                sceneOpener.openNewScene("/fxml/loginWindow.fxml", loginWindowStage, (Stage) closeButton.getScene().getWindow(), loginWindowController, true);
+                sceneOpener.openNewScene("/fxml/loginWindow.fxml", loginWindowStage,
+                        (Stage) closeButton.getScene().getWindow(), loginWindowController, true);
             }
         };
         Platform.runLater(()->{
