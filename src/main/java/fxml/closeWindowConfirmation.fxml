@@ -9,12 +9,12 @@
    <children>
       <AnchorPane fx:id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="128.0" prefWidth="244.0" style="-fx-background-color: #FFFFFF;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label layoutX="21.0" prefHeight="66.0" prefWidth="222.0" text="Вы уверены что хотите закрыть" textOverrun="WORD_ELLIPSIS">
+            <Label fx:id="areYouShureLabel" layoutX="21.0" prefHeight="66.0" prefWidth="222.0" text="Вы уверены что хотите закрыть" textOverrun="WORD_ELLIPSIS">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="80.0" layoutY="50.0" text="приложение?">
+            <Label fx:id="appLabel" layoutX="80.0" layoutY="50.0" text="приложение?">
                <font>
                   <Font size="14.0" />
                </font>

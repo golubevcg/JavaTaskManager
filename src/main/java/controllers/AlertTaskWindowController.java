@@ -1,5 +1,6 @@
 package controllers;
 
+import additionalClasses.LanguageSwitcher;
 import additionalClasses.UIColorAndStyleSettings;
 import additionalClasses.WindowEffects;
 import database.Worker;
@@ -11,6 +12,7 @@ import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.spi.LocaleNameProvider;
 
 public class AlertTaskWindowController extends ControllerParent {
 
@@ -37,9 +39,18 @@ public class AlertTaskWindowController extends ControllerParent {
     private Worker worker;
     private Stage stage;
     private UIColorAndStyleSettings uiColorAndStyleSettings = new UIColorAndStyleSettings();
+    private LanguageSwitcher languageSwitcher;
+
+    public AlertTaskWindowController(MainWindowController mainWindowController) {
+        this.mainWindowController = mainWindowController;
+        languageSwitcher = mainWindowController.getLanguageSwitcher();
+    }
 
     @FXML
     void initialize() {
+
+
+        label1.setText(languageSwitcher.getSuchTaskAlreadyExists());
 
         WindowEffects.makePaneMoovable(AnchorPane);
 

@@ -120,7 +120,8 @@ public class NewTaskWindowController extends ControllerParent{
             List<String> list = taskService.checkTask(taskText);
 
             if (list.size() >= 1) {
-                AlertTaskWindowController alertTaskWindowController = new AlertTaskWindowController();
+                AlertTaskWindowController alertTaskWindowController =
+                        new AlertTaskWindowController(this.mainWindowController);
                 SceneOpener sceneOpener = new SceneOpener();
                 Stage alertTaskWindowStage = new Stage();
                 sceneOpener.openNewScene("/fxml/alertTaskBoxWindow.fxml", alertTaskWindowStage,

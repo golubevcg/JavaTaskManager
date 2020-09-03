@@ -42,8 +42,11 @@ public class SceneOpener {
                 UndecoratedWindowsResizer fxResizeHelper = new UndecoratedWindowsResizer();
                 fxResizeHelper.addResizeListener(newStage);
             }
-            newStage.initStyle(StageStyle.UNDECORATED);
-            newStage.initStyle(StageStyle.TRANSPARENT);
+
+            if(newStage.getStyle()==StageStyle.DECORATED){
+                newStage.initStyle(StageStyle.UNDECORATED);
+                newStage.initStyle(StageStyle.TRANSPARENT);
+            }
 
             newStage.show();
 

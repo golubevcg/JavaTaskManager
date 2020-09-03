@@ -116,7 +116,9 @@ public class LoginWindowController extends ControllerParent{
             if (list.get(0).getPassword().equals(loginPassword)) {
                 MainWindowController mainWindowController = new MainWindowController(user);
                 Stage mainWindowStage = new Stage();
-                sceneOpener.openNewScene("/fxml/mainWindow.fxml", mainWindowStage, (Stage) closeButton.getScene().getWindow(), mainWindowController, true);
+                mainWindowController.setStage(mainWindowStage);
+                sceneOpener.openNewScene("/fxml/mainWindow.fxml", mainWindowStage,
+                        (Stage) closeButton.getScene().getWindow(), mainWindowController, true);
             } else {
                 this.shakeField(loginField);
                 this.shakeField(pwdField);

@@ -137,7 +137,8 @@ public class EditTaskWindowController extends ControllerParent{
             List<String> list = taskService.checkTask(taskText);
 
             if (list.size() >= 1) {
-                AlertTaskWindowController alertTaskWindowController = new AlertTaskWindowController();
+                AlertTaskWindowController alertTaskWindowController =
+                        new AlertTaskWindowController(this.mainWindowController);
                 Stage alertTaskWindowStage = new Stage();
                 sceneOpener.openNewScene("/fxml/alertTaskBoxWindow.fxml", alertTaskWindowStage,
                         (Stage) closeButton.getScene().getWindow(), alertTaskWindowController, false);

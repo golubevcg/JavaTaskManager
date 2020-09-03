@@ -1,9 +1,6 @@
 package controllers;
 
-import additionalClasses.SceneOpener;
-import additionalClasses.TextFieldCheckerEach30sec;
-import additionalClasses.UIColorAndStyleSettings;
-import additionalClasses.WindowEffects;
+import additionalClasses.*;
 import database.HibernateSessionFactoryUtil;
 import database.Task;
 import database.User;
@@ -11,6 +8,8 @@ import database.Worker;
 import database.services.TaskService;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -75,6 +74,14 @@ public class MainWindowController extends ControllerParent{
     @FXML
     private MenuItem statisticsMenu;
 
+    @FXML
+    private Menu languageMenu;
+
+    @FXML
+    private RadioMenuItem engRadioMenu;
+
+    @FXML
+    private RadioMenuItem rusRadioMenu;
 
     @FXML
     private MenuItem quitMenu;
@@ -100,26 +107,28 @@ public class MainWindowController extends ControllerParent{
     private Stage stage;
     private UIColorAndStyleSettings uiColorAndStyleSettings = new UIColorAndStyleSettings();
     private SceneOpener sceneOpener = new SceneOpener();
-    CloseWindowConfirmationController closeWindowConfirmationController =
-            new CloseWindowConfirmationController(this.stage);
-    Stage closeWindowStage = new Stage();
-
+    CloseWindowConfirmationController closeWindowConfirmationController = new CloseWindowConfirmationController();
     public MainWindowController(User rootUser) {
         this.rootUser = rootUser;
     }
+    private int counter = 0;
+    private ToggleGroup languageToggleGroup = new ToggleGroup();
+    private LanguageSwitcher languageSwitcher = new LanguageSwitcherEng();
 
     public void setStage(Stage stage){
         this.stage = stage;
     }
 
-    private int counter = 0;
-
     public void initialize() {
+
+        closeWindowConfirmationController.setMainController(this);
 
         WindowEffects.setDropShadowToWindow(forDropShadowTopAnchorPane);
         WindowEffects.makePaneMoovable(movableAnchorPane);
 
         this.cleanAllNodes();
+
+        this.setupLanguageSwitcher();
 
         this.editMenuBarMenus();
 
@@ -142,6 +151,38 @@ public class MainWindowController extends ControllerParent{
             public void handle(ActionEvent actionEvent) {
                 sceneOpener.openNewScene("/fxml/newWorkerWindow.fxml",
                         newWorkerStage, stage,newWorkerWindowController, false);
+            }
+        });
+
+    }
+
+    public LanguageSwitcher getLanguageSwitcher() {
+        return languageSwitcher;
+    }
+
+    private void setupLanguageSwitcher() {
+
+        if(languageSwitcher==null){
+            languageSwitcher = new LanguageSwitcherEng();
+        }
+
+        rusRadioMenu.setToggleGroup(languageToggleGroup);
+        engRadioMenu.setToggleGroup(languageToggleGroup);
+
+        languageMenu.setStyle(uiColorAndStyleSettings.getFontStyleToMenuItems());
+        rusRadioMenu.setStyle(uiColorAndStyleSettings.getFontStyleToMenuItems());
+        engRadioMenu.setStyle(uiColorAndStyleSettings.getFontStyleToMenuItems());
+
+        languageToggleGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
+            public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
+
+                if( "English".equals(( (RadioMenuItem)languageToggleGroup.getSelectedToggle() ).getText() )){
+                    languageSwitcher = new LanguageSwitcherEng();
+                }else{
+                    languageSwitcher = new LanguageSwitcherRUS();
+                }
+
+                initialize();
             }
         });
 
@@ -262,9 +303,9 @@ public class MainWindowController extends ControllerParent{
 
     private void setupWorkerLabelContextMenus(Worker currentWorker, Label workerLabel) {
         ContextMenu workerLabelContextMenu = new ContextMenu();
-        MenuItem addTaskToWorker = new MenuItem("Добавить новую задачу");
-        MenuItem editWorker = new MenuItem("Отредактировать сотрудника");
-        MenuItem deleteWorker = new MenuItem("Удалить сотрудника");
+        MenuItem addTaskToWorker = new MenuItem(languageSwitcher.getAddTaskToWorker());
+        MenuItem editWorker = new MenuItem(languageSwitcher.getEditWorker());
+        MenuItem deleteWorker = new MenuItem(languageSwitcher.getDeleteWorker());
 
         addTaskToWorker.setStyle( uiColorAndStyleSettings.getFontStyleToMenuItems() );
         editWorker.setStyle( uiColorAndStyleSettings.getFontStyleToMenuItems() );
@@ -414,11 +455,11 @@ public class MainWindowController extends ControllerParent{
     }
 
     private void setupTaskMenuItems(Task task, Rectangle taskRectangle) {
-        MenuItem editTask = new MenuItem("Отредактировать задачу");
-        MenuItem deleteTask = new MenuItem("Удалить задачу");
-        MenuItem returnToTextfield = new MenuItem("Вернуть задачу в записи");
-        Menu changeWorker = new Menu("Переназначить сотрудника");
-        Menu markByColor = new Menu("Пометить цветом");
+        MenuItem editTask = new MenuItem(languageSwitcher.getEditTask());
+        MenuItem deleteTask = new MenuItem(languageSwitcher.getDeleteTask());
+        MenuItem returnToTextfield = new MenuItem(languageSwitcher.getReturnToTextField());
+        Menu changeWorker = new Menu(languageSwitcher.getChangeWorker());
+        Menu markByColor = new Menu(languageSwitcher.getMarkByColor());
         MenuItem yellow = new MenuItem("#e2e0c8");
         MenuItem blue = new MenuItem("#c8d7e2");
         MenuItem red = new MenuItem("#e2c8ca");
@@ -601,7 +642,7 @@ public class MainWindowController extends ControllerParent{
 
         if(("quene".equals(task.getTasktype()))){
             ContextMenu taskRectangleContextMenu = new ContextMenu();
-            MenuItem moveTaskToInWork = new MenuItem("Сделать задачу в работе");
+            MenuItem moveTaskToInWork = new MenuItem(languageSwitcher.getMoveTaskToInWork());
             moveTaskToInWork.setStyle( uiColorAndStyleSettings.getFontStyleToMenuItems() );
             uiColorAndStyleSettings.setImageToMenuItem(moveTaskToInWork, "moveToWork.png", 16,16);
 
@@ -627,7 +668,7 @@ public class MainWindowController extends ControllerParent{
 
         if(("inwork").equals(task.getTasktype())){
             ContextMenu taskRectangleContextMenu = new ContextMenu();
-            MenuItem moveTaskToInQueue = new MenuItem("Вернуть задачу в очередь");
+            MenuItem moveTaskToInQueue = new MenuItem(languageSwitcher.getInQueue());
             moveTaskToInQueue.setStyle( uiColorAndStyleSettings.getFontStyleToMenuItems() );
             uiColorAndStyleSettings.setImageToMenuItem(moveTaskToInQueue, "moveToQuene.png",16,16);
 
@@ -758,6 +799,10 @@ public class MainWindowController extends ControllerParent{
         imageView.setFitHeight(17);
         mainMenu.setGraphic(imageView);
 
+        addWorkerMenu.setText(languageSwitcher.getAddWorker());
+        statisticsMenu.setText(languageSwitcher.getStatistics());
+        quitMenu.setText(languageSwitcher.getQuit());
+
         addWorkerMenu.setStyle( uiColorAndStyleSettings.getFontStyleToMenuItems() );
         statisticsMenu.setStyle( uiColorAndStyleSettings.getFontStyleToMenuItems() );
         quitMenu.setStyle( uiColorAndStyleSettings.getFontStyleToMenuItems() );
@@ -788,15 +833,15 @@ public class MainWindowController extends ControllerParent{
     private List<MenuItem> createDefaultMenuItems(TextInputControl t) {
         String fontStyleToMenuItems = uiColorAndStyleSettings.getFontStyleToMenuItems();
 
-        MenuItem cut = new MenuItem("Вырезать");
+        MenuItem cut = new MenuItem(languageSwitcher.getCut());
         cut.setOnAction(e -> t.cut());
-        MenuItem copy = new MenuItem("Скопировать");
+        MenuItem copy = new MenuItem(languageSwitcher.getCopy());
         copy.setOnAction(e -> t.copy());
-        MenuItem paste = new MenuItem("Вставить");
+        MenuItem paste = new MenuItem(languageSwitcher.getPaste());
         paste.setOnAction(e -> t.paste());
-        MenuItem delete = new MenuItem("Удалить");
+        MenuItem delete = new MenuItem(languageSwitcher.getDelete());
         delete.setOnAction(e -> t.deleteText(t.getSelection()));
-        MenuItem selectAll = new MenuItem("Выделить всё");
+        MenuItem selectAll = new MenuItem(languageSwitcher.getSelectAll());
         selectAll.setOnAction(e -> t.selectAll());
 
         cut.setStyle(fontStyleToMenuItems);
@@ -828,8 +873,10 @@ public class MainWindowController extends ControllerParent{
         ((Stage)(mainAnchorPane.getScene().getWindow())).setIconified(true);
     }
 
+    Stage closeWindowStage = new Stage();
     @Override
     public void close() {
+        closeWindowStage.close();
         sceneOpener.openNewScene("/fxml/closeWindowConfirmation.fxml", closeWindowStage, stage,
                 closeWindowConfirmationController, false);
     }
@@ -864,7 +911,7 @@ public class MainWindowController extends ControllerParent{
             if (list.size() >= 1) {
                 Stage alertBoxStage = new Stage();
                 sceneOpener.openNewScene("/fxml/alertTaskBoxWindow.fxml", alertBoxStage,
-                        (Stage) closeButton.getScene().getWindow(),new AlertBoxController(), false);
+                        (Stage) closeButton.getScene().getWindow(),new AlertBoxController(this), false);
                 return false;
             } else {
                 taskService.saveTask(task);
@@ -879,7 +926,7 @@ public class MainWindowController extends ControllerParent{
 
         ContextMenu contextMenu = new ContextMenu();
         contextMenu.getItems().addAll(createDefaultMenuItems(textArea));
-        Menu createTaskFromSelectedMenuItem = new Menu("Создать задачу из выделенного");
+        Menu createTaskFromSelectedMenuItem = new Menu(languageSwitcher.getCreateTaskFromSelected());
         createTaskFromSelectedMenuItem.setStyle(fontStyleToMenuItems);
 
         List<Menu> menuItemsList = new ArrayList<>();
@@ -888,8 +935,8 @@ public class MainWindowController extends ControllerParent{
             Menu workerMenu = new Menu(worker.getFirstname()
                     + " " + worker.getLastname());
             menuItemsList.add(workerMenu);
-            MenuItem inWorkMenuItem = new MenuItem("в работу");
-            MenuItem inQueueMenuItem = new MenuItem("в очередь");
+            MenuItem inWorkMenuItem = new MenuItem(languageSwitcher.getInWork());
+            MenuItem inQueueMenuItem = new MenuItem(languageSwitcher.getInQueue());
 
             inWorkMenuItem.setStyle(fontStyleToMenuItems);
             inQueueMenuItem.setStyle(fontStyleToMenuItems);

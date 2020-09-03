@@ -1,12 +1,15 @@
 package controllers;
 
+import Main.Main;
+import additionalClasses.LanguageSwitcher;
 import additionalClasses.UIColorAndStyleSettings;
 import additionalClasses.WindowEffects;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
         import javafx.scene.control.Button;
-        import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class CloseWindowConfirmationController extends ControllerParent{
@@ -18,6 +21,12 @@ public class CloseWindowConfirmationController extends ControllerParent{
     private AnchorPane AnchorPane;
 
     @FXML
+    private Label areYouShureLabel;
+
+    @FXML
+    private Label appLabel;
+
+    @FXML
     private Button yesButton;
 
     @FXML
@@ -25,17 +34,31 @@ public class CloseWindowConfirmationController extends ControllerParent{
 
     Stage mainControllerStage;
     UIColorAndStyleSettings uiColorAndStyleSettings = new UIColorAndStyleSettings();
+    LanguageSwitcher languageSwitcher;
+    MainWindowController mainWindowController;
 
-    public CloseWindowConfirmationController(Stage stage) {
-        this.mainControllerStage = stage;
+    public CloseWindowConfirmationController() {
+
     }
 
+    public void setMainController(MainWindowController mainWindowController) {
+        this.mainControllerStage = Main.getStageObj();
+        this.mainWindowController = mainWindowController;
+        languageSwitcher = mainWindowController.getLanguageSwitcher();
+    }
 
     @FXML
     void initialize() {
 
         WindowEffects.setDropShadowToWindow(forDropShadowTopAnchorPane);
         WindowEffects.makePaneMoovable(AnchorPane);
+
+        areYouShureLabel.setText(languageSwitcher.getAreYouShureThatYouWantToClose());
+        appLabel.setText(languageSwitcher.getApp());
+
+        yesButton.setText(languageSwitcher.getYes());
+
+        noButton.setText(languageSwitcher.getNo());
 
         yesButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override

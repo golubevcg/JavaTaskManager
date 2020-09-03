@@ -115,7 +115,7 @@ public class NewWorkerWindowController extends ControllerParent{
             List<String> list = workerService.checkWorkerLogin(worker.getLogin());
 
             if (list.size() >= 1) {
-                AlertBoxController alertBoxController = new AlertBoxController();
+                AlertBoxController alertBoxController = new AlertBoxController(this.mainWindowController);
                 SceneOpener sceneOpener = new SceneOpener();
                 Stage alertBoxWindowStage = new Stage();
                 sceneOpener.openNewScene("/fxml/alertBoxWindow.fxml", alertBoxWindowStage,

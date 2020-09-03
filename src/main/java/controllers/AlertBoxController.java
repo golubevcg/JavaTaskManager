@@ -1,5 +1,7 @@
 package controllers;
 
+import additionalClasses.LanguageSwitcher;
+import additionalClasses.LanguageSwitcherEng;
 import additionalClasses.UIColorAndStyleSettings;
 import additionalClasses.WindowEffects;
 import database.Worker;
@@ -39,9 +41,25 @@ public class AlertBoxController extends  ControllerParent{
     private Worker worker;
     private Stage stage;
     private UIColorAndStyleSettings uiColorAndStyleSettings = new UIColorAndStyleSettings();
+    private LanguageSwitcher languageSwitcher;
+
+    public AlertBoxController(MainWindowController mainWindowController) {
+        this.mainWindowController = mainWindowController;
+        languageSwitcher = mainWindowController.getLanguageSwitcher();
+    }
+
+    public AlertBoxController() {}
+
 
     @FXML
     void initialize() {
+
+        if(languageSwitcher==null){
+            languageSwitcher = new LanguageSwitcherEng();
+        }
+
+        label1.setText(languageSwitcher.getSuchLoginAlreadyRegistered());
+        label2.setText(languageSwitcher.getPleasePickAnother());
 
         WindowEffects.makePaneMoovable(AnchorPane);
 
