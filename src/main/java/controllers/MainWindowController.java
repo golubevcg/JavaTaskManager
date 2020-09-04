@@ -559,7 +559,7 @@ public class MainWindowController extends ControllerParent{
                     @Override
                     public void handle(MouseEvent mouseEvent) {
                         taskRectangle.setStrokeWidth(0);
-                        taskRectangle.setFill(Color.web(color2HighlightedToMarkTask));
+                        taskRectangle.setFill(Color.web(color2ToMarkTask));
                     }
                 });
             }

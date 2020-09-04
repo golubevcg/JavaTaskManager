@@ -29,6 +29,10 @@ public class LanguageSwitcherEng implements LanguageSwitcher{
     private String app = "application?";
     private String yes = "Yes";
     private String no = "No";
+    private String AreYouShureThatYouWantToDelete = "Are you sure that you want to delete";
+    private String task = "task?";
+
+
 
     @Override
     public String getSuchTaskAlreadyExists(){
@@ -53,6 +57,16 @@ public class LanguageSwitcherEng implements LanguageSwitcher{
     @Override
     public String getNo() {
         return no;
+    }
+
+    @Override
+    public String getAreYouShureThatYouWantToDelete() {
+        return AreYouShureThatYouWantToDelete;
+    }
+
+    @Override
+    public String getTask() {
+        return task;
     }
 
     @Override

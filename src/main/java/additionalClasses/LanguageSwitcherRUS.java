@@ -29,6 +29,8 @@ public class LanguageSwitcherRUS implements LanguageSwitcher{
     private String app = "приложение?";
     private String yes = "Да";
     private String no = "Нет";
+    private String AreYouShureThatYouWantToDelete = "Вы уверены что хотите удалить";
+    private String task = "задачу?";
 
     @Override
     public String getSuchTaskAlreadyExists(){
@@ -53,6 +55,16 @@ public class LanguageSwitcherRUS implements LanguageSwitcher{
     @Override
     public String getNo() {
         return no;
+    }
+
+    @Override
+    public String getAreYouShureThatYouWantToDelete() {
+        return AreYouShureThatYouWantToDelete;
+    }
+
+    @Override
+    public String getTask() {
+        return task;
     }
 
     @Override

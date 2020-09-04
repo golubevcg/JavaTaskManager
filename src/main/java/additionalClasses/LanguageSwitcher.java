@@ -28,4 +28,6 @@ package additionalClasses;
     String getApp();
     String getYes();
     String getNo();
+    String getAreYouShureThatYouWantToDelete() ;
+    String getTask();
 }

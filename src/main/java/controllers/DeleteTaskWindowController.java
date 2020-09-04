@@ -1,11 +1,13 @@
 package controllers;
 
+import additionalClasses.LanguageSwitcher;
 import additionalClasses.UIColorAndStyleSettings;
 import additionalClasses.WindowEffects;
 import database.Task;
 import database.services.TaskService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -19,12 +21,11 @@ public class DeleteTaskWindowController extends ControllerParent {
 
     private Task task;
 
-    public TextArea textArea;
+    @FXML
+    private Label areYouShureLabel;
 
-    public DeleteTaskWindowController(MainWindowController mainWindowController, Task task) {
-        this.mainWindowController = mainWindowController;
-        this.task = task;
-    }
+    @FXML
+    private Label taskLabel;
 
     @FXML
     private AnchorPane AnchorPane;
@@ -37,6 +38,14 @@ public class DeleteTaskWindowController extends ControllerParent {
 
     private Stage stage;
     private UIColorAndStyleSettings uiColorAndStyleSettings = new UIColorAndStyleSettings();
+    LanguageSwitcher languageSwitcher;
+
+
+    public DeleteTaskWindowController(MainWindowController mainWindowController, Task task) {
+        this.mainWindowController = mainWindowController;
+        this.task = task;
+    }
+
 
     public void setStage(Stage stage) {
         this.stage = stage;
@@ -44,6 +53,14 @@ public class DeleteTaskWindowController extends ControllerParent {
 
     @FXML
     public void initialize() {
+
+        languageSwitcher = mainWindowController.getLanguageSwitcher();
+
+        areYouShureLabel.setText(languageSwitcher.getAreYouShureThatYouWantToDelete());
+        taskLabel.setText(languageSwitcher.getTask());
+
+        yesButton.setText(languageSwitcher.getYes());
+        noButton.setText(languageSwitcher.getNo());
 
         WindowEffects.setDropShadowToWindow(forDropShadowTopAnchorPane);
         WindowEffects.makePaneMoovable(AnchorPane);
