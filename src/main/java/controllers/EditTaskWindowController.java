@@ -120,6 +120,7 @@ public class EditTaskWindowController extends ControllerParent{
 
         createButton.setOnAction(e -> {
             if (checkTaskRegisterNewTask() == true) {
+                mainWindowController.getUser().setTextfield(mainWindowController.getTextField());
                 mainWindowController.initialize();
                 createButton.getScene().getWindow().hide();
             }

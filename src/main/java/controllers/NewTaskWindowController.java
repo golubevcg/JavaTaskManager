@@ -1,5 +1,6 @@
 package controllers;
 
+import additionalClasses.LanguageSwitcher;
 import animations.Shake;
 import additionalClasses.SceneOpener;
 import additionalClasses.UIColorAndStyleSettings;
@@ -76,10 +77,12 @@ public class NewTaskWindowController extends ControllerParent{
     private Worker worker;
     private Stage stage;
     private UIColorAndStyleSettings uiColorAndStyleSettings = new UIColorAndStyleSettings();
+    private LanguageSwitcher languageSwitcher;
 
     public NewTaskWindowController(MainWindowController mainWindowController, Worker worker) {
         this.mainWindowController = mainWindowController;
         this.worker = worker;
+        this.languageSwitcher = mainWindowController.getLanguageSwitcher();
     }
 
     @FXML
@@ -88,6 +91,11 @@ public class NewTaskWindowController extends ControllerParent{
         WindowEffects.setDropShadowToWindow(forDropShadowTopAnchorPane);
         WindowEffects.makePaneMoovable(moovableAnchorPane);
         this.setStylesToButtons();
+
+        taskTextfield.setPromptText(languageSwitcher.getTextOfTask());
+        inQueenRadioButton.setText(languageSwitcher.getInQueueTaskType());
+        inWorkRadioButton.setText(languageSwitcher.getInWorkTaskType());
+        createButton.setText(languageSwitcher.getCreateNewTask());
 
         inQueenRadioButton.fire();
         inQueenRadioButton.getStylesheets().add( getClass().getResource("/styles.css").toExternalForm() );
