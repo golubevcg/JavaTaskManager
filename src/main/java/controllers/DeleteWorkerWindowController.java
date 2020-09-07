@@ -1,5 +1,6 @@
 package controllers;
 
+import additionalClasses.LanguageSwitcher;
 import additionalClasses.UIColorAndStyleSettings;
 import additionalClasses.WindowEffects;
 import database.Task;
@@ -7,6 +8,7 @@ import database.Worker;
 import database.services.WorkerService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 
 import java.util.List;
@@ -26,14 +28,22 @@ public class DeleteWorkerWindowController extends ControllerParent{
     @FXML
     private Button noButton;
 
+    @FXML
+    private Label areYouShureLabel;
+
+    @FXML
+    private Label workerLabel;
+
     private MainWindowController mainWindowController;
     private Worker worker;
     private UIColorAndStyleSettings uiColorAndStyleSettings = new UIColorAndStyleSettings();
+    private LanguageSwitcher languageSwitcher;
 
 
     public DeleteWorkerWindowController(MainWindowController mainWindowController, Worker worker) {
         this.mainWindowController = mainWindowController;
         this.worker = worker;
+        this.languageSwitcher = mainWindowController.getLanguageSwitcher();
     }
 
     @FXML
@@ -41,6 +51,13 @@ public class DeleteWorkerWindowController extends ControllerParent{
 
         WindowEffects.setDropShadowToWindow(forDropShadowTopAnchorPane);
         WindowEffects.makePaneMoovable(AnchorPane);
+
+        yesButton.setText(languageSwitcher.getYes());
+        noButton.setText(languageSwitcher.getNo());
+        areYouShureLabel.setText(languageSwitcher.getAreYouShureThatYouWantToDelete());
+        workerLabel.setText(languageSwitcher.getWorker());
+
+
 
         yesButton.setOnAction(e->{
             this.addAllTasksTextToTextfield();

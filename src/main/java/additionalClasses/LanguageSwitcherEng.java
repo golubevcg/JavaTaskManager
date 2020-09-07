@@ -31,8 +31,48 @@ public class LanguageSwitcherEng implements LanguageSwitcher{
     private String no = "No";
     private String AreYouShureThatYouWantToDelete = "Are you sure that you want to delete";
     private String task = "task?";
+    private String appreciateTaskLabel = "Estimate the complexity of the completed task,";
+    private String higherValueHarderTaskLabel = "higher number means more difficult task";
+    private String textOfTask = "Task text";
+    private String inQueueTaskType = "in queue";
+    private String inWorkTaskType = "in work";
+    private String createNewTask = "Create new task";
+    private String worker = "worker?";
 
+    @Override
+    public String getWorker(){
+        return worker;
+    }
 
+    @Override
+    public String getTextOfTask() {
+        return textOfTask;
+    }
+
+    @Override
+    public String getInQueueTaskType() {
+        return inQueueTaskType;
+    }
+
+    @Override
+    public String getInWorkTaskType() {
+        return inWorkTaskType;
+    }
+
+    @Override
+    public String getCreateNewTask() {
+        return createNewTask;
+    }
+
+    @Override
+    public String getAppreciateTaskLabel() {
+        return appreciateTaskLabel;
+    }
+
+    @Override
+    public String getHigherValueHarderTaskLabel() {
+        return higherValueHarderTaskLabel;
+    }
 
     @Override
     public String getSuchTaskAlreadyExists(){

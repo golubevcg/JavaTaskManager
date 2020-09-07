@@ -1,5 +1,6 @@
 package controllers;
 
+import additionalClasses.LanguageSwitcher;
 import animations.Shake;
 import additionalClasses.SceneOpener;
 import additionalClasses.UIColorAndStyleSettings;
@@ -14,6 +15,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import org.apache.commons.codec.language.bm.Lang;
+
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -75,6 +78,7 @@ public class EditTaskWindowController extends ControllerParent{
     private Stage stage;
     private UIColorAndStyleSettings uiColorAndStyleSettings = new UIColorAndStyleSettings();
     private SceneOpener sceneOpener = new SceneOpener();
+    private LanguageSwitcher languageSwitcher;
 
     public void setStage(Stage stage){
         this.stage = stage;
@@ -83,6 +87,7 @@ public class EditTaskWindowController extends ControllerParent{
     public EditTaskWindowController(MainWindowController mainWindowController, Task task) {
         this.mainWindowController = mainWindowController;
         this.task = task;
+        this.languageSwitcher = mainWindowController.getLanguageSwitcher();
     }
 
     @FXML
@@ -91,6 +96,10 @@ public class EditTaskWindowController extends ControllerParent{
         WindowEffects.setDropShadowToWindow(forDropShadowTopAnchorPane);
         WindowEffects.makePaneMoovable(moovableAnchorPane);
 
+        taskTextfield.setPromptText(languageSwitcher.getTextOfTask());
+        inQueenRadioButton.setText(languageSwitcher.getInQueueTaskType());
+        inWorkRadioButton.setText(languageSwitcher.getInWorkTaskType());
+        createButton.setText(languageSwitcher.getCreateNewTask());
 
         String stylesheetRadioButtons = getClass().getResource("/styles.css").toExternalForm();
         inWorkRadioButton.getStylesheets().add(stylesheetRadioButtons);

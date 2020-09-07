@@ -1,5 +1,6 @@
 package controllers;
 
+import additionalClasses.LanguageSwitcher;
 import additionalClasses.SceneOpener;
 import additionalClasses.UIColorAndStyleSettings;
 import additionalClasses.WindowEffects;
@@ -48,6 +49,13 @@ public class FinTaskRatingWindowController extends ControllerParent{
     private RadioButton buttonRating1;
 
     @FXML
+    private Label appreciateTaskLabel;
+
+    @FXML
+    private Label highierNumberHarderTaskLabel;
+
+
+    @FXML
     private Button minimiseButton;
 
     @FXML
@@ -72,10 +80,12 @@ public class FinTaskRatingWindowController extends ControllerParent{
     private MainWindowController mainWindowController;
     private Stage stage;
     private UIColorAndStyleSettings uiColorAndStyleSettings = new UIColorAndStyleSettings();
+    private LanguageSwitcher languageSwitcher;
 
     public FinTaskRatingWindowController(Task task, MainWindowController mainWindowController) {
         this.task = task;
         this.mainWindowController = mainWindowController;
+        languageSwitcher = mainWindowController.getLanguageSwitcher();
     }
 
     @FXML
@@ -85,6 +95,8 @@ public class FinTaskRatingWindowController extends ControllerParent{
         WindowEffects.makePaneMoovable(moovableAnchorPane);
         this.setStylesToButtons();
 
+        appreciateTaskLabel.setText(languageSwitcher.getAppreciateTaskLabel());
+        highierNumberHarderTaskLabel.setText(languageSwitcher.getHigherValueHarderTaskLabel());
 
         ToggleGroup group = new ToggleGroup();
         buttonRating1.setToggleGroup(group);

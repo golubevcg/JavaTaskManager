@@ -30,4 +30,11 @@ package additionalClasses;
     String getNo();
     String getAreYouShureThatYouWantToDelete() ;
     String getTask();
+    String getAppreciateTaskLabel();
+    String getHigherValueHarderTaskLabel();
+    String getWorker();
+    String getTextOfTask();
+    String getInQueueTaskType();
+    String getInWorkTaskType();
+    String getCreateNewTask();
 }

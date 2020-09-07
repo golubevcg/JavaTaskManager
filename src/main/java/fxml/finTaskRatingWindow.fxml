@@ -7,7 +7,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane fx:id="forDropShadowTopAnchorPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <AnchorPane fx:id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="231.0" prefWidth="387.0" style="-fx-background-color: #ffffff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -43,12 +42,12 @@
                   <Font name="System Bold" size="20.0" />
                </font>
             </RadioButton>
-            <Label layoutX="57.0" layoutY="53.0" text="Оцените сложность выполненной задачи,">
+            <Label fx:id="appreciateTaskLabel" layoutX="57.0" layoutY="53.0" text="Оцените сложность выполненной задачи,">
                <font>
                   <Font name="Arial" size="14.0" />
                </font>
             </Label>
-            <Label layoutX="65.0" layoutY="80.0" text="чем выше число, тем сложнее задача">
+            <Label fx:id="highierNumberHarderTaskLabel" layoutX="65.0" layoutY="80.0" text="чем выше число, тем сложнее задача">
                <font>
                   <Font name="Arial" size="14.0" />
                </font>

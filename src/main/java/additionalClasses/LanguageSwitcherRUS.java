@@ -31,6 +31,48 @@ public class LanguageSwitcherRUS implements LanguageSwitcher{
     private String no = "Нет";
     private String AreYouShureThatYouWantToDelete = "Вы уверены что хотите удалить";
     private String task = "задачу?";
+    private String appreciateTaskLabel = "Оцените сложность выполненной задачи,";
+    private String higherValueHarderTaskLabel = "чем выше число, тем сложнее задача";
+    private String textOfTask = "Текст задачи";
+    private String inQueueTaskType = "в очереди";
+    private String inWorkTaskType = "в работе";
+    private String createNewTask = "Создать новую задачу";
+    private String worker = "сотрудника?";
+
+    @Override
+    public String getWorker(){
+        return worker;
+    }
+
+    @Override
+    public String getTextOfTask() {
+        return textOfTask;
+    }
+
+    @Override
+    public String getInQueueTaskType() {
+        return inQueueTaskType;
+    }
+
+    @Override
+    public String getInWorkTaskType() {
+        return inWorkTaskType;
+    }
+
+    @Override
+    public String getCreateNewTask() {
+        return createNewTask;
+    }
+
+    @Override
+    public String getAppreciateTaskLabel() {
+        return appreciateTaskLabel;
+    }
+
+    @Override
+    public String getHigherValueHarderTaskLabel() {
+        return higherValueHarderTaskLabel;
+    }
 
     @Override
     public String getSuchTaskAlreadyExists(){
