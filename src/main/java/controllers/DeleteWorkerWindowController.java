@@ -75,21 +75,28 @@ public class DeleteWorkerWindowController extends ControllerParent{
                 "-fx-background-insets: transparent;"+
                 "-fx-border-radius: 5;"+
                 "-fx-background-radius: 5;"+
+                "-fx-background-radius: 5;"+
                 "-fx-border-width: 1.5;");
     }
 
     private void addAllTasksTextToTextfield(){
         List<Task> tasks = worker.getTasks();
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("\n" + worker.getFirstname() + " " + worker.getLastname() + "," + languageSwitcher.getRestTasks() + ":\n");
-        for (int i = 0; i <tasks.size() ; i++) {
 
-            if(!("done".equals(tasks.get(i).getTasktype()))){
-                stringBuilder.append(" -" + tasks.get(i).getText() + ";\n");
+        if(tasks.size()!=0){
+
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("\n" + worker.getFirstname() + " " + worker.getLastname() + "," + languageSwitcher.getRestTasks() + "\n");
+
+            for (int i = 0; i <tasks.size() ; i++) {
+
+                if(!("done".equals(tasks.get(i).getTasktype()))){
+                    stringBuilder.append(" -" + tasks.get(i).getText() + ";\n");
+                }
+
             }
 
+            mainWindowController.addToTextArea(stringBuilder.toString());
         }
-        mainWindowController.addToTextArea(stringBuilder.toString());
     }
 
     private void deleteTaskCloseWindow(){
