@@ -1,5 +1,6 @@
 package controllers;
 
+import additionalClasses.LanguageSwitcher;
 import additionalClasses.UIColorAndStyleSettings;
 import additionalClasses.WindowEffects;
 import database.Task;
@@ -63,6 +64,14 @@ public class StatisticsWindowController extends ControllerParent{
     @FXML
     private Button minimiseButton;
 
+    @FXML
+    private Label firstDateLabel;
+
+    @FXML
+    private Label lastDateLabel;
+
+    @FXML
+    private Label numbersInGraphicsLabel;
 
     @Override
     public void min() {
@@ -76,22 +85,34 @@ public class StatisticsWindowController extends ControllerParent{
         mainWindowController.initialize();
     }
 
-    MainWindowController mainWindowController;
-    Stage stage;
-    UIColorAndStyleSettings uiColorAndStyleSettings = new UIColorAndStyleSettings();
-    User rootUser = new User();
-    List<Worker> workersList = rootUser.getWorkers();
-    ObservableMap<CheckMenuItem,Worker> MapOfSelectedCheckBoxesOfWorkersInStatisticsMenu = FXCollections.observableHashMap();
+    private MainWindowController mainWindowController;
+    private Stage stage;
+    private UIColorAndStyleSettings uiColorAndStyleSettings = new UIColorAndStyleSettings();
+    private User rootUser = new User();
+    private List<Worker> workersList = rootUser.getWorkers();
+    private ObservableMap<CheckMenuItem,Worker>
+            MapOfSelectedCheckBoxesOfWorkersInStatisticsMenu = FXCollections.observableHashMap();
+    private LanguageSwitcher languageSwitcher;
 
-    private LocalDate firstDateValue = LocalDate.of(2020, LocalDate.now().getMonth().minus(1).getValue(), 01);
+    private LocalDate firstDateValue =
+            LocalDate.of(2020, LocalDate.now().getMonth().minus(1).getValue(), 01);
     private LocalDate secondDateValue = LocalDate.now().plusDays(1);
     private double finalSumForPieChart = 0;
     private ToggleGroup timeStepToggleGroup = new ToggleGroup();
     private ArrayList<String> daysList = new ArrayList<>();
 
+    public StatisticsWindowController(MainWindowController mainWindowController) {
+        this.mainWindowController = mainWindowController;
+        languageSwitcher=mainWindowController.getLanguageSwitcher();
+    }
+
     @FXML
     void initialize() {
 
+        firstDateLabel.setText(languageSwitcher.getFirstDateTextLabel());
+        lastDateLabel.setText(languageSwitcher.getLastDateTextLabel());
+        numbersInGraphicsLabel.setText(languageSwitcher.getNumbersInGraphicsNotice());
+        workersMenuButton.setText(languageSwitcher.getWorkersTextLabel());
 
         WindowEffects.setDropShadowToWindow(forDropShadowTopAnchorPane);
         WindowEffects.makePaneMoovable(movableAnchorPane);

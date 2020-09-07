@@ -39,6 +39,30 @@ public class LanguageSwitcherRUS implements LanguageSwitcher{
     private String createNewTask = "Создать новую задачу";
     private String worker = "сотрудника?";
     private String restTasks = "оставшиеся задачи:";
+    private String workers = "Сотрудники:";
+    private String firstDate = "Первичная дата:";
+    private String lastDate = "Конечная дата:";
+    private String numbersInGraphicsNotice = "Цифры в графиках - сумма рейтингов всех задач.";
+
+    @Override
+    public String getWorkersTextLabel() {
+        return workers;
+    }
+
+    @Override
+    public String getFirstDateTextLabel() {
+        return firstDate;
+    }
+
+    @Override
+    public String getLastDateTextLabel() {
+        return lastDate;
+    }
+
+    @Override
+    public String getNumbersInGraphicsNotice() {
+        return numbersInGraphicsNotice;
+    }
 
     @Override
     public String getRestTasks() {

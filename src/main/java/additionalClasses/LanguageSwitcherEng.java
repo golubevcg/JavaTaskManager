@@ -38,7 +38,31 @@ public class LanguageSwitcherEng implements LanguageSwitcher{
     private String inWorkTaskType = "in work";
     private String createNewTask = "Create new task";
     private String worker = "worker?";
-    private String restTasks = "оставшиеся задачи:";
+    private String restTasks = "rest tasks:";
+    private String workers = "Workers:";
+    private String firstDate = "First date:";
+    private String lastDate = "Last date:";
+    private String numbersInGraphicsNotice = "Numbers in charts - sum of task ratings.";
+
+    @Override
+    public String getWorkersTextLabel() {
+        return workers;
+    }
+
+    @Override
+    public String getFirstDateTextLabel() {
+        return firstDate;
+    }
+
+    @Override
+    public String getLastDateTextLabel() {
+        return lastDate;
+    }
+
+    @Override
+    public String getNumbersInGraphicsNotice() {
+        return numbersInGraphicsNotice;
+    }
 
     @Override
     public String getRestTasks() {

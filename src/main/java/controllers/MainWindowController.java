@@ -816,7 +816,7 @@ public class MainWindowController extends ControllerParent{
             }
         });
 
-        StatisticsWindowController statisticsWindowController = new StatisticsWindowController();
+        StatisticsWindowController statisticsWindowController = new StatisticsWindowController(this);
         statisticsWindowController.setRootUser(rootUser);
         statisticsWindowController.setMainWindowController(this);
         Stage statisticsWindowStage = new Stage();

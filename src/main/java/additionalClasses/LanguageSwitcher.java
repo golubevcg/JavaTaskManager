@@ -37,5 +37,9 @@ package additionalClasses;
     String getInQueueTaskType();
     String getInWorkTaskType();
     String getCreateNewTask();
+    String getWorkersTextLabel();
+    String getFirstDateTextLabel();
+    String getLastDateTextLabel();
+    String getNumbersInGraphicsNotice();
     String getRestTasks();
 }
