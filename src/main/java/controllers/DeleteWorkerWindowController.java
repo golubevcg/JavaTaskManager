@@ -81,7 +81,7 @@ public class DeleteWorkerWindowController extends ControllerParent{
     private void addAllTasksTextToTextfield(){
         List<Task> tasks = worker.getTasks();
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("\n" + worker.getFirstname() + " " + worker.getLastname() + ", оставшиеся задачи: \n");
+        stringBuilder.append("\n" + worker.getFirstname() + " " + worker.getLastname() + "," + languageSwitcher.getRestTasks() + ":\n");
         for (int i = 0; i <tasks.size() ; i++) {
 
             if(!("done".equals(tasks.get(i).getTasktype()))){

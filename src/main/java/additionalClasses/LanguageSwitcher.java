@@ -37,4 +37,5 @@ package additionalClasses;
     String getInQueueTaskType();
     String getInWorkTaskType();
     String getCreateNewTask();
+    String getRestTasks();
 }

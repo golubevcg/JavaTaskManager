@@ -38,6 +38,12 @@ public class LanguageSwitcherRUS implements LanguageSwitcher{
     private String inWorkTaskType = "в работе";
     private String createNewTask = "Создать новую задачу";
     private String worker = "сотрудника?";
+    private String restTasks = "оставшиеся задачи:";
+
+    @Override
+    public String getRestTasks() {
+        return restTasks;
+    }
 
     @Override
     public String getWorker(){
